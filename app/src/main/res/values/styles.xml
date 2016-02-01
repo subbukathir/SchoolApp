@@ -1,14 +1,88 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/color_Primary</item>
-        <!--   darker variant for the status bar and contextual app bars -->
-        <item name="colorPrimaryDark">@color/color_Primary_Dark</item>
-        <!--   theme UI controls like checkboxes and text fields -->
-        <item name="colorAccent">@color/color_Accent</item>
-        <!--   Window background color -->
-        <item name="android:windowBackground">@color/color_WindowBackground</item>
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+
+    </style>
+
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/color_app</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_app_background</item>
+    </style>
+
+    <style name="match_parent_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="wrap_content_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="match_wrap_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="wrap_match_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="text_view_welcome">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/txt_size_btn</item>
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
+    </style>
+
+    <style name="et_login_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textColorHint">@color/material_grey_600</item>
+        <item name="android:padding">@dimen/space_layout_padding</item>
+        <item name="android:layout_margin">@dimen/space_layout_margin</item>
+        <item name="android:inputType">text</item>
+        <item name="android:backgroundTint">@color/color_app</item>
+    </style>
+
+    <style name="btn_login_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/color_app</item>
+        <item name="android:textColorHint">@color/material_grey_600</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">@dimen/txt_size_btn</item>
+        <item name="android:layout_margin">@dimen/space_layout_margin</item>
+    </style>
+
+    <style name="line_horizontal_footer">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/color_app</item>
+    </style>
+    <style name="img_view_profile_pic">
+        <item name="android:layout_height">@dimen/img_height</item>
+        <item name="android:layout_width">@dimen/img_width</item>
+        <item name="android:src">@drawable/ic_profile</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="text_view_header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/txt_view_medium</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center</item>
     </style>
 </resources>

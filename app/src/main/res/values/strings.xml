@@ -1,6 +1,68 @@
 <resources>
-    <string name="app_name">Oxford school</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Oxford School</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="nav_item_home">Home</string>
+    <string name="nav_item_friends">Friends</string>
+    <string name="nav_item_notifications">Messages</string>
+
+    <!-- navigation drawer item labels  -->
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_home</item>
+        <item>@string/nav_item_friends</item>
+        <item>@string/nav_item_notifications</item>
+    </string-array>
+
+    <!-- Splash Screen -->
+    <string name="lbl_loading">Loading...,Please wait</string>
+    <string name="lbl_welcome">Welcome to Oxford School</string>
+    <string name="lbl_parent_module">Parent Module</string>
+
+    <string name="title_messages">Messages</string>
+    <string name="title_friends">Friends</string>
+    <string name="title_home">Home</string>
+
+    <string name="lbl_first_name">First Name</string>
+    <string name="lbl_last_name">Last Name</string>
+    <string name="lbl_class">Class :</string>
+    <string name="lbl_section">Sec :</string>
+
+    <string name="lbl_msg_blank_first_name">Please fill out first name</string>
+    <string name="lbl_msg_blank_last_name">Please fill out last name</string>
+    <string name="lbl_msg_blank_username">Please fill out username</string>
+    <string name="lbl_msg_blank_password">Please fill your password</string>
+
+    <string name="lbl_msg_valid_first_name">First name should contain atleast 3 characters</string>
+    <string name="lbl_msg_valid_last_name">Last name should contain atleast 3 characters</string>
+    <string name="lbl_msg_valid_username">username should contain atleast 4 characters</string>
+    <string name="lbl_msg_valid_password">password should contain atleast 6 characters</string>
+
+
+    <string name="lbl_send">Send</string>
+
+    <string name="lbl_new_message">New Message</string>
+    <string name="lbl_message">Message</string>
+
+    <string name="blank_msg">Message field should not be empty</string>
+    <string name="valid_length_msg">Message field should contain more than 10 characters.</string>
+    <string name="msg_no_internet">Internet is not connected.</string>
+    <string name="msg_unexpected_error">Sorry! Could not process your request.</string>
+
+    <string name="lbl_ok">OK.</string>
+
+    <string name="lbl_no_media">No Media</string>
+
+    <string name="lbl_progress_msg">Please wait...</string>
+
+    <string name="lbl_select_photo">Select Photo</string>
+
+    <string-array name="array_select_photo">
+        <item>Take photo</item>
+        <item>Your photos</item>
+    </string-array>
+
+
 </resources>
