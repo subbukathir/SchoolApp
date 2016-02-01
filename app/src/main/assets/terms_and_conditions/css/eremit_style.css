@@ -1,0 +1,120 @@
+@charset "utf-8";
+/* CSS Document */
+
+body { margin: 0px; background:#F6F7F7;}
+body,p {
+	font-family:Arial;
+	font-size:12px;
+	color:#333333;
+	line-height:20px;
+	padding:10px;
+}
+.title { font-size:22px; color:#696969; font-weight:bold;padding-bottom:10px;}
+.clearBoth { clear:both;}
+
+/* home */
+#wrapperBg { width:100%; background:url(../images/bg.gif) repeat-y center;}
+#wrapperBg #wrapper {width:995px; margin-left:auto; margin-right:auto;}
+#header {height:110px; background:url(../images/logo.jpg) no-repeat 30px center; /*border-bottom:#6e0012 solid 1px;*/}
+#header #topLink { height:57px; text-align:right;}
+#header #topLink a { margin-right:20px;}
+#header #linkDiff { height:19px; text-align:right;}
+#header #mainLink { height:34px; text-align:right; padding-top:19px;}
+#header #mainLink ul { margin:0; padding:0; list-style:none; margin-right:20px; }
+#header #mainLink ul li { display:block; float:right; padding-top:6px; }
+#header #mainLink ul li a { padding:4px 10px; font-size:14px; text-decoration: none; font-weight:bold; }
+#header #mainLink ul li a:link, #header #mainLink ul li a:visited { color:black; }
+#header #mainLink ul li a:hover, #header #mainLink ul li a.active { color:#d81010; }
+
+
+#banner { height:392px; }
+#banner #bannerLeft { float:left; width:675px;}
+#banner #bannerRight {
+	float:right;
+	width:320px;
+	height: 392px;
+}
+#steps {/*border-top:#6e0012 solid 1px; */} 
+
+#homeContent { background:url(../images/bg_home_content.gif) no-repeat top; padding:24px 45px 0px 12px; min-height:200px;}
+#homeContent #div01 { width:348px; float:left; padding:12px 0px; }
+#homeContent #div02 { width:257px; padding:12px 30px; float:left; background:url(../images/home_div02_bg.gif) no-repeat; }
+#homeContent #div02 #todaysRates {
+	background:url(../images/bg_todays_rates.gif) no-repeat;
+	/*	height:110px; */
+	padding-top: 19px;
+	padding-right: 14px;
+	padding-bottom: 19px;
+	padding-left: 14px;
+}
+#homeContent #div02 #todaysRates #country { float:left; font-weight:bold; padding-right:3px;}
+#homeContent #div02 #todaysRates #ringgit { float:left; padding-right:3px;}
+#homeContent #div02 #todaysRates #exchange { float:left;}
+#homeContent #div02 #todaysRates #exchange div { color:white; background:#6c6c6c;}
+#homeContent #div02 #todaysRates #country div, #homeContent #div02 #todaysRates #ringgit div, #homeContent #div02 #todaysRates #exchange div{padding:1px 3px; margin-bottom:2px;}
+#homeContent #div03 { width:240px; float:right; padding:12px 0px 0px 0px; }
+#homeContent #div03 .underline { text-decoration:underline;}
+#homeContent #div03 .numbers {font-size:18px; color:#6c6c6c; padding-bottom:13px;}
+#homeContent .title { font-size:22px; color:#696969; font-weight:bold;padding-bottom:10px;}
+#homeContent .content { padding-left:0px;}
+#homeContent .content2 { padding-left:37px;}
+
+.sprateR
+{
+margin-left:2px;
+}
+/* links */
+a:link, a:visited { font-size:12px; text-decoration: underline; color:#333333;}
+a:hover { font-size:12px; text-decoration: none; color:#99132c; }
+a.learnmore:link, a.learnmore:visited {text-decoration: none; color:#c32929; }
+a.learnmore:hover {text-decoration: underline; color:#99132c;}
+
+/* content */
+#subContent { background:url(../images/bg_home_content.gif) no-repeat top; padding:32px 30px 0px 25px; min-height:200px;}
+#subContent #divSidebar { width:187px; float:left; padding:12px 0px; }
+#subContent #divSidebar .title { color:#be0000; font-size:12px; font-weight:bold; text-transform:uppercase; height:23px; padding:5px 10px; background:url(../images/sidebar_dots.gif) repeat-x bottom;}
+#subContent #divSidebar ul.links { margin:0; padding:0; list-style:none; }
+#subContent #divSidebar ul.links li { display:block; padding:6px 10px; background:url(../images/sidebar_dots.gif) repeat-x bottom;}
+#subContent #divSidebar ul.links li a:link, #subContent #divSidebar ul.links li a:visited { text-decoration: none; }
+#subContent #divSidebar ul.links li a:hover { text-decoration: none; }
+
+#subContent #divSubContent { width:448px; padding:12px 30px 10px 30px; float:left; }
+#subContent #divSubContent .title { color:#696969; font-size:18px; margin-top:0px;}
+#subContent #divSubContent .breadcrumb {float:right; font-size:10px;}
+
+#subContent #divSubContent #todaysRates {
+	background:url(../images/bg_todays_rates.gif) no-repeat;
+/*	height:110px; */
+	margin-left:35px;
+	padding-top: 19px;
+	padding-right: 14px;
+	padding-bottom: 19px;
+	padding-left: 12px;
+}
+#subContent #divSubContent #todaysRates #country { float:left; font-weight:bold; padding-right:3px;}
+#subContent #divSubContent #todaysRates #ringgit { float:left; padding-right:3px;}
+#subContent #divSubContent #todaysRates #exchange { float:left;}
+#subContent #divSubContent #todaysRates #exchange div { color:white; background:#6c6c6c;}
+#subContent #divSubContent #todaysRates #country div, #subContent #divSubContent #todaysRates #ringgit div, #subContent #divSubContent #todaysRates #exchange div{padding:1px 4px; margin-bottom:2px;}
+
+
+
+#subContent #divBanners { width:240px; padding:32px 0px 0px 0px; float:right; }
+#subContent #divBanners img { margin-bottom:10px;}
+
+
+/* admin */
+
+
+/* footer */
+#footer #merchantrade { text-align:right; padding: 5px 40px 3px 0px;}
+#footer #footerLinks { background:url(../images/footer_bg.gif) no-repeat left; height:21px; padding:5px 46px 0px 62px; font-size:10px; color:#ededed; text-align:right;}
+#footer #footerLinks ul { margin:0; padding:0; list-style:none; }
+#footer #footerLinks ul li { display:block; float:left; padding-right:25px;}
+#footer #footerLinks ul li a:link, #footer #footerLinks ul li a:visited { font-size:10px; text-decoration: none; color:#ededed;}
+#footer #footerLinks ul li a:hover { font-size:10px; text-decoration: none; color:#fffc00; }
+
+#footer #footerCopyright { font-size:10px; color:#666666; padding:8px 45px; text-align:right;}
+#footer #affiliate { float:left; }
+
+#footerBg { height:16px; width:100%; background:url(../images/footer_bg3.gif) no-repeat center; margin-left:auto; margin-right:auto; margin-bottom:15px;}
