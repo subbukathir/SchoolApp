@@ -55,6 +55,7 @@ public class UserLogin_Process
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
     }
+
     public void GetLogin()
     {
 
@@ -78,7 +79,7 @@ public class UserLogin_Process
                         if (response.length() == 0)
                         {
                             editor = mPreferences.edit();
-                            editor.putString(AppUtils.LOGIN_SHARED, "");
+                            editor.putString(AppUtils.SHARED_LOGIN_PROFILE, "");
                             editor.commit();
                             mCallBack.onLoginSuccess();
                         }
@@ -90,7 +91,7 @@ public class UserLogin_Process
                             if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                             {
                                 editor = mPreferences.edit();
-                                editor.putString(AppUtils.LOGIN_SHARED, Str_Code);
+                                editor.putString(AppUtils.SHARED_LOGIN_PROFILE, response.toString());
                                 editor.commit();
                                 mCallBack.onLoginSuccess();
                             }
@@ -160,4 +161,5 @@ public class UserLogin_Process
             mCallBack.onLoginFailed(Str_Msg);
         }
     }
+
 }

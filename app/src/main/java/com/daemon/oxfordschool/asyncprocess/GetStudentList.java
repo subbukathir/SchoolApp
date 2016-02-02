@@ -16,49 +16,54 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
-import com.daemon.oxfordschool.listeners.MoviesListener;
+import com.daemon.oxfordschool.constants.ApiConstants;
+import com.daemon.oxfordschool.listeners.StudentsListListener;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by daemonsoft on 4/12/15.
  */
-public class FetchMovies
+public class GetStudentList
 {
-    public static String MODULE = "FetchMovies";
+    public static String MODULE = "GetStudentList";
     public static String TAG ="";
     String Str_Msg = "",Str_Code="";
-    MoviesListener mCallBack;
+    StudentsListListener mCallBack;
     String Str_Url="";
+    JSONObject Payload;
     Fragment mFragment;
     AppCompatActivity mActivity;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;
 
-    public FetchMovies(String Str_Url, Fragment mFragment)
+    public GetStudentList(String Str_Url, JSONObject Payload,Fragment mFragment)
     {
         this.Str_Url = Str_Url;
+        this.Payload = Payload;
         this.mFragment=mFragment;
         this.mActivity = (AppCompatActivity)mFragment.getActivity();
-        mCallBack = (MoviesListener) mFragment;
+        mCallBack = (StudentsListListener) mFragment;
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
     }
 
     /**
-     * Fetching movies json by making http call
+     * Getting students list json by making http call
      */
-    public void fetchMovies()
+    public void getStudents()
     {
-        TAG = "fetchMovies";
+        TAG = "getStudents";
         Log.d(MODULE,TAG);
         // appending offset to url
         String url = Str_Url;
         // Volley's json array request object
-        JsonArrayRequest req = new JsonArrayRequest(url,responseListener,responseErrorListener);
+        JsonObjectRequest req = new JsonObjectRequest(url,Payload,responseListener,responseErrorListener);
         MyApplication.getInstance().addToRequestQueue(req);
     }
 
@@ -69,24 +74,40 @@ public class FetchMovies
         {
             try
             {
-                JSONArray response = (JSONArray) o;
+                JSONObject response = (JSONObject) o;
                 Log.d(TAG, response.toString());
-                if (response.length() > 0)
+                if (response.toString().length()==0)
                 {
-                    editor.putString(AppUtils.MOVIES_SHARED,response.toString());
+                    Log.d(TAG, "empty");
+                    editor = mPreferences.edit();
+                    editor.putString(AppUtils.SHARED_STUDENT_LIST, "");
                     editor.commit();
-                    mCallBack.onMoviesReceived();
+                    Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                    mCallBack.onStudentsReceivedError(Str_Msg);
                 }
                 else
                 {
-                    Str_Msg = "No Movies Found";
-                    mCallBack.onMoviesReceivedError(Str_Msg);
+                    String Str_Code = response.getString("success");
+                    Log.d(MODULE, TAG + " Str_Code : " + Str_Code);
+
+                    if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
+                    {
+                        editor = mPreferences.edit();
+                        editor.putString(AppUtils.SHARED_STUDENT_LIST, response.toString());
+                        editor.commit();
+                        mCallBack.onStudentsReceived();
+                    }
+                    else
+                    {
+                        Str_Msg = response.getString("message");
+                        mCallBack.onStudentsReceivedError(Str_Msg);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                mCallBack.onMoviesReceivedError(Str_Msg);
+                mCallBack.onStudentsReceivedError(Str_Msg);
             }
 
         }
@@ -123,7 +144,7 @@ public class FetchMovies
             {
                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
             }
-            mCallBack.onMoviesReceivedError(Str_Msg);
+            mCallBack.onStudentsReceivedError(Str_Msg);
         }
     };
 

@@ -33,7 +33,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
 
     boolean isAllEnteryFilled = true;
     String username, password;
-    String Url = ApiConstants.Url_Login;
+    String Url = ApiConstants.LOGIN_URL;
     Button button_login;
     EditText et_username, et_password;
     TextInputLayout til_username,til_password;

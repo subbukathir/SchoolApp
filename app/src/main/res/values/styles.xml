@@ -10,6 +10,8 @@
         <item name="colorPrimary">@color/color_app</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_app_background</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="colorButtonNormal">@color/color_app</item>
     </style>
 
     <style name="match_parent_style">
@@ -64,25 +66,71 @@
         <item name="android:layout_margin">@dimen/space_layout_margin</item>
     </style>
 
-    <style name="line_horizontal_footer">
+    <style name="divider_style">
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:background">@color/color_app</item>
+        <item name="android:background">@color/material_grey_300</item>
     </style>
     <style name="img_view_profile_pic">
-        <item name="android:layout_height">@dimen/img_height</item>
-        <item name="android:layout_width">@dimen/img_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:src">@drawable/ic_profile</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
 
-    <style name="text_view_header">
+    <style name="text_view_header_name">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/txt_view_medium</item>
         <item name="android:textColor">@color/color_white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:singleLine">true</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left</item>
     </style>
+
+    <style name="text_view_header_class">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/txt_view_medium</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:padding">@dimen/space_layout_padding</item>
+    </style>
+
+    <style name="text_view_profile_left_details">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/color_primary_dark</item>
+        <item name="android:textSize">@dimen/lbl_size</item>
+        <item name="android:layout_margin">@dimen/space_layout_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">@dimen/space_layout_padding</item>
+    </style>
+
+    <style name="text_view_profile_right_details">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:textSize">@dimen/lbl_size</item>
+        <item name="android:layout_margin">@dimen/space_layout_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">@dimen/space_layout_margin</item>
+    </style>
+
+    <style name="text_view_label">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/color_dark_grey</item>
+        <item name="android:textSize">@dimen/lbl_size</item>
+        <item name="android:layout_marginLeft">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">@dimen/space_layout_margin</item>
+    </style>
+
 </resources>
