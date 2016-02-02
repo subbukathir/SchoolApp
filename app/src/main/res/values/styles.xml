@@ -99,11 +99,11 @@
     <style name="text_view_header_profile">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/margin_large</item>
-        <item name="android:textSize">@dimen/txt_view_medium</item>
+        <item name="android:textSize">@dimen/lbl_size</item>
         <item name="android:textColor">@color/color_dark_grey</item>
         <item name="android:singleLine">true</item>
         <item name="android:padding">@dimen/space_layout_padding</item>
-        <item name="android:layout_margin">@dimen/space_layout_margin</item>
+        <item name="android:layout_margin">@dimen/space_layout_margin_small</item>
         <item name="android:drawablePadding">@dimen/space_layout_padding_small</item>
     </style>
 

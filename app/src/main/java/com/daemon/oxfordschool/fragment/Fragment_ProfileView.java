@@ -109,7 +109,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             tv_profile_email=(TextView) view.findViewById(R.id.tv_profile_email);
             tv_lbl_profile_address=(TextView) view.findViewById(R.id.tv_lbl_profile_address);
             tv_profile_address=(TextView) view.findViewById(R.id.tv_profile_address);
-            image_view_profile = (ImageView) view.findViewById(R.id.img_view_profile);
+            image_view_profile = (ImageView) view.findViewById(R.id.iv_profile);
 
             profile_header = (RelativeLayout) view.findViewById(R.id.view_profile_header);
 
