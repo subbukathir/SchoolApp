@@ -34,6 +34,9 @@ public class AppUtils extends Dialog
 
     public static String MOVIES_SHARED = "Shared_Movies";
     public static String LOGIN_SHARED = "Shared_Login";
+    public static String SUBJECTLIST_SHARED = "Shared_SubjectList";
+    public static String SECTIONLIST_SHARED = "Shared_SectionList";
+    public static String CLASSLIST_SHARED = "Shared_ClassList";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
