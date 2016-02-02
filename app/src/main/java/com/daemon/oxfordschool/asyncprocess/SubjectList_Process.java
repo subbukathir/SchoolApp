@@ -39,7 +39,7 @@ public class SubjectList_Process
 
     String Str_Msg = "",Str_Code="";
     SubjectListListener mCallBack;
-    String Str_Url=ApiConstants.Url_SubjectList;
+    String Str_Url=ApiConstants.SUBJECTLIST_URL;
     AppCompatActivity mActivity;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;

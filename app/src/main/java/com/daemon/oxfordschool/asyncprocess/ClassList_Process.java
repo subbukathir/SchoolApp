@@ -39,7 +39,7 @@ public class ClassList_Process
 
     String Str_Msg = "",Str_Code="";
     ClassListListener mCallBack;
-    String Str_Url=ApiConstants.Url_ClassList;
+    String Str_Url=ApiConstants.CLASSLIST_URL;
     AppCompatActivity mActivity;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;

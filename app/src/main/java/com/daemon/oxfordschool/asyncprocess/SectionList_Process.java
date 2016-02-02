@@ -39,7 +39,7 @@ public class SectionList_Process
 
     String Str_Msg = "",Str_Code="";
     SectionListListener mCallBack;
-    String Str_Url=ApiConstants.Url_SectionList;
+    String Str_Url=ApiConstants.SECTIONLIST_URL;
     AppCompatActivity mActivity;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;
