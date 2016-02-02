@@ -27,7 +27,7 @@ public class Fragment_ProfileView extends Fragment
     public static String MODULE = "Fragment_ProfileView ";
     public static String TAG = "";
 
-    TextView tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address;
+    TextView tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address,tv_header_name;
     SharedPreferences mPreferences;
     User mUser;
     AppCompatActivity mActivity;
@@ -72,6 +72,7 @@ public class Fragment_ProfileView extends Fragment
         Log.d(MODULE, TAG);
         try
         {
+            tv_header_name = (TextView) view.findViewById(R.id.tv_header_name);
             tv_profile_mobile_number=(TextView) view.findViewById(R.id.tv_profile_mobile_number);
             tv_profile_email=(TextView) view.findViewById(R.id.tv_profile_email);
             tv_lbl_profile_address=(TextView) view.findViewById(R.id.tv_lbl_profile_address);
@@ -109,6 +110,7 @@ public class Fragment_ProfileView extends Fragment
         Log.d(MODULE, TAG);
         try
         {
+            tv_header_name.setTypeface(font.getHelveticaBold());
             tv_profile_mobile_number.setTypeface(font.getHelveticaRegular());
             tv_profile_email.setTypeface(font.getHelveticaRegular());
             tv_lbl_profile_address.setTypeface(font.getHelveticaRegular());
@@ -147,6 +149,10 @@ public class Fragment_ProfileView extends Fragment
         TAG = "setProfile";
         Log.d(MODULE, TAG);
 
+        StringBuilder Str_Name = new StringBuilder();
+        Str_Name.append(mUser.getFirstName()).append(" ");
+        Str_Name.append(mUser.getLastName()).append(" ");
+        tv_header_name.setText(Str_Name.toString());
         tv_profile_mobile_number.setText(mUser.getMobile_Number());
         tv_profile_email.setText(mUser.getEmail());
         StringBuilder Str_Address = new StringBuilder();
@@ -155,7 +161,6 @@ public class Fragment_ProfileView extends Fragment
         Str_Address.append(mUser.getAddress3()).append(" ");
         tv_profile_address.setText(Str_Address);
     }
-
 
 
 }

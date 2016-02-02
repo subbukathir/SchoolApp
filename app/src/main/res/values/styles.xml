@@ -89,13 +89,12 @@
     </style>
 
     <style name="text_view_header_class">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/txt_view_medium</item>
         <item name="android:textColor">@color/color_white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:singleLine">true</item>
-        <item name="android:padding">@dimen/space_layout_padding</item>
     </style>
 
     <style name="text_view_profile_left_details">
