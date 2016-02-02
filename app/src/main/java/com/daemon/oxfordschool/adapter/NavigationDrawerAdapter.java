@@ -13,7 +13,9 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
+import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
+import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.model.NavDrawerItem;
 
 
@@ -21,6 +23,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     List<NavDrawerItem> data = Collections.emptyList();
     private LayoutInflater inflater;
     private Context context;
+    private Font font= MyApplication.getInstance().getFontInstance();
 
     public NavigationDrawerAdapter(Context context, List<NavDrawerItem> data) {
         this.context = context;
@@ -57,6 +60,8 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         public MyViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
+            title.setTypeface(font.getHelveticaRegular());
         }
     }
+
 }

@@ -32,15 +32,15 @@ public class AppUtils extends Dialog
     public static final String MODULE = "AppUtils";
     public static String TAG = "";
 
-    public static String MOVIES_SHARED = "Shared_Movies";
-    public static String LOGIN_SHARED = "Shared_Login";
+    public static String SHARED_LOGIN_PROFILE = "Shared_Login";
+    public static String SHARED_STUDENT_LIST = "Shared_Student_List";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
     public static String SHARED_DIALOG_PICKER = "Shared_Dialog_Picker";
 
     public static File root = android.os.Environment.getExternalStorageDirectory();
-    public static String RootPath = "/Android/data/com.daemon.materialdesign";
+    public static String RootPath = "/Android/data/com.daemon.oxfordschool";
 
     private static ProgressDialog mPrograssDialog;
 

@@ -15,8 +15,9 @@ import android.view.View;
 
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
+import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
+import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.FriendsFragment;
-import com.daemon.oxfordschool.fragment.HomeFragment;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         {
             case R.id.action_settings:
                  return true;
-
             case android.R.id.home:
                  FragmentDrawer.mDrawerLayout.openDrawer(Gravity.LEFT);
                  return false;
@@ -78,16 +78,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
-                fragment = new HomeFragment();
-                title = getString(R.string.title_home);
+                fragment = new Fragment_ProfileView();
+                title = getString(R.string.lbl_profile);
                 break;
             case 1:
-                fragment = new FriendsFragment();
-                title = getString(R.string.title_friends);
+                fragment = new Fragment_StudentProfile();
+                title = getString(R.string.lbl_students);
                 break;
             case 2:
                 fragment = new FriendsFragment();
-                title = getString(R.string.title_messages);
                 break;
             default:
                 break;

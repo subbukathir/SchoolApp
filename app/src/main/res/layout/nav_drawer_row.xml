@@ -2,16 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="@dimen/space_layout_margin"
     android:clickable="true">
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="15dp"
+        android:paddingLeft="@dimen/space_layout_margin"
+        android:textSize="@dimen/txt_view_large"
         android:textStyle="bold" />
 
 </RelativeLayout>

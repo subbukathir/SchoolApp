@@ -74,7 +74,7 @@
 
 
     <!--view profile-->
-    <dimen name="dim_img_size_view_profile">150dp</dimen>
+    <dimen name="dim_img_size_view_profile">200dp</dimen>
     <dimen name="txt_view_width_profile">150dp</dimen>
 
 </resources>

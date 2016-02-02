@@ -5,15 +5,29 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <string name="nav_item_home">Home</string>
-    <string name="nav_item_friends">Friends</string>
-    <string name="nav_item_notifications">Messages</string>
+    <string name="lbl_profile">Profile</string>
+    <string name="lbl_student_profile">Student Profile</string>
+    <string name="lbl_events">Events</string>
+    <string name="lbl_homework">Homework</string>
+    <string name="lbl_attendance">Attendance</string>
+    <string name="lbl_exam_schedule">Exam Schedule</string>
+    <string name="lbl_exam_result">Exam Result</string>
+    <string name="lbl_fees_detail">Fees Detail</string>
+    <string name="lbl_time_table">Time Table</string>
+    <string name="lbl_reports">Report Details</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
-        <item>@string/nav_item_home</item>
-        <item>@string/nav_item_friends</item>
-        <item>@string/nav_item_notifications</item>
+        <item>@string/lbl_profile</item>
+        <item>@string/lbl_student_profile</item>
+        <item>@string/lbl_events</item>
+        <item>@string/lbl_homework</item>
+        <item>@string/lbl_attendance</item>
+        <item>@string/lbl_exam_schedule</item>
+        <item>@string/lbl_exam_result</item>
+        <item>@string/lbl_fees_detail</item>
+        <item>@string/lbl_time_table</item>
+        <item>@string/lbl_reports</item>
     </string-array>
 
     <!-- Splash Screen -->
@@ -25,10 +39,24 @@
     <string name="title_friends">Friends</string>
     <string name="title_home">Home</string>
 
+
     <string name="lbl_first_name">First Name</string>
     <string name="lbl_last_name">Last Name</string>
     <string name="lbl_class">Class :</string>
-    <string name="lbl_section">Sec :</string>
+    <string name="lbl_section">Section :</string>
+
+    <!-- Profile View -->
+
+    <string name="lbl_Email">Email</string>
+    <string name="lbl_Mobile">Mobile</string>
+    <string name="lbl_address">Address</string>
+
+
+    <!-- Student Profile View -->
+
+    <string name="lbl_no_student">No Student Found</string>
+    <string name="lbl_students">Students</string>
+
 
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>
     <string name="lbl_msg_blank_last_name">Please fill out last name</string>
