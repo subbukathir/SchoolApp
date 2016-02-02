@@ -58,6 +58,15 @@
     <string name="lbl_students">Students</string>
 
 
+    <!-- Event View -->
+
+    <string name="lbl_event_name">Event Name </string>
+    <string name="lbl_start_date">Start Date</string>
+    <string name="lbl_end_date">End Date</string>
+    <string name="lbl_organizer">Organizer</string>
+    <string name="lbl_description">Description</string>
+
+
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>
     <string name="lbl_msg_blank_last_name">Please fill out last name</string>
     <string name="lbl_msg_blank_username">Please fill out username</string>

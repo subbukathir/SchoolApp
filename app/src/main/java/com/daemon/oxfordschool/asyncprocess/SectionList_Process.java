@@ -75,7 +75,7 @@ public class SectionList_Process
                         if (response.length() == 0)
                         {
                             editor = mPreferences.edit();
-                            editor.putString(AppUtils.SECTIONLIST_SHARED, "");
+                            editor.putString(AppUtils.SHARED_SECTION_LIST, "");
                             editor.commit();
                             mCallBack.onSectionListSuccess();
                         }
@@ -87,7 +87,7 @@ public class SectionList_Process
                             if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                             {
                                 editor = mPreferences.edit();
-                                editor.putString(AppUtils.SECTIONLIST_SHARED, Str_Code);
+                                editor.putString(AppUtils.SHARED_SECTION_LIST, Str_Code);
                                 editor.commit();
                                 mCallBack.onSectionListSuccess();
                             }

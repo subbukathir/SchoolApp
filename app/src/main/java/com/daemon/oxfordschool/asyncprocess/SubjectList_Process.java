@@ -74,7 +74,7 @@ public class SubjectList_Process
                         if (response.length() == 0)
                         {
                             editor = mPreferences.edit();
-                            editor.putString(AppUtils.SUBJECTLIST_SHARED, "");
+                            editor.putString(AppUtils.SHARED_SUBJECT_LIST, "");
                             editor.commit();
                             mCallBack.onSubjectListSuccess();
                         }
@@ -86,7 +86,7 @@ public class SubjectList_Process
                             if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                             {
                                 editor = mPreferences.edit();
-                                editor.putString(AppUtils.SUBJECTLIST_SHARED, Str_Code);
+                                editor.putString(AppUtils.SHARED_SUBJECT_LIST, Str_Code);
                                 editor.commit();
                                 mCallBack.onSubjectListSuccess();
                             }
@@ -150,4 +150,5 @@ public class SubjectList_Process
             Log.d(MODULE,TAG + Str_Msg);
         }
     }
+
 }

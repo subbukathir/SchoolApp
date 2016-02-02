@@ -12,7 +12,7 @@ public class ApiConstants
     public static String CLASSLIST_URL=SERVER_URL + "ClassList.php";
     public static String SECTIONLIST_URL=SERVER_URL +"SectionList.php";
     public static String SUBJECTLIST_URL=SERVER_URL + "SubjectsList.php";
-
+    public static String EVENTS_LIST_URL=SERVER_URL + "EventsList.php";
 
     public static String SUCCESS_CODE="0";
 }

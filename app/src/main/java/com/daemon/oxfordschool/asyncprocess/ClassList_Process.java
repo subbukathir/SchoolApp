@@ -74,7 +74,7 @@ public class ClassList_Process
                         if (response.length() == 0)
                         {
                             editor = mPreferences.edit();
-                            editor.putString(AppUtils.CLASSLIST_SHARED, "");
+                            editor.putString(AppUtils.SHARED_CLASS_LIST, "");
                             editor.commit();
                             mCallBack.onClassListSuccess();
                         }
@@ -86,7 +86,7 @@ public class ClassList_Process
                             if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                             {
                                 editor = mPreferences.edit();
-                                editor.putString(AppUtils.CLASSLIST_SHARED, Str_Code);
+                                editor.putString(AppUtils.SHARED_CLASS_LIST, Str_Code);
                                 editor.commit();
                                 mCallBack.onClassListSuccess();
                             }

@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
+import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.FriendsFragment;
@@ -86,7 +87,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.lbl_students);
                 break;
             case 2:
-                fragment = new FriendsFragment();
+                fragment = new Fragment_Events();
+                title = getString(R.string.lbl_events);
                 break;
             default:
                 break;

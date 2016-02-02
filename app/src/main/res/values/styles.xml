@@ -10,7 +10,7 @@
         <item name="colorPrimary">@color/color_app</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_app_background</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowBackground">@color/color_white</item>
         <item name="colorButtonNormal">@color/color_app</item>
     </style>
 
@@ -128,6 +128,18 @@
         <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
         <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">@dimen/space_layout_margin</item>
+    </style>
+
+    <style name="text_view_event_list_item">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/color_dark_grey</item>
+        <item name="android:textSize">@dimen/lbl_size</item>
+        <item name="android:layout_marginLeft">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
         <item name="android:layout_weight">1</item>
         <item name="android:padding">@dimen/space_layout_margin</item>
     </style>
