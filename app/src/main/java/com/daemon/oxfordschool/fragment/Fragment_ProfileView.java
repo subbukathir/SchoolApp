@@ -50,7 +50,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     public static String MODULE = "Fragment_ProfileView ";
     public static String TAG = "";
 
-    TextView tv_profile_name,tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address;
+    TextView tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address,tv_header_name;
     public ImageView image_view_profile;
     RelativeLayout profile_header;
     SharedPreferences mPreferences;
@@ -104,12 +104,11 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         Log.d(MODULE, TAG);
         try
         {
+            tv_header_name = (TextView) view.findViewById(R.id.tv_header_name);
             tv_profile_mobile_number=(TextView) view.findViewById(R.id.tv_profile_mobile_number);
             tv_profile_email=(TextView) view.findViewById(R.id.tv_profile_email);
             tv_lbl_profile_address=(TextView) view.findViewById(R.id.tv_lbl_profile_address);
             tv_profile_address=(TextView) view.findViewById(R.id.tv_profile_address);
-            tv_profile_name = (TextView) view.findViewById(R.id.txt_view_name);
-
             image_view_profile = (ImageView) view.findViewById(R.id.img_view_profile);
 
             profile_header = (RelativeLayout) view.findViewById(R.id.view_profile_header);
@@ -125,8 +124,6 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         }
     }
 
-
-
     @Override
     public void onStart()
     {
@@ -135,7 +132,8 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         TAG = "onStart";
         Log.d(MODULE, TAG);
 
-        try {
+        try
+        {
             getProfile();
             setProfile();
         }
@@ -151,11 +149,11 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         Log.d(MODULE, TAG);
         try
         {
+            tv_header_name.setTypeface(font.getHelveticaBold());
             tv_profile_mobile_number.setTypeface(font.getHelveticaRegular());
             tv_profile_email.setTypeface(font.getHelveticaRegular());
             tv_lbl_profile_address.setTypeface(font.getHelveticaRegular());
             tv_profile_address.setTypeface(font.getHelveticaRegular());
-            tv_profile_name.setTypeface(font.getHelveticaBold());
         }
         catch (Exception ex)
         {
@@ -163,7 +161,8 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         }
     }
 
-    public void getProfile() {
+    public void getProfile()
+    {
         TAG = "getProfile";
         Log.d(MODULE, TAG);
         try
@@ -189,17 +188,16 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         TAG = "setProfile";
         Log.d(MODULE, TAG);
 
+        StringBuilder Str_Name = new StringBuilder();
+        Str_Name.append(mUser.getFirstName()).append(" ");
+        Str_Name.append(mUser.getLastName()).append(" ");
+        tv_header_name.setText(Str_Name.toString());
         tv_profile_mobile_number.setText(mUser.getMobile_Number());
         tv_profile_email.setText(mUser.getEmail());
         StringBuilder Str_Address = new StringBuilder();
         Str_Address.append(mUser.getAddress1()).append(" ");
         Str_Address.append(mUser.getAddress2()).append(" ");
         Str_Address.append(mUser.getAddress3()).append(" ");
-
-        StringBuilder Str_Name = new StringBuilder();
-        Str_Name.append(mUser.getFirstName()).append(" ");
-        Str_Name.append(mUser.getLastName()).append(" ");
-        tv_profile_name.setText(Str_Name);
         tv_profile_address.setText(Str_Address);
     }
 

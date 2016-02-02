@@ -105,6 +105,7 @@
                 <!-- Label address starts here -->
 
             </LinearLayout>
+            <include layout="@layout/view_profile_details" />
 
         </LinearLayout>
 
