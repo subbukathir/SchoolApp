@@ -52,15 +52,15 @@ public class CHomework implements Parcelable
         this.SubjectName = source.readString();
     }
 
-    public static final Parcelable.Creator<CEvents> CREATOR = new Parcelable.Creator<CEvents>()
+    public static final Parcelable.Creator<CHomework> CREATOR = new Parcelable.Creator<CHomework>()
     {
-        public CEvents createFromParcel(Parcel in)
+        public CHomework createFromParcel(Parcel in)
         {
-            return new CEvents(in);
+            return new CHomework(in);
         }
-        public CEvents[] newArray(int size)
+        public CHomework[] newArray(int size)
         {
-            return new CEvents[size];
+            return new CHomework[size];
         }
     };
 

@@ -39,7 +39,7 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
         setContentView(R.layout.splash_screen);
 
         Init();
-        new ClassList_Process(SplashScreen.this).GetClassList();
+        new ClassList_Process(SplashScreen.this,this).GetClassList();
         new Thread(new Runnable() {
 
             @Override
@@ -81,11 +81,17 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
     }
 
     @Override
-    public void onClassListSuccess() {
-        TAG = "onClassListSuccess";
+    public void onClassListReceived() {
+        TAG = "onClassListReceived";
         Log.d(MODULE, TAG);
 
         new SectionList_Process(this).GetSectionList();
+    }
+
+    @Override
+    public void onClassListReceivedError(String Str_Msg) {
+        TAG = "onClassListReceivedError";
+        Log.d(MODULE, TAG);
     }
 
     @Override

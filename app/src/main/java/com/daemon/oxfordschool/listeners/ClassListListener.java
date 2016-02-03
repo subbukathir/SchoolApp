@@ -5,5 +5,6 @@ package com.daemon.oxfordschool.listeners;
  */
 public interface ClassListListener
 {
-    public void onClassListSuccess();
+    public void onClassListReceived();
+    public void onClassListReceivedError(String Str_Msg);
 }
