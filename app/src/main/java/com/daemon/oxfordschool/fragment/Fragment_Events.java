@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daemon.oxfordschool.MyApplication;
@@ -175,10 +176,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         try
         {
             getEventsList();
-            if(mListEvents.size()>0)
-            {
-                showEventsList();
-            }
+            showEventsList();
         }
         catch (Exception ex)
         {
@@ -188,7 +186,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
     @Override
     public void onEventsReceivedError(String Str_Msg) {
-        TAG = "onStudentsReceivedError";
+        TAG = "onEventsReceivedError";
         Log.d(MODULE, TAG);
         try
         {
@@ -233,8 +231,16 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         Log.d(MODULE, TAG);
         try
         {
-            EventsAdapter adapter = new EventsAdapter(mListEvents,this);
-            recycler_view.setAdapter(adapter);
+            if(mListEvents.size()>0)
+            {
+                EventsAdapter adapter = new EventsAdapter(mListEvents,this);
+                recycler_view.setAdapter(adapter);
+            }
+            else
+            {
+                showEmptyView();
+            }
+
         }
         catch (Exception ex)
         {
@@ -242,6 +248,28 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         }
     }
 
+    public void showEmptyView()
+    {
+        TAG = "showEmptyView";
+        Log.d(MODULE, TAG);
+
+        try
+        {
+            View emptyView  = mActivity.getLayoutInflater().inflate(R.layout.view_list_empty,null);
+            LinearLayout.LayoutParams params = AppUtils.getMatchParentParams();
+            emptyView.setLayoutParams(params);
+            TextView textView = (TextView) emptyView.findViewById(R.id.text_view_empty);
+            textView.setText(R.string.lbl_no_events);
+            textView.setTypeface(font.getHelveticaRegular());
+            ((ViewGroup)recycler_view.getParent().getParent()).addView(emptyView);
+            recycler_view.setEmptyView(emptyView);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
 
 
 

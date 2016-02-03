@@ -235,6 +235,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         builder.show();
 
     }
+
     private void dispatchTakePictureIntent()
     {
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -288,7 +289,6 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         startActivityForResult(intent, 102);
     }
 
-
     private void StartPicking()
     {
         TAG = "Goto_Fragment_BankList";
@@ -312,6 +312,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         ObjTransaction.addToBackStack(null);
         ObjTransaction.commit();
     }
+
     private void initImageLoader()
     {
         try

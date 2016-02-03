@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.daemon.oxfordschool.R;
 import com.google.gson.Gson;
@@ -39,6 +40,7 @@ public class AppUtils extends Dialog
     public static String SHARED_SECTION_LIST = "Shared_Section_List";
     public static String SHARED_CLASS_LIST = "Shared_Class_List";
     public static String SHARED_EVENTS_LIST = "Shared_Events_List";
+    public static String SHARED_HOMEWORK_LIST = "Shared_HomeWork_List";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
@@ -169,6 +171,18 @@ public class AppUtils extends Dialog
     public static void hideProgressDialog()
     {
         mPrograssDialog.hide();
+    }
+
+    public static LinearLayout.LayoutParams getMatchParentParams()
+    {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        return params;
+    }
+
+    public static LinearLayout.LayoutParams getMatchWrapParams()
+    {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        return params;
     }
 
 }
