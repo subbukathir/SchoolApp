@@ -65,6 +65,12 @@
     <string name="lbl_end_date">End Date</string>
     <string name="lbl_organizer">Organizer</string>
     <string name="lbl_description">Description</string>
+    <string name="lbl_no_events">No Events</string>
+
+    <!-- HomeWork -->
+
+    <string name="lbl_select_date">Select Date</string>
+    <string name="lbl_no_homework">No homework on </string>
 
 
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>
