@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/match_parent_style"
-    android:orientation="vertical"
-
-    android:padding="@dimen/space_layout_padding_small">
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="1dp">
+        card_view:cardCornerRadius="10dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="@color/material_grey_100"
+        card_view:cardElevation="10dp">
 
         <LinearLayout
             style="@style/match_wrap_style"

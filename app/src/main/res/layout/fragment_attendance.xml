@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_student_profile_header" />
+
+    <LinearLayout
+        style="@style/match_parent_style"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/lbl_month"
+                style="@style/text_view_label" />
+
+            <Spinner
+                style="@style/spinner_style"
+                android:id="@+id/spinner_month"
+                ></Spinner>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/lbl_working_days"
+                style="@style/text_view_label" />
+
+            <TextView
+                android:id="@+id/txt_view_workingdays"
+                style="@style/text_view_label" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/lbl_present_days"
+                style="@style/text_view_label" />
+
+            <TextView
+                android:id="@+id/txt_view_presentdays"
+                style="@style/text_view_label" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/lbl_percentage"
+                style="@style/text_view_label" />
+
+            <TextView
+                android:id="@+id/txt_view_percentage"
+                style="@style/text_view_label" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

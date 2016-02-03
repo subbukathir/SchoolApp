@@ -19,7 +19,7 @@ import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
-import com.daemon.oxfordschool.fragment.FriendsFragment;
+import com.daemon.oxfordschool.fragment.Fragment_Attendance;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -94,6 +94,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 3:
                 fragment = new Fragment_HomeWork();
                 title = getString(R.string.lbl_homework);
+                break;
+            case 4:
+                fragment = new Fragment_Attendance();
+                title = getString(R.string.lbl_attendance);
                 break;
             default:
                 break;

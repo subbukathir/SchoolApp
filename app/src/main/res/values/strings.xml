@@ -107,5 +107,29 @@
         <item>Your photos</item>
     </string-array>
 
+    <!-- Attendance View -->
+
+    <string name="lbl_month">Month  </string>
+    <string name="lbl_working_days">No of Working Days  </string>
+    <string name="lbl_present_days">No of Present Days  </string>
+    <string name="lbl_percentage">Percentage  </string>
+
+    <string-array name="array_months">
+        <item>Select Month</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+
 
 </resources>
