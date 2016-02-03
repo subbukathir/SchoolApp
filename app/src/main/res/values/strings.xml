@@ -61,9 +61,9 @@
     <!-- Event View -->
 
     <string name="lbl_event_name">Event Name </string>
-    <string name="lbl_start_date">Start Date</string>
-    <string name="lbl_end_date">End Date</string>
-    <string name="lbl_organizer">Organizer</string>
+    <string name="lbl_start_date">Starts</string>
+    <string name="lbl_end_date">Ends</string>
+    <string name="lbl_organizer">Organized By :</string>
     <string name="lbl_description">Description</string>
 
 

@@ -45,7 +45,7 @@ import java.util.ArrayList;
 public class Fragment_Events extends Fragment implements EventsListListener,Event_List_Item_Click_Listener
 {
 
-    public static String MODULE = "Fragment_StudentProfile ";
+    public static String MODULE = "Fragment_Events ";
     public static String TAG = "";
 
     SwipeRefreshLayout swipeRefreshLayout;
