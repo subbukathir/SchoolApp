@@ -73,6 +73,14 @@
     <string name="lbl_no_homework">No homework on </string>
 
 
+    <!-- Exam Schedule -->
+
+    <string name="lbl_select_exam_type">Select Exam Type</string>
+    <string name="lbl_no_exams">No Examinations</string>
+    <string name="lbl_date">Date</string>
+    <string name="lbl_subject">Subject</string>
+
+
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>
     <string name="lbl_msg_blank_last_name">Please fill out last name</string>
     <string name="lbl_msg_blank_username">Please fill out username</string>

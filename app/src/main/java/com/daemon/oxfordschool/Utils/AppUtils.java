@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.daemon.oxfordschool.R;
+import com.daemon.oxfordschool.classes.Common_Class;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -23,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by daemonsoft on 7/12/15.
@@ -39,6 +41,8 @@ public class AppUtils extends Dialog
     public static String SHARED_SUBJECT_LIST = "Shared_Subject_List";
     public static String SHARED_SECTION_LIST = "Shared_Section_List";
     public static String SHARED_CLASS_LIST = "Shared_Class_List";
+    public static String SHARED_EXAM_TYPE_LIST = "Shared_Exam_List";
+    public static String SHARED_EXAM_LIST = "Shared_Exam_List";
     public static String SHARED_EVENTS_LIST = "Shared_Events_List";
     public static String SHARED_HOMEWORK_LIST = "Shared_HomeWork_List";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
@@ -183,6 +187,24 @@ public class AppUtils extends Dialog
     {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         return params;
+    }
+
+    public static String[] getArray(ArrayList<Common_Class> list)
+    {
+        String[] array = new String[list.size()];
+        try
+        {
+            for(int i=0;i<list.size();i++)
+            {
+                array[i] = list.get(i).getName();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return array;
     }
 
 }

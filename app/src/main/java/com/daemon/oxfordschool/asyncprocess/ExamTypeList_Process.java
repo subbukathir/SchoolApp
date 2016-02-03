@@ -2,7 +2,6 @@ package com.daemon.oxfordschool.asyncprocess;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -25,6 +24,7 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.ClassListListener;
+import com.daemon.oxfordschool.listeners.ExamTypeListListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,32 +32,32 @@ import org.json.JSONObject;
 /**
  * Created by daemonsoft on 1/2/16.
  */
-public class ClassList_Process
+public class ExamTypeList_Process
 {
-    public static String MODULE = "ClassList_Process";
+    public static String MODULE = "ExamTypeList_Process";
     public static String TAG ="";
 
     String Str_Msg = "",Str_Code="";
-    ClassListListener mCallBack;
-    String Str_Url=ApiConstants.CLASSLIST_URL;
+    ExamTypeListListener mCallBack;
+    String Str_Url=ApiConstants.EXAM_TYPE_LIST_URL;
     AppCompatActivity mActivity;
     Object Obj;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;
 
-    public ClassList_Process(AppCompatActivity mActivity,Object Obj)
+    public ExamTypeList_Process(AppCompatActivity mActivity, Object Obj)
     {
         this.mActivity = mActivity;
         this.Obj = Obj;
-        mCallBack = (ClassListListener) Obj;
+        mCallBack = (ExamTypeListListener) Obj;
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
     }
 
-    public void GetClassList()
+    public void GetExamTypeList()
     {
 
-        TAG = " GetClassList";
+        TAG = " GetExamTypeList";
         try
         {
             RequestQueue rq = Volley.newRequestQueue(mActivity);
@@ -75,10 +75,10 @@ public class ClassList_Process
                         if (response.toString().length() == 0)
                         {
                             editor = mPreferences.edit();
-                            editor.putString(AppUtils.SHARED_CLASS_LIST, "");
+                            editor.putString(AppUtils.SHARED_EXAM_TYPE_LIST, "");
                             editor.commit();
                             Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                            mCallBack.onClassListReceivedError(Str_Msg);
+                            mCallBack.onExamTypeListReceivedError(Str_Msg);
                         }
                         else
                         {
@@ -88,14 +88,14 @@ public class ClassList_Process
                             if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                             {
                                 editor = mPreferences.edit();
-                                editor.putString(AppUtils.SHARED_CLASS_LIST, response.toString());
+                                editor.putString(AppUtils.SHARED_EXAM_TYPE_LIST, response.toString());
                                 editor.commit();
-                                mCallBack.onClassListReceived();
+                                mCallBack.onExamTypeListReceived();
                             }
                             else
                             {
                                 Str_Msg = response.getString("message");
-                                mCallBack.onClassListReceivedError(Str_Msg);
+                                mCallBack.onExamTypeListReceivedError(Str_Msg);
                             }
                         }
                     }
@@ -103,7 +103,7 @@ public class ClassList_Process
                     {
                         e.printStackTrace();
                         Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                        mCallBack.onClassListReceivedError(Str_Msg);
+                        mCallBack.onExamTypeListReceivedError(Str_Msg);
                     }
 
                 }
@@ -141,7 +141,7 @@ public class ClassList_Process
                                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
                             }
                             Log.d(MODULE,TAG + Str_Msg);
-                            mCallBack.onClassListReceivedError(Str_Msg);
+                            mCallBack.onExamTypeListReceivedError(Str_Msg);
                         }
                     });
 
@@ -154,7 +154,7 @@ public class ClassList_Process
         {
             Log.e(MODULE, TAG + " Exception Occurs - " + e);
             Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-            mCallBack.onClassListReceivedError(Str_Msg);
+            mCallBack.onExamTypeListReceivedError(Str_Msg);
             Log.d(MODULE,TAG + Str_Msg);
         }
     }
