@@ -406,7 +406,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         {
             tv_working_days.setText(mWorkingDays);
             tv_present_days.setText(mPresentDays);
-            tv_present_days.setText(mPercentage);
+            tv_percentage.setText(mPercentage);
             ll_attendance.setVisibility(View.VISIBLE);
             layout_empty.setVisibility(View.GONE);
         }
