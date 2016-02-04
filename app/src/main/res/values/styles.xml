@@ -172,4 +172,32 @@
         <item name="android:padding">@dimen/space_layout_padding</item>
     </style>
 
+    <style name="text_view_timetable_headers">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/color_dark_grey</item>
+        <item name="android:textSize">@dimen/txt_size_btn</item>
+        <item name="android:layout_weight">1.6</item>
+        <item name="android:padding">@dimen/space_layout_padding</item>
+        <item name="android:layout_marginLeft">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
+    </style>
+
+    <style name="text_view_timetable_texts">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/color_dark_grey</item>
+        <item name="android:textSize">@dimen/txt_size_btn</item>
+        <item name="android:layout_weight">0.8</item>
+        <item name="android:padding">@dimen/space_layout_padding</item>
+        <item name="android:layout_marginLeft">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
+    </style>
+
+    <style name="linear_layout_time_table_item">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
 </resources>

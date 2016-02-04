@@ -22,6 +22,7 @@ import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
+import com.daemon.oxfordschool.fragment.Fragment_TimeTable;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -109,6 +110,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new Fragment_ExamResult();
                 title = getString(R.string.lbl_exam_result);
                 break;
+            case 8:
+                fragment = new Fragment_TimeTable();
+                title = getString(R.string.lbl_time_table);
+                break;
             default:
                 break;
         }
@@ -130,4 +135,5 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         TAG="onBackPressed";
         Log.d(MODULE, TAG);
     }
+
 }

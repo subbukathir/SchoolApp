@@ -5,5 +5,6 @@ package com.daemon.oxfordschool.listeners;
  */
 public interface SubjectListListener
 {
-    public void onSubjectListSuccess();
+    public void onSubjectListReceived();
+    public void onSubjectListReceivedError(String Str_Msg);
 }

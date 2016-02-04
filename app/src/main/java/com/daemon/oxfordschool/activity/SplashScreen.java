@@ -89,7 +89,7 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
         TAG = "onClassListReceived";
         Log.d(MODULE, TAG);
 
-        new SectionList_Process(this).GetSectionList();
+        new SectionList_Process(this,this).GetSectionList();
     }
 
     @Override
@@ -99,18 +99,30 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
     }
 
     @Override
-    public void onSectionListSuccess() {
-        TAG = "onSectionListSuccess";
+    public void onSectionListReceived() {
+        TAG = "onSectionListReceived";
         Log.d(MODULE, TAG);
 
-        new SubjectList_Process(this).GetSubjectList();
+        new SubjectList_Process(this,this).GetSubjectList();
     }
 
     @Override
-    public void onSubjectListSuccess() {
-        TAG = "onSubjectListSuccess";
+    public void onSectionListReceivedError(String Str_Msg) {
+        TAG = "onSectionListReceivedError";
+        Log.d(MODULE, TAG);
+    }
+
+    @Override
+    public void onSubjectListReceived() {
+        TAG = "onSubjectListReceived";
         Log.d(MODULE, TAG);
 
+    }
+
+    @Override
+    public void onSubjectListReceivedError(String Str_Msg) {
+        TAG = "onSubjectListReceived";
+        Log.d(MODULE, TAG);
     }
 
     public void ShowIntent() {

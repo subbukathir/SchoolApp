@@ -39,15 +39,17 @@ public class SubjectList_Process
 
     String Str_Msg = "",Str_Code="";
     SubjectListListener mCallBack;
+    Object Obj;
     String Str_Url=ApiConstants.SUBJECTLIST_URL;
     AppCompatActivity mActivity;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;
 
-    public SubjectList_Process(AppCompatActivity mActivity)
+    public SubjectList_Process(AppCompatActivity mActivity,Object Obj)
     {
         this.mActivity = mActivity;
-        mCallBack = (SubjectListListener) mActivity;
+        this.Obj = Obj;
+        mCallBack = (SubjectListListener) Obj;
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
     }
@@ -71,12 +73,13 @@ public class SubjectList_Process
                     {
                         Log.d(MODULE, TAG + response.toString());
 
-                        if (response.length() == 0)
+                        if (response.toString().length() == 0)
                         {
                             editor = mPreferences.edit();
                             editor.putString(AppUtils.SHARED_SUBJECT_LIST, "");
                             editor.commit();
-                            mCallBack.onSubjectListSuccess();
+                            Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                            mCallBack.onSubjectListReceivedError(Str_Msg);
                         }
                         else
                         {
@@ -88,7 +91,12 @@ public class SubjectList_Process
                                 editor = mPreferences.edit();
                                 editor.putString(AppUtils.SHARED_SUBJECT_LIST, Str_Code);
                                 editor.commit();
-                                mCallBack.onSubjectListSuccess();
+                                mCallBack.onSubjectListReceived();
+                            }
+                            else
+                            {
+                                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                                mCallBack.onSubjectListReceivedError(Str_Msg);
                             }
 
                         }
@@ -98,6 +106,8 @@ public class SubjectList_Process
                     {
                         e.printStackTrace();
                         Log.e(MODULE, TAG + " UnknownResponse");
+                        Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                        mCallBack.onSubjectListReceivedError(Str_Msg);
                     }
 
                 }
@@ -135,6 +145,8 @@ public class SubjectList_Process
                                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
                             }
                             Log.d(MODULE,TAG + Str_Msg);
+                            mCallBack.onSubjectListReceivedError(Str_Msg);
+
                         }
                     });
 
@@ -147,6 +159,7 @@ public class SubjectList_Process
         {
             Log.e(MODULE, TAG + " Exception Occurs - " + e);
             Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+            mCallBack.onSubjectListReceivedError(Str_Msg);
             Log.d(MODULE,TAG + Str_Msg);
         }
     }

@@ -39,19 +39,20 @@ public class SectionList_Process
 
     String Str_Msg = "",Str_Code="";
     SectionListListener mCallBack;
+    Object Obj;
     String Str_Url=ApiConstants.SECTIONLIST_URL;
     AppCompatActivity mActivity;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;
 
-    public SectionList_Process(AppCompatActivity mActivity)
+    public SectionList_Process(AppCompatActivity mActivity,Object Obj)
     {
         this.mActivity = mActivity;
-        mCallBack = (SectionListListener) mActivity;
+        this.Obj = Obj;
+        mCallBack = (SectionListListener) Obj;
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
     }
-
 
     public void GetSectionList()
     {
@@ -77,7 +78,8 @@ public class SectionList_Process
                             editor = mPreferences.edit();
                             editor.putString(AppUtils.SHARED_SECTION_LIST, "");
                             editor.commit();
-                            mCallBack.onSectionListSuccess();
+                            Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                            mCallBack.onSectionListReceivedError(Str_Msg);
                         }
                         else
                         {
@@ -89,7 +91,12 @@ public class SectionList_Process
                                 editor = mPreferences.edit();
                                 editor.putString(AppUtils.SHARED_SECTION_LIST, Str_Code);
                                 editor.commit();
-                                mCallBack.onSectionListSuccess();
+                                mCallBack.onSectionListReceived();
+                            }
+                            else
+                            {
+                                Str_Msg = response.getString("message");
+                                mCallBack.onSectionListReceivedError(Str_Msg);
                             }
 
                         }
@@ -100,7 +107,8 @@ public class SectionList_Process
                         e.printStackTrace();
                         Log.e(MODULE, TAG + " UnknownResponse");
                         Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                        Log.d(MODULE,TAG + Str_Msg);
+                        mCallBack.onSectionListReceivedError(Str_Msg);
+
                     }
 
                 }
@@ -138,6 +146,7 @@ public class SectionList_Process
                                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
                             }
                             Log.d(MODULE,TAG + Str_Msg);
+                            mCallBack.onSectionListReceivedError(Str_Msg);
                         }
                     });
 
@@ -150,7 +159,8 @@ public class SectionList_Process
         {
             Log.e(MODULE, TAG + " Exception Occurs - " + e);
             Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-            Log.d(MODULE,TAG + Str_Msg);
+            mCallBack.onSectionListReceivedError(Str_Msg);
         }
     }
+
 }

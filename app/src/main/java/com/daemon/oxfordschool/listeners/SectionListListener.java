@@ -5,5 +5,6 @@ package com.daemon.oxfordschool.listeners;
  */
 public interface SectionListListener
 {
-    public void onSectionListSuccess();
+    public void onSectionListReceived();
+    public void onSectionListReceivedError(String Str_Msg);
 }
