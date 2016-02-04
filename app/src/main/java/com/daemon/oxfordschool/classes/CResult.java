@@ -29,6 +29,16 @@ public class CResult implements Parcelable
     private String ObtainedMarks;
     private String Result;
 
+    /**----Attendance result*/
+
+    private String AttendanceId;
+    private String AttendanceDate;
+    private String IsPresent;
+    private String IsHalfDay;
+    private String IsAfterNoon;
+
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -58,6 +68,11 @@ public class CResult implements Parcelable
         dest.writeString(Marks);
         dest.writeString(ObtainedMarks);
         dest.writeString(Result);
+        dest.writeString(AttendanceId);
+        dest.writeString(AttendanceDate);
+        dest.writeString(IsPresent);
+        dest.writeString(IsHalfDay);
+        dest.writeString(IsAfterNoon);
     }
 
     public CResult(Parcel source) {
@@ -81,6 +96,11 @@ public class CResult implements Parcelable
         this.Marks = source.readString();
         this.ObtainedMarks = source.readString();
         this.Result = source.readString();
+        this.AttendanceId=source.readString();
+        this.AttendanceDate=source.readString();
+        this.IsPresent=source.readString();
+        this.IsHalfDay=source.readString();
+        this.IsAfterNoon=source.readString();
 
     }
 
@@ -256,58 +276,7 @@ public class CResult implements Parcelable
         Result = result;
     }
 
-
-    /**----Attendance result*/
-
-    private String AttendanceId;
-    private String AttendanceDate;
-    private String IsPresent;
-    private String IsHalfDay;
-    private String IsAfterNoon;
-
-    @Override
-    public void writeToParcel(Parcel dest, int flag)
-    {
-        dest.writeString(AttendanceId);
-        dest.writeString(AttendanceDate);
-        dest.writeString(IsPresent);
-        dest.writeString(IsHalfDay);
-        dest.writeString(IsAfterNoon);
-
-    }
-    public CResult(Parcel source)
-    {
-        this.AttendanceId=source.readString();
-        this.AttendanceDate=source.readString();
-        this.IsPresent=source.readString();
-        this.IsHalfDay=source.readString();
-        this.IsAfterNoon=source.readString();
-
-    }
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-public static final Parcelable.Creator<CResult> CREATOR =new Parcelable.Creator<CResult>() {
-    @Override
-    public CResult createFromParcel(Parcel in) {
-        return new CResult(in);
-    }
-
-    @Override
-    public CResult[] newArray(int size) {
-        return new CResult[size];
-    }
-};
-
-    public String getExamResultId() {
-        return ExamResultId;
-    }
-
-    public void setExamResultId(String examResultId) {
-        ExamResultId = examResultId;
-    }
+/*------- Attendance Details-------*/
 
     public String getAttendanceId() {
         return AttendanceId;
