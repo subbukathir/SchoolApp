@@ -7,10 +7,10 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="10dp"
+        card_view:cardCornerRadius="5dp"
         card_view:cardUseCompatPadding="true"
         card_view:cardBackgroundColor="@color/material_grey_100"
-        card_view:cardElevation="10dp">
+        card_view:cardElevation="5dp">
 
         <LinearLayout
             style="@style/match_wrap_style"
@@ -19,61 +19,37 @@
             <TextView
                 android:id="@+id/tv_event_name"
                 style="@style/text_view_event_list_item"
-                android:hint="@string/lbl_event_name"
-                android:textColor="@color/color_black"
-                android:textSize="18sp"
+                android:textSize="@dimen/txt_size_btn"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                style="@style/match_wrap_style"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_lbl_event_organizer"
-                    style="@style/text_view_event_list_item"
-                    android:layout_weight="1.4"
-                    android:text="@string/lbl_organizer"
-
-                    android:textColor="@color/color_green" />
-
-                <TextView
-                    android:id="@+id/tv_event_organizer"
-                    style="@style/text_view_event_list_item"
-                    android:layout_weight="0.8"
-                    android:textColor="@color/color_green"/>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_event_organizer"
+                style="@style/text_view_event_list_item"
+                android:textColor="@color/color_green" />
 
             <LinearLayout
                 style="@style/match_wrap_style"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_lbl_event_start_date"
-                    style="@style/text_view_event_list_item"
-                    android:text="@string/lbl_start_date"
-                    android:textColor="@color/color_light_grey" />
                 <TextView
                     android:id="@+id/tv_event_start_date"
                     style="@style/text_view_event_list_item"
-                    android:layout_weight="0.8"
-                    android:textColor="@color/color_light_grey" />
-
-                <TextView
-                    android:id="@+id/tv_lbl_event_end_date"
-                    style="@style/text_view_event_list_item"
-                    android:text="@string/lbl_end_date"
+                    android:gravity="left"
+                    android:textSize="@dimen/lbl_size_list_item"
                     android:textColor="@color/color_light_grey" />
 
                 <TextView
                     android:id="@+id/tv_event_end_date"
                     style="@style/text_view_event_list_item"
-                    android:layout_weight="0.8"
+                    android:gravity="right"
+                    android:textSize="@dimen/lbl_size_list_item"
                     android:textColor="@color/color_light_grey" />
 
             </LinearLayout>
 
         </LinearLayout>
+
     </android.support.v7.widget.CardView>
+
 </LinearLayout>
 

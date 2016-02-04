@@ -165,7 +165,7 @@
         <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
         <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:padding">@dimen/space_layout_margin</item>
+        <item name="android:padding">@dimen/space_layout_padding</item>
     </style>
 
 </resources>
