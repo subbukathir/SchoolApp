@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/match_parent_style"
-    android:background="@color/color_app"
     android:layout_gravity="center"
-    android:layout_centerInParent="true"
+    android:background="@color/color_app"
     android:orientation="vertical">
 
-    <TextView
-        style="@style/match_wrap_style"
-        android:text="@string/lbl_welcome"
-        android:textColor="@color/color_white"
-        android:textStyle="bold"
-        android:layout_marginTop="100dp"
-        android:id="@+id/txt_view_welcome"
-        android:layout_centerInParent="false"
-        android:gravity="center"/>
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:id="@+id/progressBar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:max="100"
-        android:progress="30"
-        android:indeterminate="false"
-        android:secondaryProgress="10"
-        android:progressDrawable="@drawable/circular"
-        android:layout_centerInParent="true"/>
-    <TextView
-        style="@style/match_wrap_style"
-        android:text="@string/lbl_loading"
-        android:textColor="@color/color_white"
+    <LinearLayout
+        style="@style/match_parent_style"
+        android:orientation="vertical"
+        android:gravity="center">
 
-        android:textStyle="bold"
-        android:id="@+id/txt_view_loading"
-        android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
+        <TextView
+            android:id="@+id/tv_welcome"
+            style="@style/match_wrap_style"
+            android:gravity="center"
+            android:text="@string/lbl_welcome"
+            android:layout_margin="@dimen/space_layout_margin"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/txt_size_btn"/>
 
-        android:gravity="center"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:layout_margin="@dimen/space_layout_margin"
+            android:progress="30"
+            android:progressDrawable="@drawable/circular"
+            android:secondaryProgress="10" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_loading"
+            style="@style/match_wrap_style"
+            android:layout_margin="@dimen/space_layout_margin"
+            android:gravity="center"
+            android:text="@string/lbl_loading"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/txt_size_btn"/>
+    </LinearLayout>
+
+</LinearLayout>

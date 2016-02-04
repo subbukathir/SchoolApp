@@ -71,6 +71,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@color/material_grey_300</item>
     </style>
+
     <style name="img_view_profile_pic">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
@@ -144,18 +145,21 @@
         <item name="android:singleLine">true</item>
         <item name="android:padding">@dimen/space_layout_margin</item>
     </style>
-<style name="spinner_style">
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:textColor">@color/color_dark_grey</item>
-    <item name="android:textSize">@dimen/lbl_size</item>
-    <item name="android:layout_marginLeft">@dimen/space_layout_margin</item>
-    <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
-    <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:layout_weight">1</item>
-    <item name="android:padding">@dimen/space_layout_margin</item>
-</style>
+
+    <style name="spinner_style">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/color_dark_grey</item>
+        <item name="android:textSize">@dimen/lbl_size</item>
+        <item name="android:layout_marginLeft">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">@dimen/space_layout_margin</item>
+        <item name="android:background">@drawable/abc_spinner_textfield_background_material</item>
+    </style>
+
     <style name="text_view_event_list_item">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
@@ -165,7 +169,7 @@
         <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
         <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:padding">@dimen/space_layout_margin</item>
+        <item name="android:padding">@dimen/space_layout_padding</item>
     </style>
 
 </resources>

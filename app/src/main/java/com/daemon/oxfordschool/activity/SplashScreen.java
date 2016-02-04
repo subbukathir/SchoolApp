@@ -1,6 +1,5 @@
 package com.daemon.oxfordschool.activity;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,7 +8,9 @@ import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
+import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.listeners.ClassListListener;
 import com.daemon.oxfordschool.listeners.SectionListListener;
 import com.daemon.oxfordschool.listeners.SubjectListListener;
@@ -25,11 +26,11 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
     public static String TAG = "";
 
     private ProgressBar progressBar;
-    private TextView txt_loading;
+    private TextView tv_loading,tv_welcome;
     int pStatus = 0;
     private Handler handler = new Handler();
+    private Font font= MyApplication.getInstance().getFontInstance();
 
-    ObjectAnimator animation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
                             // TODO Auto-generated method stub
                             progressBar.setProgress(pStatus);
                             progressBar.setSecondaryProgress(pStatus + 5);
-                            txt_loading.setText(pStatus + "/" + progressBar.getMax());
+                            tv_loading.setText(pStatus + "/" + progressBar.getMax());
                             if (pStatus == 100) {
                                 ShowIntent();
                             }
@@ -77,7 +78,10 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
 
     public void Init() {
         progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
-        txt_loading = (TextView) this.findViewById(R.id.txt_view_loading);
+        tv_welcome = (TextView) this.findViewById(R.id.tv_welcome);
+        tv_loading = (TextView) this.findViewById(R.id.tv_loading);
+        tv_welcome.setTypeface(font.getHelveticaBold());
+        tv_loading.setTypeface(font.getHelveticaBold());
     }
 
     @Override
@@ -115,6 +119,7 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
 
         Intent intent = new Intent(this, Activity_Login.class);
         startActivity(intent);
+        this.finish();
     }
 
 }

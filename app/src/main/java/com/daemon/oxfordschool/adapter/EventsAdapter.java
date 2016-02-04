@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     static FragmentActivity mActivity;
     static SharedPreferences mPreferences;
     static RecyclerView recycler_view;
-    Font font= MyApplication.getInstance().getFontInstance();
+    static Font font= MyApplication.getInstance().getFontInstance();
     static Typeface mTypeFace;
     private boolean isFooterEnabled = false;
     int mMargin=0;float mDensity=0;
@@ -84,7 +83,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 Log.d(MODULE, TAG + " mEvent Name : " + mEvent.getName());
                 Log.d(MODULE, TAG + " mEvent Description : " + mEvent.getDescription());
-                Log.d(MODULE, TAG + " mEvent OrganizerId : " + mEvent.getOrganizerId());
+                Log.d(MODULE, TAG + " mEvent OrganizerId : " +  mEvent.getOrganizerId());
                 Log.d(MODULE, TAG + " mEvent StartDate : " + mEvent.getStartDate());
                 Log.d(MODULE, TAG + " mEvent EndDate : " + mEvent.getEndDate());
                 Log.d(MODULE, TAG + " mEvent Organizer First Name : " + mEvent.getOrganizer_First_Name());
@@ -95,7 +94,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Str_OrganizerName.append(mEvent.getOrganizer_First_Name()).append(" ");
                 Str_OrganizerName.append(mEvent.getOrganizer_Last_Name());
                 holder.tv_event_organizer.setText(Str_OrganizerName.toString());
-                //holder.tv_event_organizer.setLayoutParams(params);
+                holder.tv_event_organizer.setLayoutParams(params);
 
                 String Str_Sdate = mEvent.getStartDate();
                 String Str_Edate = mEvent.getEndDate();
@@ -198,8 +197,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static class Event_ListHolders extends RecyclerView.ViewHolder
     {
         //Declaring parent view items
-        public TextView  tv_lbl_event_name,tv_event_name,tv_lbl_event_start_date,tv_event_start_date,
-                tv_lbl_event_end_date,tv_event_end_date,tv_lbl_event_organizer,tv_event_organizer;
+        public TextView  tv_event_name,tv_event_start_date,tv_event_end_date,tv_event_organizer;
         public ImageView image_view;
         public View itemView;
 
@@ -211,11 +209,8 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             {
                 this.itemView = itemView;
                 tv_event_name = (TextView) itemView.findViewById(R.id.tv_event_name);
-                tv_lbl_event_start_date = (TextView) itemView.findViewById(R.id.tv_lbl_event_start_date);
                 tv_event_start_date = (TextView) itemView.findViewById(R.id.tv_event_start_date);
-                tv_lbl_event_end_date = (TextView) itemView.findViewById(R.id.tv_lbl_event_end_date);
                 tv_event_end_date = (TextView) itemView.findViewById(R.id.tv_event_end_date);
-                tv_lbl_event_organizer = (TextView) itemView.findViewById(R.id.tv_lbl_event_organizer);
                 tv_event_organizer = (TextView) itemView.findViewById(R.id.tv_event_organizer);
                 //Setting properties
                 mActivity.runOnUiThread(new Runnable() {
@@ -237,12 +232,9 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             try
             {
-                tv_event_name.setTypeface(mTypeFace);
-                tv_lbl_event_start_date.setTypeface(mTypeFace);
+                tv_event_name.setTypeface(font.getHelveticaBold());
                 tv_event_start_date.setTypeface(mTypeFace);
-                tv_lbl_event_end_date.setTypeface(mTypeFace);
                 tv_event_end_date.setTypeface(mTypeFace);
-                tv_lbl_event_organizer.setTypeface(mTypeFace);
                 tv_event_organizer.setTypeface(mTypeFace);
             }
             catch (Exception ex)
