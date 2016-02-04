@@ -71,6 +71,8 @@
 
     <string name="lbl_select_date">Select Date</string>
     <string name="lbl_no_homework">No homework on </string>
+    <string name="lbl_assignmentI"> Assignment I </string>
+    <string name="lbl_assignmentII"> Assignment II </string>
 
 
     <!-- Exam Schedule -->
@@ -79,6 +81,13 @@
     <string name="lbl_no_exams">No Examinations</string>
     <string name="lbl_date">Date</string>
     <string name="lbl_subject">Subject</string>
+
+    <!-- Exam Result -->
+
+    <string name="lbl_select_exam_name">Select Exam</string>
+    <string name="lbl_no_result">No Result</string>
+    <string name="lbl_marks">Marks</string>
+    <string name="lbl_Result">Result</string>
 
 
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>

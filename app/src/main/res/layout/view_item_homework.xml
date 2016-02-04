@@ -23,7 +23,7 @@
             android:id="@+id/tv_lbl_AssignmentI"
             style="@style/text_view_event_list_item"
             android:layout_weight="1.4"
-            android:text="@string/lbl_start_date" />
+            android:text="@string/lbl_assignmentI" />
 
         <TextView
             android:id="@+id/tv_AssignmentI"
@@ -41,7 +41,7 @@
             android:id="@+id/tv_lbl_AssignmentII"
             style="@style/text_view_event_list_item"
             android:layout_weight="1.4"
-            android:text="@string/lbl_end_date" />
+            android:text="@string/lbl_assignmentII" />
 
         <TextView
             android:id="@+id/tv_AssignmentII"
