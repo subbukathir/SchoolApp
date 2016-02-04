@@ -27,25 +27,25 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.ExamListAdapter;
-import com.daemon.oxfordschool.adapter.HomeWorkAdapter;
+import com.daemon.oxfordschool.adapter.ExamResultAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
-import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetExamList;
+import com.daemon.oxfordschool.asyncprocess.GetExamResult;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.classes.CExam;
+import com.daemon.oxfordschool.classes.CResult;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.ClassListListener;
-import com.daemon.oxfordschool.listeners.ExamListListener;
+import com.daemon.oxfordschool.listeners.ExamResultListener;
 import com.daemon.oxfordschool.listeners.ExamTypeListListener;
-import com.daemon.oxfordschool.listeners.Exam_List_Item_Click_Listener;
+import com.daemon.oxfordschool.listeners.Exam_Result_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
 import com.daemon.oxfordschool.response.CommonList_Response;
 import com.daemon.oxfordschool.response.ExamList_Response;
-import com.daemon.oxfordschool.response.HomeWorkList_Response;
+import com.daemon.oxfordschool.response.ExamResult_Response;
 import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
 
@@ -54,39 +54,43 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Fragment_ExamSchedule extends Fragment implements StudentsListListener,ExamTypeListListener,
-        ExamListListener,Exam_List_Item_Click_Listener
+public class Fragment_ExamResult extends Fragment implements StudentsListListener,ExamTypeListListener,
+        ExamResultListener,Exam_Result_List_Item_Click_Listener
 {
 
-    public static String MODULE = "Fragment_ExamSchedule ";
+    public static String MODULE = "Fragment_ExamResult";
     public static String TAG = "";
 
-    TextView tv_lbl_select_exam_type,text_view_empty;
+    TextView tv_select_exam_type,text_view_empty,tv_lbl_exam_subject,
+            tv_lbl_exam_marks,tv_lbl_exam_result;
     Spinner spinner_exam_type;
     RelativeLayout layout_empty;
     int mSelectedPosition;
-    SwipeRefreshLayout swipeRefreshLayout;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
 
     SharedPreferences mPreferences;
     User mUser,mSelectedUser;
     ViewPager vp_student;
-    ArrayList<CExam> mListExams =new ArrayList<CExam>();
-    ArrayList<Common_Class> mListExamType =new ArrayList<Common_Class>();
-    ArrayList<User> mListStudents =new ArrayList<User>();
 
-    ExamList_Response response;
+    ArrayList<User> mListStudents =new ArrayList<User>();
+    ArrayList<Common_Class> mListExamType =new ArrayList<Common_Class>();
+    ArrayList<CExam> mListExams =new ArrayList<CExam>();
+    ArrayList<CResult> mListResult =new ArrayList<CResult>();
+
     StudentsList_Response studentListResponse;
-    CommonList_Response examListResponse;
+    CommonList_Response examListTypeResponse;
+    ExamList_Response examListResponse;
+    ExamResult_Response response;
 
     AppCompatActivity mActivity;
-    String Str_Id="",Str_ExamTypeId="",Str_ClassId="";
+    String Str_Id="",Str_ExamTypeId="",Str_ClassId="",Str_StudentId="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
     String Str_ExamList_Url = ApiConstants.EXAM_LIST_URL;
+    String Str_ExamResult_Url = ApiConstants.EXAM_RESULT_URL;
 
-    public Fragment_ExamSchedule()
+    public Fragment_ExamResult()
     {
         // Required empty public constructor
     }
@@ -115,7 +119,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_exam_schedule, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_exam_result, container, false);
         TAG = "onCreateView";
         Log.d(MODULE, TAG);
         initView(rootView);
@@ -129,10 +133,12 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         try
         {
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
-            tv_lbl_select_exam_type = (TextView) view.findViewById(R.id.tv_select_exam_type);
+            tv_select_exam_type = (TextView) view.findViewById(R.id.tv_select_exam_type);
+            tv_lbl_exam_subject = (TextView) view.findViewById(R.id.tv_lbl_exam_subject);
+            tv_lbl_exam_marks = (TextView) view.findViewById(R.id.tv_lbl_exam_marks);
+            tv_lbl_exam_result = (TextView) view.findViewById(R.id.tv_lbl_exam_result);
             spinner_exam_type = (Spinner) view.findViewById(R.id.spinner_exam_type);
-            swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_exam_list);
+            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_exam_result);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
             setProperties();
@@ -168,13 +174,16 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         try
         {
             layout_empty.setVisibility(View.GONE);
-            tv_lbl_select_exam_type.setTypeface(font.getHelveticaRegular());
+            tv_select_exam_type.setTypeface(font.getHelveticaRegular());
+            tv_lbl_exam_subject.setTypeface(font.getHelveticaBold());
+            tv_lbl_exam_marks.setTypeface(font.getHelveticaBold());
+            tv_lbl_exam_result.setTypeface(font.getHelveticaBold());
             text_view_empty.setTypeface(font.getHelveticaRegular());
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
             vp_student.addOnPageChangeListener(_OnPageChangeListener);
             spinner_exam_type.setOnItemSelectedListener(_OnItemSelectedListener);
-            text_view_empty.setText(getString(R.string.lbl_no_exams));
+            text_view_empty.setText(getString(R.string.lbl_no_result));
         }
         catch (Exception ex)
         {
@@ -238,6 +247,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         @Override
         public void onPageSelected(int position) {
             mSelectedPosition=position;
+            if(mListExamType.size()>0)getExamResultFromService(position);
         }
 
         @Override
@@ -248,10 +258,11 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
 
     AdapterView.OnItemSelectedListener _OnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
 
             Str_ExamTypeId = mListExamType.get(position).getID();
-            getExamListFromService(position);
+            getExamResultFromService(position);
+
         }
 
         @Override
@@ -260,15 +271,16 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         }
     };
 
-    public void getExamListFromService(int position)
+    public void getExamResultFromService(int position)
     {
-        TAG = "getExamListFromService";
+        TAG = "getExamResultFromService";
         Log.d(MODULE, TAG);
         try
         {
             mSelectedUser = mListStudents.get(mSelectedPosition);
             Str_ClassId = mSelectedUser.getClassId();
-            new GetExamList(Str_ExamList_Url,Payload_ExamList(),this).getExams();
+            Str_StudentId = mSelectedUser.getStudentId();
+            new GetExamResult(Str_ExamResult_Url,Payload_ExamResult(),this).getExamResult();
         }
         catch (Exception ex)
         {
@@ -342,13 +354,13 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
     }
 
     @Override
-    public void onExamListReceived() {
+    public void onExamResultReceived() {
         TAG = "onExamTypeListReceived";
         Log.d(MODULE, TAG);
         try
         {
-            getExamList();
-            showExamList();
+            getExamResult();
+            showExamResult();
         }
         catch (Exception ex)
         {
@@ -357,7 +369,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
     }
 
     @Override
-    public void onExamListReceivedError(String Str_Msg) {
+    public void onExamResultReceivedError(String Str_Msg) {
         TAG = "onClassListReceived";
         Log.d(MODULE, TAG);
 
@@ -372,7 +384,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
     }
 
     @Override
-    public void onExamListItemClicked(int position) {
+    public void onExamResultListItemClicked(int position) {
 
     }
 
@@ -402,8 +414,8 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
             Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
             if(Str_Json.length()>0)
             {
-                examListResponse = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>(){}.getType());
-                mListExamType = examListResponse.getCclass();
+                examListTypeResponse = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>(){}.getType());
+                mListExamType = examListTypeResponse.getCclass();
             }
         }
         catch (Exception ex)
@@ -431,19 +443,19 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         }
     }
 
-    public void getExamList()
+    public void getExamResult()
     {
-        TAG = "getExamList";
+        TAG = "getExamResult";
         Log.d(MODULE, TAG);
         try
         {
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_EXAM_LIST,"");
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_EXAM_RESULT,"");
             Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
             if(Str_Json.length()>0)
             {
-                response = (ExamList_Response) AppUtils.fromJson(Str_Json, new TypeToken<ExamList_Response>(){}.getType());
-                mListExams = response.getCexam();
+                response = (ExamResult_Response) AppUtils.fromJson(Str_Json, new TypeToken<ExamResult_Response>(){}.getType());
+                mListResult = response.getCresult();
             }
         }
         catch (Exception ex)
@@ -452,15 +464,15 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         }
     }
 
-    public void showExamList()
+    public void showExamResult()
     {
-        TAG = "showExamList";
+        TAG = "showExamResult";
         Log.d(MODULE, TAG);
         try
         {
-            if(mListExams.size()>0)
+            if(mListResult.size()>0)
             {
-                ExamListAdapter adapter = new ExamListAdapter(mListExams,this);
+                ExamResultAdapter adapter = new ExamResultAdapter(mListResult,this);
                 recycler_view.setAdapter(adapter);
                 layout_empty.setVisibility(View.GONE);
                 recycler_view.setVisibility(View.VISIBLE);
@@ -513,15 +525,15 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         return obj;
     }
 
-    public JSONObject Payload_ExamList()
+    public JSONObject Payload_ExamResult()
     {
         TAG = "Payload_ExamList";
         Log.d(MODULE, TAG);
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("ExamType", Str_ExamTypeId);
-            obj.put("ClassId", Str_ClassId);
+            obj.put("ExamTypeId", Str_ExamTypeId);
+            obj.put("StudentId", Str_StudentId);
         }
         catch (JSONException e) {
             e.printStackTrace();

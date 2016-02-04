@@ -16,6 +16,7 @@ import android.view.View;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
 import com.daemon.oxfordschool.fragment.Fragment_Events;
+import com.daemon.oxfordschool.fragment.Fragment_ExamResult;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
@@ -99,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 5:
                 fragment = new Fragment_ExamSchedule();
                 title = getString(R.string.lbl_exam_schedule);
+                break;
+            case 6:
+                fragment = new Fragment_ExamResult();
+                title = getString(R.string.lbl_exam_result);
                 break;
             default:
                 break;

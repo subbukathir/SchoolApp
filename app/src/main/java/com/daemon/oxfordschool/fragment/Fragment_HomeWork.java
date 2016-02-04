@@ -170,7 +170,10 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
             vp_student.addOnPageChangeListener(_OnPageChangeListener);
             btn_select_date.setOnClickListener(_OnClickListener);
             btn_select_date.setText(Str_Date);
-            text_view_empty.setText(getString(R.string.lbl_no_homework) + Str_Date);
+            StringBuilder Str_EmptyMessage = new StringBuilder();
+            Str_EmptyMessage.append(getString(R.string.lbl_no_homework)).append(" ");
+            Str_EmptyMessage.append(Str_Date);
+            text_view_empty.setText(Str_EmptyMessage.toString());
         }
         catch (Exception ex)
         {

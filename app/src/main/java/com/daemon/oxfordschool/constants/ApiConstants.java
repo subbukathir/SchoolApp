@@ -15,6 +15,7 @@ public class ApiConstants
     public static String EVENTS_LIST_URL=SERVER_URL + "EventsList.php";
     public static String EXAM_TYPE_LIST_URL=SERVER_URL + "ExamTypeList.php";
     public static String EXAM_LIST_URL=SERVER_URL + "ExamList.php";
+    public static String EXAM_RESULT_URL=SERVER_URL + "ExamResultByStudentId.php";
     public static String HOMEWORK_LIST_URL=SERVER_URL + "HomeWorkList.php";
 
     public static String SUCCESS_CODE="0";

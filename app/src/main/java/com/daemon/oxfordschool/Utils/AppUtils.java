@@ -43,6 +43,7 @@ public class AppUtils extends Dialog
     public static String SHARED_CLASS_LIST = "Shared_Class_List";
     public static String SHARED_EXAM_TYPE_LIST = "Shared_Exam_List";
     public static String SHARED_EXAM_LIST = "Shared_Exam_List";
+    public static String SHARED_EXAM_RESULT = "Shared_Exam_Result";
     public static String SHARED_EVENTS_LIST = "Shared_Events_List";
     public static String SHARED_HOMEWORK_LIST = "Shared_HomeWork_List";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
