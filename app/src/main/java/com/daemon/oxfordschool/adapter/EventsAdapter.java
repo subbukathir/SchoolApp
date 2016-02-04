@@ -21,10 +21,10 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.classes.CEvents;
 import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -36,8 +36,6 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     Fragment mFragment;
     FragmentManager mManager;
     static FragmentActivity mActivity;
-    private ImageLoader imageLoader;
-    private DisplayImageOptions options;
     static SharedPreferences mPreferences;
     static RecyclerView recycler_view;
     Font font= MyApplication.getInstance().getFontInstance();
@@ -46,7 +44,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     int mMargin=0;float mDensity=0;
     Event_List_Item_Click_Listener mItemCallBack;
 
-    private static String MODULE = "Stations_Adapter";
+    private static String MODULE = "EventsAdapter";
     private static String TAG="";
     LinearLayout.LayoutParams params;
 
@@ -79,27 +77,47 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             if(mHolder instanceof Event_ListHolders)
             {
-                Log.d(MODULE, TAG + "mHolder is instance of Station_ListHolders");
+                Log.d(MODULE, TAG + "mHolder is instance of Event_ListHolders");
                 Event_ListHolders holder = (Event_ListHolders) mHolder;
                 final CEvents mEvent = mListEvents.get(position);
 
-                Log.d(MODULE, TAG + "mStation Name : " + mEvent.getName());
-                Log.d(MODULE, TAG + "mStation Description : " + mEvent.getDescription());
-                Log.d(MODULE, TAG + "mStation OrganizerId : " +  mEvent.getOrganizerId());
-                Log.d(MODULE, TAG + "mStation StartDate : " + mEvent.getStartDate());
-                Log.d(MODULE, TAG + "mStation EndDate : " + mEvent.getEndDate());
-                Log.d(MODULE, TAG + "mStation Organizer First Name : " + mEvent.getOrganizer_First_Name());
-                Log.d(MODULE, TAG + "mStation Organizer Last Name : " + mEvent.getOrganizer_Last_Name());
+                Log.d(MODULE, TAG + " mEvent Name : " + mEvent.getName());
+                Log.d(MODULE, TAG + " mEvent Description : " + mEvent.getDescription());
+                Log.d(MODULE, TAG + " mEvent OrganizerId : " +  mEvent.getOrganizerId());
+                Log.d(MODULE, TAG + " mEvent StartDate : " + mEvent.getStartDate());
+                Log.d(MODULE, TAG + " mEvent EndDate : " + mEvent.getEndDate());
+                Log.d(MODULE, TAG + " mEvent Organizer First Name : " + mEvent.getOrganizer_First_Name());
+                Log.d(MODULE, TAG + " mEvent Organizer Last Name : " + mEvent.getOrganizer_Last_Name());
 
                 holder.tv_event_name.setText(mEvent.getName());
-                holder.tv_event_start_date.setText(mEvent.getStartDate());
-                holder.tv_event_end_date.setText(mEvent.getEndDate());
-
                 StringBuilder Str_OrganizerName = new StringBuilder();
                 Str_OrganizerName.append(mEvent.getOrganizer_First_Name()).append(" ");
                 Str_OrganizerName.append(mEvent.getOrganizer_Last_Name());
                 holder.tv_event_organizer.setText(Str_OrganizerName.toString());
-                //holder.tv_event_organizer.setLayoutParams(params);
+                holder.tv_event_organizer.setLayoutParams(params);
+
+                String Str_Sdate = mEvent.getStartDate();
+                String Str_Edate = mEvent.getEndDate();
+
+                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                DateFormat format1 = new SimpleDateFormat("E, MMM dd yy HH:mm a");
+
+                Date Sdate, Edate;
+                try {
+                    Sdate = sdf1.parse(Str_Sdate);
+                    Edate = sdf1.parse(Str_Edate);
+                    String str_sdate = format1.format(Sdate);
+                    String str_edate = format1.format(Edate);
+                    Log.d(MODULE, TAG + "start date" + str_sdate);
+
+                    holder.tv_event_start_date.setText(str_sdate);
+                    holder.tv_event_end_date.setText(str_edate);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -191,7 +209,6 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             try
             {
                 this.itemView = itemView;
-                tv_lbl_event_name = (TextView) itemView.findViewById(R.id.tv_lbl_event_name);
                 tv_event_name = (TextView) itemView.findViewById(R.id.tv_event_name);
                 tv_lbl_event_start_date = (TextView) itemView.findViewById(R.id.tv_lbl_event_start_date);
                 tv_event_start_date = (TextView) itemView.findViewById(R.id.tv_event_start_date);
@@ -219,7 +236,6 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             try
             {
-                tv_lbl_event_name.setTypeface(mTypeFace);
                 tv_event_name.setTypeface(mTypeFace);
                 tv_lbl_event_start_date.setTypeface(mTypeFace);
                 tv_event_start_date.setTypeface(mTypeFace);
