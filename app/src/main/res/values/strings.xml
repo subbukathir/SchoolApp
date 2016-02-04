@@ -126,7 +126,7 @@
 
     <!-- Attendance View -->
 
-    <string name="lbl_month">Month  </string>
+    <string name="lbl_month">Select Month</string>
     <string name="lbl_working_days">No of Working Days  </string>
     <string name="lbl_present_days">No of Present Days  </string>
     <string name="lbl_percentage">Percentage  </string>

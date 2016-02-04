@@ -49,7 +49,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
     public static String MODULE = "Fragment_Attendance ";
     public static String TAG = "";
 
-    int mSelectedPosition;
+    int mSelectedPosition,mSelectedMonthPosition;
 
     SharedPreferences mPreferences;
     User mUser,mSelectedUser;
@@ -63,7 +63,8 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
     AppCompatActivity mActivity;
     String Str_Id="",mMonth="",mWorkingDays="",mPresentDays="",mPercentage="",mMonth_value;
     Spinner spinner_months;
-    TextView txt_view_workingDays,txt_view_presentDays, txt_view_percentage,text_view_empty;
+    TextView tv_lbl_select_month,tv_lbl_no_of_working_days, tv_working_days,tv_lbl_no_of_present_days,tv_present_days,
+            tv_lbl_percentage,tv_percentage,text_view_empty;
     ArrayAdapter<CharSequence> adapter;
     RelativeLayout layout_empty;
     LinearLayout ll_attendance;
@@ -116,27 +117,53 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         try
         {
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
-            setProperties();
-
-            txt_view_workingDays = (TextView)view.findViewById(R.id.txt_view_workingdays);
-            txt_view_presentDays = (TextView)view.findViewById(R.id.txt_view_presentdays);
-            txt_view_percentage = (TextView)view.findViewById(R.id.txt_view_percentage);
+            tv_lbl_select_month = (TextView)view.findViewById(R.id.tv_lbl_select_month);
+            tv_lbl_no_of_working_days = (TextView)view.findViewById(R.id.tv_lbl_no_of_working_days);
+            tv_working_days = (TextView)view.findViewById(R.id.tv_working_days);
+            tv_lbl_no_of_present_days = (TextView)view.findViewById(R.id.tv_lbl_no_of_present_days);
+            tv_present_days = (TextView)view.findViewById(R.id.tv_present_days);
+            tv_lbl_percentage = (TextView)view.findViewById(R.id.tv_lbl_percentage);
+            tv_percentage = (TextView)view.findViewById(R.id.tv_percentage);
             spinner_months=(Spinner)view.findViewById(R.id.spinner_month);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
             ll_attendance = (LinearLayout) view.findViewById(R.id.ll_attendance_details);
-
             String[] items = getResources().getStringArray(R.array.array_months);
             adapter = ArrayAdapter.createFromResource(mActivity,
                     R.array.array_months, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_months.setAdapter(adapter);
-
             spinner_months.setOnItemSelectedListener(this);
+            setProperties();
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
+        }
+    }
+
+    public void setProperties()
+    {
+        TAG = "setProperties";
+        Log.d(MODULE, TAG);
+        try
+        {
+            layout_empty.setVisibility(View.GONE);
+            ll_attendance.setVisibility(View.GONE);
+            text_view_empty.setTypeface(font.getHelveticaRegular());
+            tv_lbl_select_month.setTypeface(font.getHelveticaRegular());
+            tv_lbl_no_of_working_days.setTypeface(font.getHelveticaBold());
+            tv_working_days.setTypeface(font.getHelveticaRegular());
+            tv_lbl_no_of_present_days.setTypeface(font.getHelveticaBold());
+            tv_present_days.setTypeface(font.getHelveticaRegular());
+            tv_lbl_percentage.setTypeface(font.getHelveticaBold());
+            tv_percentage.setTypeface(font.getHelveticaRegular());
+            vp_student.addOnPageChangeListener(_OnPageChangeListener);
+            text_view_empty.setText(getString(R.string.lbl_no_attendance) + " " + mMonth_value);
+        }
+        catch (Exception ex)
+        {
+
         }
     }
 
@@ -151,50 +178,6 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         try
         {
             if(mListStudents.size()>0) showStudentsList();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l)
-    {
-        TAG="onItemSelected";
-        Log.d(MODULE,TAG);
-        Integer postion=pos;
-        mMonth=postion.toString();
-        mMonth_value= spinner_months.getSelectedItem().toString();
-        AppUtils.showProgressDialog(mActivity);
-        Log.d(MODULE, TAG + " postion " + postion + " value " + mMonth_value);
-        if(postion==0)
-        {
-            text_view_empty.setText(getString(R.string.lbl_select_month));
-            showEmptyView();
-        }
-        else
-        {
-            getAttendance();
-            ll_attendance.setVisibility(View.VISIBLE);
-            text_view_empty.setText(getString(R.string.lbl_no_attendance) + " "+mMonth_value);
-        }
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
-    public void showStudentsList()
-    {
-        TAG = "showStudentsList";
-        Log.d(MODULE, TAG);
-        try
-        {
-            StudentPagerAdapter adapter = new StudentPagerAdapter(mActivity,mListStudents);
-            vp_student.setAdapter(adapter);
         }
         catch (Exception ex)
         {
@@ -223,6 +206,42 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             ex.printStackTrace();
         }
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l)
+    {
+        TAG="onItemSelected";
+        Log.d(MODULE,TAG);
+        mSelectedMonthPosition=pos;
+        mMonth=Integer.toString(pos);
+        mMonth_value= spinner_months.getSelectedItem().toString();
+        Log.d(MODULE, TAG + " position " + pos + " value " + mMonth_value);
+        getAttendanceFromService();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            mSelectedPosition=position;
+            getAttendanceFromService();
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+
     @Override
     public void onStudentsReceived() {
         TAG = "onStudentsReceived";
@@ -255,6 +274,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             ex.printStackTrace();
         }
     }
+
     public void getStudentsList()
     {
         TAG = "getStudentsList";
@@ -280,86 +300,38 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             ex.printStackTrace();
         }
     }
-    public JSONObject Payload_StudentList()
+
+    public void showStudentsList()
     {
-        TAG = "Payload";
-        Log.d(MODULE, TAG);
-
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("ParentId", Str_Id);
-            obj.put("ClassId", "");
-            obj.put("SectionId", "");
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.d(MODULE, TAG + " obj : " + obj.toString());
-
-        return obj;
-    }
-    public void setProperties()
-    {
-        TAG = "setProperties";
+        TAG = "showStudentsList";
         Log.d(MODULE, TAG);
         try
         {
-            layout_empty.setVisibility(View.GONE);
-            ll_attendance.setVisibility(View.GONE);
-            text_view_empty.setTypeface(font.getHelveticaRegular());
-            vp_student.addOnPageChangeListener(_OnPageChangeListener);
-
-            text_view_empty.setText(getString(R.string.lbl_no_attendance) + mMonth_value);
+            StudentPagerAdapter adapter = new StudentPagerAdapter(mActivity,mListStudents);
+            vp_student.setAdapter(adapter);
         }
         catch (Exception ex)
         {
-
-        }
-    }
-
-    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            mSelectedPosition=position;
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    };
-
-    public void getAttendance()
-    {
-        Log.d(MODULE,TAG + "getAttendance");
-        mSelectedUser=mListStudents.get(mSelectedPosition);
-        new GetAttendance(Str_Attendance_Url,Payload_Attendance(),Fragment_Attendance.this).getAttendance();
-    }
-
-    public JSONObject Payload_Attendance()
-    {
-        TAG = "Payload_Attendance";
-        Log.d(MODULE,TAG);
-        JSONObject obj = new JSONObject();
-        try
-        {
-            obj.put("Month",mMonth);
-            obj.put("ClassId",mSelectedUser.getClassId());
-            obj.put("SectionId", mSelectedUser.getSectionId());
-            obj.put("StudentId", mSelectedUser.getStudentId());
-        }
-        catch (JSONException ex)
-        {
             ex.printStackTrace();
         }
-        Log.d(MODULE, TAG + " obj : " + obj.toString());
-        return obj;
+    }
+
+    public void getAttendanceFromService()
+    {
+        Log.d(MODULE,TAG + "getAttendanceFromService");
+        mSelectedUser=mListStudents.get(mSelectedPosition);
+        if(mSelectedMonthPosition==0)
+        {
+            text_view_empty.setText(getString(R.string.lbl_select_month));
+            showEmptyView();
+        }
+        else
+        {
+            AppUtils.showProgressDialog(mActivity);
+            new GetAttendance(Str_Attendance_Url,Payload_Attendance(),Fragment_Attendance.this).getAttendance();
+            ll_attendance.setVisibility(View.VISIBLE);
+            text_view_empty.setText(getString(R.string.lbl_no_attendance) + " "+mMonth_value);
+        }
     }
 
     @Override
@@ -381,6 +353,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
 
         showEmptyView();
     }
+
     public void getAttendanceDetails()
     {
         TAG = "getAttendanceDetails";
@@ -422,6 +395,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         }
 
     }
+
     public void setAttendanceDetails()
     {
         TAG = "setAttendanceDetails";
@@ -430,9 +404,9 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         AppUtils.hideProgressDialog();
         if(mSuccess==0)
         {
-            txt_view_workingDays.setText(mWorkingDays);
-            txt_view_presentDays.setText(mPresentDays);
-            txt_view_percentage.setText(mPercentage);
+            tv_working_days.setText(mWorkingDays);
+            tv_present_days.setText(mPresentDays);
+            tv_present_days.setText(mPercentage);
             ll_attendance.setVisibility(View.VISIBLE);
             layout_empty.setVisibility(View.GONE);
         }
@@ -452,8 +426,51 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         {
             layout_empty.setVisibility(View.VISIBLE);
             ll_attendance.setVisibility(View.GONE);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
+
+    public JSONObject Payload_StudentList()
+    {
+        TAG = "Payload";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("ParentId", Str_Id);
+            obj.put("ClassId", "");
+            obj.put("SectionId", "");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
+    }
+
+    public JSONObject Payload_Attendance()
+    {
+        TAG = "Payload_Attendance";
+        Log.d(MODULE,TAG);
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("Month",mMonth);
+            obj.put("ClassId",mSelectedUser.getClassId());
+            obj.put("SectionId", mSelectedUser.getSectionId());
+            obj.put("StudentId", mSelectedUser.getStudentId());
+        }
+        catch (JSONException ex)
+        {
+            ex.printStackTrace();
+        }
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+        return obj;
+    }
+
 }
