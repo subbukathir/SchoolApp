@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -83,7 +84,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 Log.d(MODULE, TAG + " mEvent Name : " + mEvent.getName());
                 Log.d(MODULE, TAG + " mEvent Description : " + mEvent.getDescription());
-                Log.d(MODULE, TAG + " mEvent OrganizerId : " +  mEvent.getOrganizerId());
+                Log.d(MODULE, TAG + " mEvent OrganizerId : " + mEvent.getOrganizerId());
                 Log.d(MODULE, TAG + " mEvent StartDate : " + mEvent.getStartDate());
                 Log.d(MODULE, TAG + " mEvent EndDate : " + mEvent.getEndDate());
                 Log.d(MODULE, TAG + " mEvent Organizer First Name : " + mEvent.getOrganizer_First_Name());
@@ -94,7 +95,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Str_OrganizerName.append(mEvent.getOrganizer_First_Name()).append(" ");
                 Str_OrganizerName.append(mEvent.getOrganizer_Last_Name());
                 holder.tv_event_organizer.setText(Str_OrganizerName.toString());
-                holder.tv_event_organizer.setLayoutParams(params);
+                //holder.tv_event_organizer.setLayoutParams(params);
 
                 String Str_Sdate = mEvent.getStartDate();
                 String Str_Edate = mEvent.getEndDate();
