@@ -77,6 +77,7 @@
 
     <dimen name="txt_view_width_profile">250dp</dimen>
     <dimen name="dim_img_size_view_profile">150dp</dimen>
+    <dimen name="lbl_profile_title">20sp</dimen>
 
     <!-- Events -->
     <dimen name="lbl_event_tile">20sp</dimen>

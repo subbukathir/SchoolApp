@@ -149,7 +149,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         Log.d(MODULE, TAG);
         try
         {
-            tv_header_name.setTypeface(font.getHelveticaBold());
+            tv_header_name.setTypeface(font.getHelveticaRegular());
             tv_profile_mobile_number.setTypeface(font.getHelveticaRegular());
             tv_profile_email.setTypeface(font.getHelveticaRegular());
             tv_lbl_profile_address.setTypeface(font.getHelveticaRegular());

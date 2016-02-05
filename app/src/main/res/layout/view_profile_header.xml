@@ -20,7 +20,7 @@
             android:id="@+id/tv_header_name"
             style="@style/text_view_header_name"
             android:text="@string/lbl_first_name"
-            android:textSize="@dimen/txt_size_btn" />
+            android:textSize="@dimen/lbl_profile_title" />
 
     </LinearLayout>
 
