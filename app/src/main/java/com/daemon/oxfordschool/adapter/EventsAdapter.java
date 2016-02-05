@@ -91,6 +91,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 holder.tv_event_name.setText(mEvent.getName());
                 StringBuilder Str_OrganizerName = new StringBuilder();
+                Str_OrganizerName.append(mActivity.getString(R.string.lbl_organizer)).append(" : ");
                 Str_OrganizerName.append(mEvent.getOrganizer_First_Name()).append(" ");
                 Str_OrganizerName.append(mEvent.getOrganizer_Last_Name());
                 holder.tv_event_organizer.setText(Str_OrganizerName.toString());
@@ -110,7 +111,10 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     String str_edate = format1.format(Edate);
                     Log.d(MODULE, TAG + "start date" + str_sdate);
 
-                    holder.tv_event_start_date.setText(str_sdate);
+                    StringBuilder Str_StartDate = new StringBuilder();
+                    Str_StartDate.append(mActivity.getString(R.string.lbl_starts_on)).append(" : ");
+                    Str_StartDate.append(str_sdate);
+                    holder.tv_event_start_date.setText(Str_StartDate.toString());
                     holder.tv_event_end_date.setText(str_edate);
 
                 }
@@ -161,7 +165,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         RecyclerView.ViewHolder mHolder=null;
         if(viewType == VIEW_ITEM)
         {
-            View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_event,null);
+            View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_event,parent,false);
             mHolder = new Event_ListHolders(layoutView);
         }
         else if(viewType == VIEW_PROG)
@@ -232,7 +236,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         {
             try
             {
-                tv_event_name.setTypeface(font.getHelveticaBold());
+                tv_event_name.setTypeface(font.getHelveticaRegular());
                 tv_event_start_date.setTypeface(mTypeFace);
                 tv_event_end_date.setTypeface(mTypeFace);
                 tv_event_organizer.setTypeface(mTypeFace);

@@ -25,7 +25,7 @@
             <TextView
                 android:id="@+id/tv_profile_mobile_number"
                 style="@style/text_view_header_profile"
-                android:drawableLeft="@drawable/ic_call_grey"/>
+                android:drawableLeft="@drawable/ic_call_app"/>
 
         </LinearLayout>
 
@@ -45,7 +45,7 @@
             <TextView
                 android:id="@+id/tv_profile_email"
                 style="@style/text_view_header_profile"
-                android:drawableLeft="@drawable/ic_email_grey"
+                android:drawableLeft="@drawable/ic_email_app"
                 android:layout_weight="1" />
 
         </LinearLayout>
@@ -72,8 +72,7 @@
                 <TextView
                     android:id="@+id/tv_lbl_profile_address"
                     style="@style/text_view_header_profile"
-                    android:drawableLeft="@drawable/ic_location_grey"
-
+                    android:drawableLeft="@drawable/ic_location_app"
                     android:text="@string/lbl_address" />
 
                 <TextView

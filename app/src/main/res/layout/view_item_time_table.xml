@@ -1,133 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/match_parent_style"
-    android:orientation="vertical">
-
-    <!-- Label Hours Starts Here-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/match_parent_style">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/match_parent_style"
         android:orientation="vertical">
 
-        <LinearLayout style="@style/linear_layout_time_table_item">
+        <!-- Label Hours Starts Here-->
 
-            <TextView
-                android:id="@+id/tv_lbl_hour1"
-                style="@style/text_view_timetable_headers"
-                android:text="@string/lbl_1hour" />
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_layout_padding"
+            android:textColor="@color/color_app" />
 
-            <TextView
-                android:id="@+id/tv_hour1"
-                style="@style/text_view_timetable_texts"
-                android:text="@string/lbl_1hour" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <LinearLayout style="@style/linear_layout_time_table_item">
+
+                <TextView
+                    android:id="@+id/tv_lbl_hour1"
+                    style="@style/text_view_timetable_headers"
+                    android:text="@string/lbl_1hour" />
+
+                <TextView
+                    android:id="@+id/tv_hour1"
+                    style="@style/text_view_timetable_texts"
+                    android:text="@string/lbl_1hour" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_layout_time_table_item">
+
+                <TextView
+                    android:id="@+id/tv_lbl_hour2"
+                    style="@style/text_view_timetable_headers"
+                    android:text="@string/lbl_2hour" />
+
+                <TextView
+                    android:id="@+id/tv_hour2"
+                    style="@style/text_view_timetable_texts"
+                    android:text="@string/lbl_2hour" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_layout_time_table_item">
+
+                <TextView
+                    android:id="@+id/tv_lbl_hour3"
+                    style="@style/text_view_timetable_headers"
+                    android:text="@string/lbl_3hour" />
+
+                <TextView
+                    android:id="@+id/tv_hour3"
+                    style="@style/text_view_timetable_texts"
+                    android:text="@string/lbl_3hour" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_layout_time_table_item">
+
+                <TextView
+                    android:id="@+id/tv_lbl_hour4"
+                    style="@style/text_view_timetable_headers"
+                    android:text="@string/lbl_4hour" />
+
+                <TextView
+                    android:id="@+id/tv_hour4"
+                    style="@style/text_view_timetable_texts"
+                    android:text="@string/lbl_4hour" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_layout_time_table_item">
+
+                <TextView
+                    android:id="@+id/tv_lbl_hour5"
+                    style="@style/text_view_timetable_headers"
+                    android:text="@string/lbl_5hour" />
+
+                <TextView
+                    android:id="@+id/tv_hour5"
+                    style="@style/text_view_timetable_texts"
+                    android:text="@string/lbl_5hour" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_layout_time_table_item">
+
+                <TextView
+                    android:id="@+id/tv_lbl_hour6"
+                    style="@style/text_view_timetable_headers"
+                    android:text="@string/lbl_6hour" />
+
+                <TextView
+                    android:id="@+id/tv_hour6"
+                    style="@style/text_view_timetable_texts"
+                    android:text="@string/lbl_6hour" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_layout_time_table_item">
+
+                <TextView
+                    android:id="@+id/tv_lbl_hour7"
+                    style="@style/text_view_timetable_headers"
+                    android:text="@string/lbl_7hour" />
+
+                <TextView
+                    android:id="@+id/tv_hour7"
+                    style="@style/text_view_timetable_texts"
+                    android:text="@string/lbl_7hour" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/linear_layout_time_table_item">
+
+                <TextView
+                    android:id="@+id/tv_lbl_hour8"
+                    style="@style/text_view_timetable_headers"
+                    android:text="@string/lbl_8hour" />
+
+                <TextView
+                    android:id="@+id/tv_hour8"
+                    style="@style/text_view_timetable_texts"
+                    android:text="@string/lbl_6hour" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
-        <LinearLayout style="@style/linear_layout_time_table_item">
-
-            <TextView
-                android:id="@+id/tv_lbl_hour2"
-                style="@style/text_view_timetable_headers"
-                android:text="@string/lbl_2hour" />
-
-            <TextView
-                android:id="@+id/tv_hour2"
-                style="@style/text_view_timetable_texts"
-                android:text="@string/lbl_2hour" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/linear_layout_time_table_item">
-
-            <TextView
-                android:id="@+id/tv_lbl_hour3"
-                style="@style/text_view_timetable_headers"
-                android:text="@string/lbl_3hour" />
-
-            <TextView
-                android:id="@+id/tv_hour3"
-                style="@style/text_view_timetable_texts"
-                android:text="@string/lbl_3hour" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/linear_layout_time_table_item">
-
-            <TextView
-                android:id="@+id/tv_lbl_hour4"
-                style="@style/text_view_timetable_headers"
-                android:text="@string/lbl_4hour" />
-
-            <TextView
-                android:id="@+id/tv_hour4"
-                style="@style/text_view_timetable_texts"
-                android:text="@string/lbl_4hour" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/linear_layout_time_table_item">
-
-            <TextView
-                android:id="@+id/tv_lbl_hour5"
-                style="@style/text_view_timetable_headers"
-                android:text="@string/lbl_5hour" />
-
-            <TextView
-                android:id="@+id/tv_hour5"
-                style="@style/text_view_timetable_texts"
-                android:text="@string/lbl_5hour" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/linear_layout_time_table_item">
-
-            <TextView
-                android:id="@+id/tv_lbl_hour6"
-                style="@style/text_view_timetable_headers"
-                android:text="@string/lbl_6hour" />
-
-            <TextView
-                android:id="@+id/tv_hour6"
-                style="@style/text_view_timetable_texts"
-                android:text="@string/lbl_6hour" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/linear_layout_time_table_item">
-
-            <TextView
-                android:id="@+id/tv_lbl_hour7"
-                style="@style/text_view_timetable_headers"
-                android:text="@string/lbl_7hour" />
-
-            <TextView
-                android:id="@+id/tv_hour7"
-                style="@style/text_view_timetable_texts"
-                android:text="@string/lbl_7hour" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/linear_layout_time_table_item">
-
-            <TextView
-                android:id="@+id/tv_lbl_hour8"
-                style="@style/text_view_timetable_headers"
-                android:text="@string/lbl_8hour" />
-
-            <TextView
-                android:id="@+id/tv_hour8"
-                style="@style/text_view_timetable_texts"
-                android:text="@string/lbl_6hour" />
-
-        </LinearLayout>
-
+        <!-- Label Hours Ends Here-->
 
 
     </LinearLayout>
 
-    <!-- Label Hours Ends Here-->
-
-
-</LinearLayout>
-
+</ScrollView>

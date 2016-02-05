@@ -66,6 +66,7 @@
     <string name="lbl_organizer">Organizer</string>
     <string name="lbl_description">Description</string>
     <string name="lbl_no_events">No Events</string>
+    <string name="lbl_starts_on">Starts On</string>
 
     <!-- HomeWork -->
 
@@ -167,6 +168,14 @@
         <item>October</item>
         <item>November</item>
         <item>December</item>
+    </string-array>
+
+    <string-array name="array_days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
     </string-array>
 
 

@@ -238,79 +238,106 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
 
     private void dispatchTakePictureIntent()
     {
+        TAG = "dispatchTakePictureIntent";
+        Log.d(MODULE, TAG);
+
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        mImageCaptureUri = Uri.fromFile(new File(Environment
-                .getExternalStorageDirectory(), "tmp.jpg"));
-        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                mImageCaptureUri);
+        mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "tmp.jpg"));
+        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT,mImageCaptureUri);
         captureIntent.putExtra("return-data", true);
         startActivityForResult(captureIntent, 101);
-
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        TAG = "onActivityResult";
+        Log.d(MODULE, TAG);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2)
         {
-            TAG = "onActivityResult";
-            Log.d(MODULE, TAG);
-            super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == 2) {
-                if (data != null) {
-                    Bundle extras2 = data.getExtras();
-                    if (extras2 != null) {
-                        Bitmap photo = extras2.getParcelable("data");
+            if (data != null)
+            {
+                Bundle extras2 = data.getExtras();
+                if (extras2 != null)
+                {
+                    Bitmap photo = extras2.getParcelable("data");
+                    AppUtils.saveImage(photo, mActivity);
+                    SetProfileImage();
+                }
+            }
+        }
+        if (requestCode == 101)
+        {
+            cropImage();
+        }
+        if (requestCode == 102)
+        {
+            try
+            {
+                if(data!=null)
+                {
+                    if(data.getExtras()!=null)
+                    {
+                        Bitmap photo = (Bitmap) data.getExtras().get("data");
                         AppUtils.saveImage(photo, mActivity);
-                        SetProfileImage();
+                        image_view_profile.setImageBitmap(photo);
                     }
                 }
             }
-
-            if (requestCode == 101) {
-                cropImage();
-            }
-
-            if (requestCode == 102) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                AppUtils.saveImage(photo, mActivity);
-                image_view_profile.setImageBitmap(photo);
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
             }
         }
     }
 
-    private void cropImage() {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(mImageCaptureUri, "image/*");
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("scale", true);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, 102);
+    private void cropImage()
+    {
+        try
+        {
+            Intent intent = new Intent("com.android.camera.action.CROP");
+            intent.setDataAndType(mImageCaptureUri, "image/*");
+            intent.putExtra("outputX", 600);
+            intent.putExtra("outputY", 600);
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("scale", true);
+            intent.putExtra("return-data", true);
+            startActivityForResult(intent, 102);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     private void StartPicking()
     {
-        TAG = "Goto_Fragment_BankList";
+        TAG = "StartPicking";
         Log.d(MODULE, TAG);
 
-        mManager = mActivity.getSupportFragmentManager();
+        try
+        {
+            mManager = mActivity.getSupportFragmentManager();
 
-        Bundle Args = new Bundle();
-        Args.putString("B_ACTION", Action.ACTION_PICK);
+            Bundle Args = new Bundle();
+            Args.putString("B_ACTION", Action.ACTION_PICK);
 
-        DialogGallery fragment = new DialogGallery();
-        fragment.setArguments(Args);
-        fragment.setTargetFragment(fragment, AppUtils.SHARED_INT_DIALOG_PICKER);
-        fragment.SetImagePickListener(Fragment_ProfileView.this);
-        /*Showing dialog within the screen */
-        //FragmentTransaction ObjTransaction = mManager.beginTransaction();
-        //fragment.show(ObjTransaction,AppConstants.C_DIALOG_BANK_FRAGMENT);
-        /*Showing dialog in the separate screen */
-        FragmentTransaction ObjTransaction = mManager.beginTransaction();
-        ObjTransaction.add(android.R.id.content,fragment,AppUtils.SHARED_DIALOG_PICKER+"");
-        ObjTransaction.addToBackStack(null);
-        ObjTransaction.commit();
+            DialogGallery fragment = new DialogGallery();
+            fragment.setArguments(Args);
+            fragment.setTargetFragment(fragment, AppUtils.SHARED_INT_DIALOG_PICKER);
+            fragment.SetImagePickListener(Fragment_ProfileView.this);
+            FragmentTransaction ObjTransaction = mManager.beginTransaction();
+            ObjTransaction.add(android.R.id.content,fragment,AppUtils.SHARED_DIALOG_PICKER+"");
+            ObjTransaction.addToBackStack(null);
+            ObjTransaction.commit();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     private void initImageLoader()
@@ -344,7 +371,11 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     }
 
     @Override
-    public void onSingleImagePicked(String Str_Path) {
+    public void onSingleImagePicked(String Str_Path)
+    {
+        TAG = "onSingleImagePicked";
+        Log.d(MODULE, TAG);
+
         Log.d(MODULE,TAG + " Single Path : " + Str_Path);
         try
         {
@@ -358,7 +389,8 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     }
 
     @Override
-    public void onMultipleImagePicked(String[] Str_Path) {
+    public void onMultipleImagePicked(String[] Str_Path)
+    {
 
     }
 
@@ -371,4 +403,5 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     public void onImageSavedError() {
         AppUtils.DialogMessage(mActivity,"Cannot Save");
     }
+
 }

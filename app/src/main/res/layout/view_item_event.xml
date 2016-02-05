@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/match_parent_style"
+    android:padding="@dimen/space_layout_padding"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -19,13 +20,14 @@
             <TextView
                 android:id="@+id/tv_event_name"
                 style="@style/text_view_event_list_item"
-                android:textSize="@dimen/txt_size_btn"
-                android:textStyle="bold" />
+                android:textSize="@dimen/lbl_event_tile"
+                android:textColor="@color/color_dark_grey"/>
 
             <TextView
                 android:id="@+id/tv_event_organizer"
                 style="@style/text_view_event_list_item"
-                android:textColor="@color/color_green" />
+                android:textColor="@color/color_green"
+                android:textSize="@dimen/txt_size_btn"/>
 
             <LinearLayout
                 style="@style/match_wrap_style"
@@ -43,6 +45,7 @@
                     style="@style/text_view_event_list_item"
                     android:gravity="right"
                     android:textSize="@dimen/lbl_size_list_item"
+                    android:visibility="gone"
                     android:textColor="@color/color_light_grey" />
 
             </LinearLayout>

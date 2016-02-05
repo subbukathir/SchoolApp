@@ -5,8 +5,11 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerTabStrip;
+import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +35,7 @@ import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetExamResult;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.asyncprocess.GetTimeTable;
+import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
 import com.daemon.oxfordschool.classes.CExam;
 import com.daemon.oxfordschool.classes.CResult;
 import com.daemon.oxfordschool.classes.Common_Class;
@@ -43,6 +47,7 @@ import com.daemon.oxfordschool.listeners.ExamResultListener;
 import com.daemon.oxfordschool.listeners.ExamTypeListListener;
 import com.daemon.oxfordschool.listeners.Exam_Result_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
+import com.daemon.oxfordschool.listeners.SubjectListListener;
 import com.daemon.oxfordschool.listeners.TimeTableListener;
 import com.daemon.oxfordschool.response.CommonList_Response;
 import com.daemon.oxfordschool.response.ExamList_Response;
@@ -55,7 +60,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Fragment_TimeTable extends Fragment implements StudentsListListener,TimeTableListener
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
+
+public class Fragment_TimeTable extends Fragment implements StudentsListListener,TimeTableListener,SubjectListListener
 {
 
     public static String MODULE = "Fragment_TimeTable";
@@ -67,10 +76,12 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
     User mUser,mSelectedUser;
     ViewPager vp_student,vp_time_table;
 
+    ArrayList<Common_Class> mSubjectList;
     ArrayList<User> mListStudents =new ArrayList<User>();
     TimeTable mTimeTable;
 
     StudentsList_Response studentListResponse;
+    CommonList_Response response;
 
     AppCompatActivity mActivity;
     String Str_Id="",Str_ClassId="",Str_SectionId="";
@@ -85,6 +96,8 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
     String[] Day5 = new String[8];
 
     Object[] ObjTbl = new Object[5];
+
+    TimeTablePagerAdapter adapter;
 
     public Fragment_TimeTable()
     {
@@ -103,6 +116,7 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
             getStudentsList();
+            getSubjects();
         }
         catch (Exception ex)
         {
@@ -260,9 +274,8 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
             getStudentsList();
             if(mListStudents.size()>0)
             {
-                showStudentsList();
                 mSelectedPosition=0;
-                getTimeTableFromService();
+                showStudentsList();
             }
         }
         catch (Exception ex)
@@ -291,7 +304,14 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
         Log.d(MODULE, TAG);
         try
         {
-            getTimeTable();
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getTimeTable();
+                    showTimeTable();
+                }
+            });
+
         }
         catch (Exception ex)
         {
@@ -321,6 +341,7 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
         {
             StudentPagerAdapter adapter = new StudentPagerAdapter(mActivity,mListStudents);
             vp_student.setAdapter(adapter);
+            getTimeTableFromService();
         }
         catch (Exception ex)
         {
@@ -377,8 +398,9 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
         Log.d(MODULE, TAG);
         try
         {
-            TimeTablePagerAdapter adapter = new TimeTablePagerAdapter(mActivity,ObjTbl);
+            adapter = new TimeTablePagerAdapter(mActivity,ObjTbl,mSubjectList);
             vp_time_table.setAdapter(adapter);
+
         }
         catch (Exception ex)
         {
@@ -425,5 +447,50 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
         return obj;
     }
 
+    @Override
+    public void onSubjectListReceived()
+    {
+        TAG = "onSubjectListReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getSubjects();
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    @Override
+    public void onSubjectListReceivedError(String Str_Msg) {
+
+    }
+
+    public void getSubjects()
+    {
+        TAG = "getSubjects";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_SUBJECT_LIST, "");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if (Str_Json.length() > 0)
+            {
+                response = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() { }.getType());
+                mSubjectList = response.getCclass();
+                Log.d(MODULE, TAG + " mSubjectList : " + mSubjectList.size());
+            }
+            else
+            {
+                new SubjectList_Process(mActivity, this).GetSubjectList();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
 }
