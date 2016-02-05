@@ -95,6 +95,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Str_OrganizerName.append(mEvent.getOrganizer_First_Name()).append(" ");
                 Str_OrganizerName.append(mEvent.getOrganizer_Last_Name());
                 holder.tv_event_organizer.setText(Str_OrganizerName.toString());
+                holder.tv_event_organizer.setLayoutParams(params);
 
                 String Str_Sdate = mEvent.getStartDate();
                 String Str_Edate = mEvent.getEndDate();
@@ -103,8 +104,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 DateFormat format1 = new SimpleDateFormat("E, MMM dd yy HH:mm a");
 
                 Date Sdate, Edate;
-                try
-                {
+                try {
                     Sdate = sdf1.parse(Str_Sdate);
                     Edate = sdf1.parse(Str_Edate);
                     String str_sdate = format1.format(Sdate);
@@ -117,11 +117,11 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     holder.tv_event_start_date.setText(Str_StartDate.toString());
                     holder.tv_event_end_date.setText(str_edate);
 
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

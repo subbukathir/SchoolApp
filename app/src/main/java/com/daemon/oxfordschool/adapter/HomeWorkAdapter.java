@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ public class HomeWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private DisplayImageOptions options;
     static SharedPreferences mPreferences;
     static RecyclerView recycler_view;
-    Font font= MyApplication.getInstance().getFontInstance();
+    static Font font= MyApplication.getInstance().getFontInstance();
     static Typeface mTypeFace;
     private boolean isFooterEnabled = false;
     int mMargin=0;float mDensity=0;
@@ -142,7 +143,7 @@ public class HomeWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RecyclerView.ViewHolder mHolder=null;
         if(viewType == VIEW_ITEM)
         {
-            View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_homework,null);
+            View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_homework, parent,false);
             mHolder = new HomeWork_ListHolders(layoutView);
         }
         else if(viewType == VIEW_PROG)
@@ -214,11 +215,12 @@ public class HomeWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         {
             try
             {
-                tv_subject_name.setTypeface(mTypeFace);
+                tv_subject_name.setTypeface(font.getHelveticaBold());
                 tv_lbl_AssignmentI.setTypeface(mTypeFace);
                 tv_AssignmentI.setTypeface(mTypeFace);
                 tv_lbl_AssignmentII.setTypeface(mTypeFace);
                 tv_AssignmentII.setTypeface(mTypeFace);
+
             }
             catch (Exception ex)
             {
