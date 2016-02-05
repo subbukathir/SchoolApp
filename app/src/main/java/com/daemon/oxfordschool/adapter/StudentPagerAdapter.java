@@ -66,17 +66,17 @@ public class StudentPagerAdapter extends PagerAdapter
 
             if(tv_name!=null)
             {
-                tv_name.setTypeface(font.getHelveticaBold());
+                tv_name.setTypeface(font.getHelveticaRegular());
                 tv_name.setText(Str_Name.toString());
             }
             if(tv_class!=null)
             {
-                tv_class.setTypeface(font.getHelveticaBold());
+                tv_class.setTypeface(font.getHelveticaRegular());
                 tv_class.setText(Str_ClassName);
             }
             if(tv_section!=null)
             {
-                tv_section.setTypeface(font.getHelveticaBold());
+                tv_section.setTypeface(font.getHelveticaRegular());
                 tv_section.setText(Str_SectionName.toString());
             }
             container.addView(itemView);

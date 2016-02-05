@@ -22,7 +22,7 @@
             style="@style/text_view_header_name"
             android:layout_weight="0.8"
             android:text="@string/lbl_first_name"
-            android:textSize="@dimen/txt_size_btn" />
+            android:textSize="@dimen/lbl_profile_title" />
 
     </LinearLayout>
 
@@ -38,7 +38,7 @@
             android:id="@+id/tv_class_name"
             style="@style/text_view_header_class"
             android:text="VIII"
-            android:textSize="@dimen/txt_size_btn"
+            android:textSize="@dimen/lbl_profile_title"
             android:layout_weight="1"
             android:gravity="left"/>
 
@@ -46,7 +46,7 @@
             android:id="@+id/tv_section_name"
             style="@style/text_view_header_class"
             android:text="A"
-            android:textSize="@dimen/txt_size_btn"
+            android:textSize="@dimen/lbl_profile_title"
             android:layout_weight="1"
             android:gravity="right"/>
 

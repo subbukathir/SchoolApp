@@ -327,6 +327,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         {
             StudentPagerAdapter adapter = new StudentPagerAdapter(mActivity,mListStudents);
             vp_student.setAdapter(adapter);
+            getHomeWorks(0,Str_Date);
         }
         catch (Exception ex)
         {
