@@ -36,7 +36,6 @@
                     android:id="@+id/tv_lbl_AssignmentI"
                     style="@style/text_view_event_list_item"
                     android:layout_weight="1.4"
-
                     android:text="@string/lbl_assignmentI"
                     android:textColor="@color/color_dark_grey" />
 

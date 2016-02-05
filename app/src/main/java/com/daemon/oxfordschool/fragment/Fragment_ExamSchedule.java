@@ -61,7 +61,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
     public static String MODULE = "Fragment_ExamSchedule ";
     public static String TAG = "";
 
-    TextView tv_lbl_select_exam_type,text_view_empty;
+    TextView tv_lbl_select_exam_type,text_view_empty,tv_lbl_subject_name,tv_lbl_exam_date;
     Spinner spinner_exam_type;
     RelativeLayout layout_empty;
     int mSelectedPosition;
@@ -131,6 +131,8 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             tv_lbl_select_exam_type = (TextView) view.findViewById(R.id.tv_select_exam_type);
             spinner_exam_type = (Spinner) view.findViewById(R.id.spinner_exam_type);
+            tv_lbl_subject_name = (TextView) view.findViewById(R.id.tv_lbl_subject_name);
+            tv_lbl_exam_date = (TextView) view.findViewById(R.id.tv_lbl_exam_date);
             swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_exam_list);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
@@ -169,6 +171,8 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         {
             layout_empty.setVisibility(View.GONE);
             tv_lbl_select_exam_type.setTypeface(font.getHelveticaRegular());
+            tv_lbl_subject_name.setTypeface(font.getHelveticaBold());
+            tv_lbl_exam_date.setTypeface(font.getHelveticaBold());
             text_view_empty.setTypeface(font.getHelveticaRegular());
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);

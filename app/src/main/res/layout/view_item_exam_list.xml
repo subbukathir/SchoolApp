@@ -4,25 +4,22 @@
     android:orientation="vertical">
 
     <LinearLayout
-        style="@style/match_wrap_style"
-        android:orientation="horizontal">
+        style="@style/match_parent_style"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_layout_padding">
 
         <TextView
             android:id="@+id/tv_subject_name"
             style="@style/text_view_event_list_item"
-            android:layout_weight="0.8"
+            android:layout_weight="0.6"
+            android:text="@string/lbl_subject"
             android:textColor="@color/color_black" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/match_wrap_style"
-        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_exam_date"
             style="@style/text_view_event_list_item"
-            android:layout_weight="0.8"
+            android:layout_weight="1"
+            android:text="@string/lbl_date"
             android:textColor="@color/color_black" />
 
     </LinearLayout>

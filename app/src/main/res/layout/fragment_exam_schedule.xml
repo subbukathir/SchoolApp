@@ -11,6 +11,8 @@
         android:layout_weight="0.8"
         android:orientation="vertical">
 
+        <!-- Select Exam Type Starts -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,16 +26,42 @@
 
             <Spinner
                 android:id="@+id/spinner_exam_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_layout_margin"
                 android:layout_marginRight="@dimen/space_layout_margin"
-                android:background="@drawable/abc_spinner_textfield_background_material"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </Spinner>
+                android:background="@drawable/abc_spinner_textfield_background_material"></Spinner>
         </LinearLayout>
 
+        <!-- Select Exam Type Ends -->
+
+        <!-- List Header Starts -->
+
+
         <LinearLayout
-            style="@style/match_parent_style">
+            style="@style/match_wrap_style"
+            android:orientation="horizontal"
+            android:padding="@dimen/space_layout_padding">
+
+            <TextView
+                android:id="@+id/tv_lbl_subject_name"
+                style="@style/text_view_event_list_item"
+                android:layout_weight="0.6"
+                android:text="@string/lbl_subject"
+                android:textColor="@color/color_black" />
+
+            <TextView
+                android:id="@+id/tv_lbl_exam_date"
+                style="@style/text_view_event_list_item"
+                android:layout_weight="1"
+                android:text="@string/lbl_date"
+                android:textColor="@color/color_black" />
+
+        </LinearLayout>
+
+        <!-- List Header  Ends -->
+
+        <LinearLayout style="@style/match_parent_style">
 
             <com.daemon.oxfordschool.components.RecycleEmptyErrorView
                 android:id="@+id/recycler_view_exam_list"

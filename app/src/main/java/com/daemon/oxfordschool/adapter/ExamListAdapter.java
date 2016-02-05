@@ -98,12 +98,12 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Log.d(MODULE, TAG + "mExam SubjectName : " + mExam.getSubjectName());
 
                 StringBuilder Str_ExamName = new StringBuilder();
-                Str_ExamName.append(mActivity.getString(R.string.lbl_subject)).append(" : ");
+                //Str_ExamName.append(mActivity.getString(R.string.lbl_subject)).append(" : ");
                 Str_ExamName.append(mExam.getSubjectName());
                 holder.tv_subject_name.setText(Str_ExamName.toString());
 
                 StringBuilder Str_ExamDate = new StringBuilder();
-                Str_ExamDate.append(mActivity.getString(R.string.lbl_date)).append(" : ");
+                //Str_ExamDate.append(mActivity.getString(R.string.lbl_date)).append(" : ");
                 Str_ExamDate.append(mExam.getExamDate());
                 holder.tv_exam_date.setText(Str_ExamDate.toString());
 
