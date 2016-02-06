@@ -11,7 +11,7 @@
     <color name="color_dark_grey">#363437</color>
     <color name="color_light_grey">#757575</color>
     <color name="color_green">#00cc00</color>
-
+    <color name="color_dark_green">#006400</color>
     <color name="color_app_background">#C81E5E</color>
     <color name="color_app">#C81E5E</color>
     <color name="textColorPrimary">#FFFFFF</color>

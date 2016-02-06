@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,12 +25,15 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.adapter.AttendanceAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetAttendance;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.classes.CResult;
+import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
+import com.daemon.oxfordschool.listeners.Attendance_List_Item_Click_Listener;
 import com.daemon.oxfordschool.response.Attendance_Response;
 import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.daemon.oxfordschool.listeners.AttendanceListener;
@@ -45,12 +49,15 @@ import java.util.ArrayList;
  * Created by daemonsoft on 3/2/16.
  */
 public class Fragment_Attendance extends Fragment implements StudentsListListener,AttendanceListener,AdapterView.OnItemSelectedListener
+        ,Attendance_List_Item_Click_Listener
 {
     public static String MODULE = "Fragment_Attendance ";
     public static String TAG = "";
 
     int mSelectedPosition,mSelectedMonthPosition;
 
+    RecycleEmptyErrorView recycler_view;
+    RecyclerView.LayoutManager mLayoutManager;
     SharedPreferences mPreferences;
     User mUser,mSelectedUser;
     ViewPager vp_student;
@@ -63,8 +70,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
     AppCompatActivity mActivity;
     String Str_Id="",mMonth="",mWorkingDays="",mPresentDays="",mPercentage="",mMonth_value;
     Spinner spinner_months;
-    TextView tv_lbl_select_month,tv_lbl_no_of_working_days, tv_working_days,tv_lbl_no_of_present_days,tv_present_days,
-            tv_lbl_percentage,tv_percentage,text_view_empty;
+    TextView tv_lbl_select_month, tv_working_days,tv_present_days,tv_percentage,text_view_empty,tv_lbl_date,tv_lbl_status;
     ArrayAdapter<CharSequence> adapter;
     RelativeLayout layout_empty;
     LinearLayout ll_attendance;
@@ -117,12 +123,12 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         try
         {
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
+            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_attendance);
             tv_lbl_select_month = (TextView)view.findViewById(R.id.tv_lbl_select_month);
-            tv_lbl_no_of_working_days = (TextView)view.findViewById(R.id.tv_lbl_no_of_working_days);
+            tv_lbl_date = (TextView)view.findViewById(R.id.tv_lbl_date);
+            tv_lbl_status = (TextView)view.findViewById(R.id.tv_lbl_status);
             tv_working_days = (TextView)view.findViewById(R.id.tv_working_days);
-            tv_lbl_no_of_present_days = (TextView)view.findViewById(R.id.tv_lbl_no_of_present_days);
             tv_present_days = (TextView)view.findViewById(R.id.tv_present_days);
-            tv_lbl_percentage = (TextView)view.findViewById(R.id.tv_lbl_percentage);
             tv_percentage = (TextView)view.findViewById(R.id.tv_percentage);
             spinner_months=(Spinner)view.findViewById(R.id.spinner_month);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
@@ -152,12 +158,13 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             ll_attendance.setVisibility(View.GONE);
             text_view_empty.setTypeface(font.getHelveticaRegular());
             tv_lbl_select_month.setTypeface(font.getHelveticaRegular());
-            tv_lbl_no_of_working_days.setTypeface(font.getHelveticaBold());
             tv_working_days.setTypeface(font.getHelveticaRegular());
-            tv_lbl_no_of_present_days.setTypeface(font.getHelveticaBold());
             tv_present_days.setTypeface(font.getHelveticaRegular());
-            tv_lbl_percentage.setTypeface(font.getHelveticaBold());
             tv_percentage.setTypeface(font.getHelveticaRegular());
+            tv_lbl_date.setTypeface(font.getHelveticaBold());
+            tv_lbl_status.setTypeface(font.getHelveticaBold());
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            recycler_view.setLayoutManager(mLayoutManager);
             vp_student.addOnPageChangeListener(_OnPageChangeListener);
             text_view_empty.setText(getString(R.string.lbl_no_attendance) + " " + mMonth_value);
         }
@@ -341,7 +348,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         Log.d(MODULE, TAG);
 
         getAttendanceDetails();
-        setAttendanceDetails();
+        showAttendanceDetails();
     }
 
     @Override
@@ -352,6 +359,11 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         Log.d(MODULE, TAG + "error " + Str_Msg);
 
         showEmptyView();
+    }
+
+    @Override
+    public void onAttendanceListItemClicked(int position) {
+
     }
 
     public void getAttendanceDetails()
@@ -396,25 +408,42 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
 
     }
 
-    public void setAttendanceDetails()
+    public void showAttendanceDetails()
     {
-        TAG = "setAttendanceDetails";
+        TAG = "showAttendanceDetails";
         Log.d(MODULE, TAG);
 
-        AppUtils.hideProgressDialog();
-        if(mSuccess==0)
+        try
         {
-            tv_working_days.setText(mWorkingDays);
-            tv_present_days.setText(mPresentDays);
-            tv_percentage.setText(mPercentage);
-            ll_attendance.setVisibility(View.VISIBLE);
-            layout_empty.setVisibility(View.GONE);
-        }
-        else
-        {
-            showEmptyView();
+            AppUtils.hideProgressDialog();
+            if(mSuccess==0)
+            {
+                tv_working_days.setText( getString(R.string.lbl_working_days) + " : " + mWorkingDays);
+                tv_present_days.setText(getString(R.string.lbl_present_days) + " : " +mPresentDays);
+                tv_percentage.setText(mPercentage);
+                ll_attendance.setVisibility(View.VISIBLE);
+                layout_empty.setVisibility(View.GONE);
+                if(mAttendanceResult.size()>0)
+                {
+                    AttendanceAdapter adapter = new AttendanceAdapter(mAttendanceResult,this);
+                    if(recycler_view!=null)recycler_view.setAdapter(adapter);
+                }
+                else
+                {
+                    showEmptyView();
+                }
+            }
+            else
+            {
+                showEmptyView();
 
+            }
         }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     public void showEmptyView()

@@ -433,7 +433,8 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
            if(mListExamType.size()>0)
            {
                String[] items = AppUtils.getArray(mListExamType);
-               ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_dropdown_item,items);
+               ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+               adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                spinner_exam_type.setAdapter(adapter);
            }
         }

@@ -82,6 +82,7 @@
     <string name="lbl_no_exams">No Examinations</string>
     <string name="lbl_date">Date</string>
     <string name="lbl_subject">Subject</string>
+    <string name="lbl_status">Status</string>
 
     <!-- Exam Result -->
 
@@ -148,11 +149,14 @@
     <!-- Attendance View -->
 
     <string name="lbl_month">Select Month</string>
-    <string name="lbl_working_days">No of Working Days  </string>
-    <string name="lbl_present_days">No of Present Days  </string>
+    <string name="lbl_working_days">Working Days  </string>
+    <string name="lbl_present_days">Present Days  </string>
     <string name="lbl_percentage">Percentage  </string>
     <string name="lbl_no_attendance">No Attendance for month </string>
     <string name="lbl_select_month">Please Select the month to see attendance </string>
+    <string name="lbl_present">Present</string>
+    <string name="lbl_absent">Absent</string>
+
 
     <string-array name="array_months">
         <item>Select Month</item>

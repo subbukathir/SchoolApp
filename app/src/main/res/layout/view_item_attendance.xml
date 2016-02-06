@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/match_parent_style"
     android:orientation="vertical">
 
     <LinearLayout
-        style="@style/match_parent_style"
+        style="@style/match_wrap_style"
         android:orientation="horizontal"
         android:padding="@dimen/space_layout_padding">
 
         <TextView
-            android:id="@+id/tv_subject_name"
+            android:id="@+id/tv_date"
             style="@style/text_view_event_list_item"
-            android:text="@string/lbl_subject"
-            android:gravity="center"
-            android:textColor="@color/color_black" />
+            android:gravity="center" />
 
         <TextView
-            android:id="@+id/tv_exam_date"
+            android:id="@+id/tv_status"
             style="@style/text_view_event_list_item"
-            android:text="@string/lbl_date"
-            android:gravity="center"
-            android:textColor="@color/color_black" />
+            android:gravity="center" />
 
     </LinearLayout>
 
