@@ -22,4 +22,9 @@ public class ApiConstants
     public static String TIME_TABLE_URL=SERVER_URL + "TimeTable.php";
 
     public static String SUCCESS_CODE="0";
+
+    public static String STUDENT="1";
+    public static String STAFF="2";
+    public static String PARENT="3";
+
 }

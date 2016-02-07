@@ -202,4 +202,28 @@
         <item name="android:orientation">horizontal</item>
     </style>
 
+    <style name="text_view_label_teacher">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_dark_grey</item>
+        <item name="android:textSize">@dimen/lbl_size</item>
+        <item name="android:layout_marginLeft">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginRight">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="img_view_list_item_profile_pic">
+        <item name="android:layout_height">@dimen/dim_img_size_view_profile</item>
+        <item name="android:layout_width">@dimen/dim_img_size_view_profile</item>
+        <item name="android:src">@drawable/profile_img</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginTop">@dimen/space_layout_margin</item>
+        <item name="android:layout_marginBottom">@dimen/space_layout_margin</item>
+    </style>
+
 </resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/match_wrap_style"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/match_wrap_style"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_profile"
+            style="@style/img_view_list_item_profile_pic" />
+
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:orientation="vertical"
+            android:padding="@dimen/space_layout_padding"
+            android:layout_marginLeft="@dimen/space_layout_margin"
+            android:layout_marginRight="@dimen/space_layout_margin"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_student_name"
+                style="@style/match_wrap_style"
+                android:text="Naveen Charkravarthi"
+                android:textColor="@color/color_black"
+                android:textSize="@dimen/txt_size_btn" />
+
+            <TextView
+                android:id="@+id/tv_phone_no"
+                style="@style/match_wrap_style"
+                android:text="989999999999"
+                android:layout_marginTop="@dimen/space_layout_margin"
+                android:textSize="@dimen/lbl_size_list_item" />
+
+            <TextView
+                android:id="@+id/tv_email"
+                style="@style/match_wrap_style"
+                android:layout_marginTop="@dimen/space_layout_margin"
+                android:text="sing@kidnapsing.com"
+                android:textSize="@dimen/lbl_size_list_item" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+

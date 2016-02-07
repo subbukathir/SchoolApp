@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/match_wrap_style"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/match_wrap_style"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_layout_padding">
+
+        <!-- Spinner Selection Class Starts Here -->
+
+            <LinearLayout
+                style="@style/match_wrap_style"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_lbl_class"
+                    style="@style/text_view_label_teacher"
+                    android:text="@string/lbl_select_class" />
+                <Spinner
+                    android:id="@+id/spinner_class"
+                    style="@style/spinner_style"></Spinner>
+
+            </LinearLayout>
+
+        <!-- Spinner Selection Class Ends Here -->
+
+        <!-- Spinner Selection Section Starts Here -->
+
+            <LinearLayout
+                style="@style/match_wrap_style"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_lbl_section"
+                    style="@style/text_view_label_teacher"
+                    android:text="@string/lbl_select_section" />
+                <Spinner
+                    android:id="@+id/spinner_section"
+                    style="@style/spinner_style"></Spinner>
+
+            </LinearLayout>
+
+        <!-- Spinner Selection Section Ends Here -->
+
+
+    </LinearLayout>
+
+</LinearLayout>

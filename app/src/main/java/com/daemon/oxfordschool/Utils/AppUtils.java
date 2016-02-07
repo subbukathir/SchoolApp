@@ -193,6 +193,25 @@ public class AppUtils extends Dialog
         return params;
     }
 
+    public static String[] getArray(ArrayList<Common_Class> list,String Str)
+    {
+        String[] array = new String[list.size()+1];
+        array[0] = Str;
+        try
+        {
+            for(int i=0;i<list.size();i++)
+            {
+                array[i+1] = list.get(i).getName();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return array;
+    }
+
     public static String[] getArray(ArrayList<Common_Class> list)
     {
         String[] array = new String[list.size()];

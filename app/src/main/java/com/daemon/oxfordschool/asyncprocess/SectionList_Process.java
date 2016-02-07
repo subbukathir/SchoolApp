@@ -89,7 +89,7 @@ public class SectionList_Process
                             if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                             {
                                 editor = mPreferences.edit();
-                                editor.putString(AppUtils.SHARED_SECTION_LIST, Str_Code);
+                                editor.putString(AppUtils.SHARED_SECTION_LIST, response.toString());
                                 editor.commit();
                                 mCallBack.onSectionListReceived();
                             }
