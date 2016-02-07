@@ -24,6 +24,7 @@ import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule;
+import com.daemon.oxfordschool.fragment.Fragment_Exam_Result_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Exam_Schedule_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork_Staff;
@@ -150,11 +151,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     fragment = new Fragment_ExamSchedule();
                     title = getString(R.string.lbl_exam_schedule);
                 }
-
                 break;
             case 6:
-                fragment = new Fragment_ExamResult();
-                title = getString(R.string.lbl_exam_result);
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
+                    fragment = new Fragment_Exam_Result_Staff();
+                    title = getString(R.string.lbl_exam_result);
+                }
+                else
+                {
+                    fragment = new Fragment_ExamResult();
+                    title = getString(R.string.lbl_exam_result);
+                }
                 break;
             case 8:
                 fragment = new Fragment_TimeTable();

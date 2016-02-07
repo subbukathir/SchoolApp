@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_section_class_selector" />
+
+    <!-- Select Exam Type Starts Here -->
+
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_select_exam_type"
+                    style="@style/text_view_label_teacher"
+                    android:paddingLeft="@dimen/space_layout_padding"
+                    android:gravity="left"
+                    android:text="@string/lbl_select_exam_type" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_layout_margin"
+                    android:layout_marginRight="@dimen/space_layout_margin">
+
+                    <Spinner
+                        android:id="@+id/spinner_exam_type"
+                        style="@style/spinner_style"></Spinner>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    <!-- Select Exam Type Ends Here -->
+
+    <!-- Select Subject Starts Here -->
+
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_select_subject"
+                    style="@style/text_view_label_teacher"
+                    android:paddingLeft="@dimen/space_layout_padding"
+                    android:gravity="left"
+                    android:text="@string/lbl_select_subject" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_layout_margin"
+                    android:layout_marginRight="@dimen/space_layout_margin">
+
+                    <Spinner
+                        android:id="@+id/spinner_subject"
+                        style="@style/spinner_style"></Spinner>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    <!-- Select Subject Ends Here -->
+
+
+    <include layout="@layout/view_exam_result_details" />
+
+</LinearLayout>
