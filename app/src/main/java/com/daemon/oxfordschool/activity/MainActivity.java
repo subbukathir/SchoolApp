@@ -1,5 +1,7 @@
 package com.daemon.oxfordschool.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,15 +16,20 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.daemon.oxfordschool.R;
+import com.daemon.oxfordschool.Utils.AppUtils;
+import com.daemon.oxfordschool.classes.User;
+import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
 import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
+import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable;
+import com.google.gson.reflect.TypeToken;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -31,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
+    User mUser;
+    SharedPreferences mPreferences;
+    String Str_Id="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +52,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        drawerFragment = (FragmentDrawer)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        getProfile();
+
+        drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
-
         // display the first navigation drawer view on app launch
         displayView(0);
     }
@@ -87,8 +97,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.lbl_profile);
                 break;
             case 1:
-                fragment = new Fragment_StudentProfile();
-                title = getString(R.string.lbl_students);
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
+                    fragment = new Fragment_StudentList();
+                    title = getString(R.string.lbl_students);
+                }
+                else
+                {
+                    fragment = new Fragment_StudentProfile();
+                    title = getString(R.string.lbl_students);
+                }
                 break;
             case 2:
                 fragment = new Fragment_Events();
@@ -134,6 +152,28 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         super.onBackPressed();
         TAG="onBackPressed";
         Log.d(MODULE, TAG);
+    }
+
+    public void getProfile()
+    {
+        TAG = "getProfile";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = this.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_LOGIN_PROFILE,"");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if(Str_Json.length()>0)
+            {
+                mUser = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
+                Str_Id = mUser.getID();
+                Log.d(MODULE, TAG + " Str_Id : " + Str_Id);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
 }
