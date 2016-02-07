@@ -20,10 +20,12 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
+import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
+import com.daemon.oxfordschool.fragment.Fragment_HomeWork_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
 import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
@@ -113,12 +115,29 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.lbl_events);
                 break;
             case 3:
-                fragment = new Fragment_HomeWork();
-                title = getString(R.string.lbl_homework);
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
+                    fragment = new Fragment_HomeWork_Staff();
+                    title = getString(R.string.lbl_homework);
+                }
+                else
+                {
+                    fragment = new Fragment_HomeWork();
+                    title = getString(R.string.lbl_homework);
+                }
                 break;
             case 4:
-                fragment = new Fragment_Attendance();
-                title = getString(R.string.lbl_attendance);
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
+                    fragment = new Fragment_Attendance_Staff();
+                    title = getString(R.string.lbl_attendance);
+                }
+                else
+                {
+                    fragment = new Fragment_Attendance();
+                    title = getString(R.string.lbl_attendance);
+                }
+
                 break;
             case 5:
                 fragment = new Fragment_ExamSchedule();

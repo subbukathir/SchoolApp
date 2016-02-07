@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.classes.Common_Class;
+import com.daemon.oxfordschool.classes.User;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -220,6 +221,47 @@ public class AppUtils extends Dialog
             for(int i=0;i<list.size();i++)
             {
                 array[i] = list.get(i).getName();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return array;
+    }
+
+    public static String[] getArray(String[] items,String Str)
+    {
+        String[] array = new String[items.length+1];
+        array[0] = Str;
+        try
+        {
+            for(int i=0;i<items.length;i++)
+            {
+                array[i+1] = items[i];
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return array;
+    }
+
+    public static String[] getStudentArray(ArrayList<User> list,String Str)
+    {
+        String[] array = new String[list.size()+1];
+        array[0] = Str;
+        try
+        {
+            for(int i=0;i<list.size();i++)
+            {
+                User mUSer = list.get(i);
+                StringBuilder Str_Name = new StringBuilder();
+                Str_Name.append(mUSer.getFirstName()).append(" ").append(mUSer.getLastName());
+                array[i+1] = Str_Name.toString();
             }
         }
         catch (Exception ex)

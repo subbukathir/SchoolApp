@@ -8,40 +8,40 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.HomeWorkAdapter;
-import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
+import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetHomeWorkList;
-import com.daemon.oxfordschool.asyncprocess.GetStudentList;
+import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
 import com.daemon.oxfordschool.classes.CHomework;
+import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
+import com.daemon.oxfordschool.listeners.ClassListListener;
 import com.daemon.oxfordschool.listeners.DateSetListener;
 import com.daemon.oxfordschool.listeners.HomeWorkListListener;
 import com.daemon.oxfordschool.listeners.Homework_List_Item_Click_Listener;
-import com.daemon.oxfordschool.listeners.StudentsListListener;
+import com.daemon.oxfordschool.listeners.SectionListListener;
+import com.daemon.oxfordschool.response.CommonList_Response;
 import com.daemon.oxfordschool.response.HomeWorkList_Response;
-import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -51,36 +51,37 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,Homework_List_Item_Click_Listener,
-        StudentsListListener,DateSetListener
+public class Fragment_HomeWork_Staff extends Fragment implements ClassListListener,
+        SectionListListener,HomeWorkListListener,Homework_List_Item_Click_Listener,DateSetListener
 {
 
-    public static String MODULE = "Fragment_HomeWork ";
+    public static String MODULE = "Fragment_HomeWork_Staff ";
     public static String TAG = "";
 
-    TextView tv_lbl_select_date,text_view_empty;
+    TextView tv_lbl_class,tv_lbl_section,tv_lbl_select_date,text_view_empty;
     Button btn_select_date;
     RelativeLayout layout_empty;
-    int mSelectedPosition;
-    SwipeRefreshLayout swipeRefreshLayout;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
-
+    Spinner spinner_class,spinner_section;
     SharedPreferences mPreferences;
-    User mUser,mSelectedUser;
-    ViewPager vp_student;
-    ArrayList<User> mListStudents =new ArrayList<User>();
+    User mUser;
+
+    ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
+    ArrayList<Common_Class> mListSection =new ArrayList<Common_Class>();
     ArrayList<CHomework> mListHomeWork =new ArrayList<CHomework>();
+
+    CommonList_Response responseCommon;
     HomeWorkList_Response response;
-    StudentsList_Response studentListresponse;
 
     AppCompatActivity mActivity;
-    String Str_Id="",Str_Date="";
+    String Str_Id="";
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
+    String Str_ClassId,Str_SectionId="",Str_Date="";
+
     String Str_HomeWorkList_Url = ApiConstants.HOMEWORK_LIST_URL;
 
-    public Fragment_HomeWork()
+    public Fragment_HomeWork_Staff()
     {
         // Required empty public constructor
     }
@@ -94,9 +95,9 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         try
         {
             mActivity = (AppCompatActivity) getActivity();
-            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
-            getStudentsList();
+            getClassList();
+            getSectionList();
             Str_Date=GetTodayDate();
         }
         catch (Exception ex)
@@ -109,7 +110,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_homework, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_homework_staff, container, false);
         TAG = "onCreateView";
         Log.d(MODULE, TAG);
         initView(rootView);
@@ -122,13 +123,18 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         Log.d(MODULE, TAG);
         try
         {
-            vp_student = (ViewPager) view.findViewById(R.id.vp_student);
-            tv_lbl_select_date = (TextView) view.findViewById(R.id.tv_lbl_select_date);
-            btn_select_date = (Button) view.findViewById(R.id.btn_select_date);
-            swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_homework);
+            tv_lbl_class = (TextView) view.findViewById(R.id.tv_lbl_class);
+            tv_lbl_section = (TextView) view.findViewById(R.id.tv_lbl_section);
+
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
+
+            tv_lbl_select_date = (TextView) view.findViewById(R.id.tv_lbl_select_date);
+            btn_select_date = (Button) view.findViewById(R.id.btn_select_date);
+
+            spinner_class = (Spinner) view.findViewById(R.id.spinner_class);
+            spinner_section = (Spinner) view.findViewById(R.id.spinner_section);
+            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_homework);
             setProperties();
         }
         catch (Exception ex)
@@ -147,7 +153,8 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
 
         try
         {
-            if(mListStudents.size()>0) showStudentsList();
+            if(mListClass.size()>0) showClassList();
+            if(mListSection.size()>0) showSectionList();
         }
         catch (Exception ex)
         {
@@ -162,18 +169,22 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         try
         {
             layout_empty.setVisibility(View.GONE);
+            tv_lbl_class.setTypeface(font.getHelveticaRegular());
+            tv_lbl_section.setTypeface(font.getHelveticaRegular());
             tv_lbl_select_date.setTypeface(font.getHelveticaRegular());
-            text_view_empty.setTypeface(font.getHelveticaRegular());
             btn_select_date.setTypeface(font.getHelveticaRegular());
+            text_view_empty.setTypeface(font.getHelveticaRegular());
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
-            vp_student.addOnPageChangeListener(_OnPageChangeListener);
+            spinner_class.setOnItemSelectedListener(_OnClassItemSelectedListener);
+            spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
             btn_select_date.setOnClickListener(_OnClickListener);
             btn_select_date.setText(Str_Date);
             StringBuilder Str_EmptyMessage = new StringBuilder();
             Str_EmptyMessage.append(getString(R.string.lbl_no_homework)).append(" ");
             Str_EmptyMessage.append(Str_Date);
             text_view_empty.setText(Str_EmptyMessage.toString());
+
         }
         catch (Exception ex)
         {
@@ -203,47 +214,19 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         }
     }
 
-    public void getStudentsList()
+    public void getHomeWorksFromService(String Str_Date)
     {
-        TAG = "getStudentsList";
+        TAG = "getHomeWorksFromService";
         Log.d(MODULE, TAG);
         try
         {
-            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_STUDENT_LIST,"");
-            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
-            if(Str_Json.length()>0)
-            {
-                studentListresponse = (StudentsList_Response) AppUtils.fromJson(Str_Json, new TypeToken<StudentsList_Response>(){}.getType());
-                mListStudents = studentListresponse.getCstudents();
-                if(mListStudents==null || mListStudents.size()==0)
-                {
-                    new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
-                }
-            }
+            new GetHomeWorkList(Str_HomeWorkList_Url,Payload_HomeWork(Str_Date),this).getHomeWorks();
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
     }
-
-    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            mSelectedPosition=position;
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    };
 
     View.OnClickListener _OnClickListener = new View.OnClickListener() {
         @Override
@@ -252,37 +235,94 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         }
     };
 
+    AdapterView.OnItemSelectedListener _OnClassItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+        {
+            TAG = "onItemSelected";
+            Log.d(MODULE, TAG);
+            try
+            {
+                if (position > 0) Str_ClassId = mListClass.get(position - 1).getID();
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView)
+        {
+
+        }
+    };
+
+    AdapterView.OnItemSelectedListener _OnSectionItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+        {
+            TAG = "_OnSectionItem";
+            Log.d(MODULE, TAG);
+            try
+            {
+                if(position>0)
+                {
+                    Log.d(MODULE, TAG + " Spinner Section : " + position);
+                    Str_SectionId=mListSection.get(position-1).getID();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView)
+        {
+
+        }
+    };
+
     @Override
-    public void onStudentsReceived() {
-        TAG = "onStudentsReceived";
+    public void onClassListReceived() {
+        TAG = "onClassListReceived";
         Log.d(MODULE, TAG);
         try
         {
-            getStudentsList();
-            if(mListStudents.size()>0)
-            {
-                showStudentsList();
-                mSelectedPosition=0;
-            }
+            getClassList();
+            showClassList();
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+
         }
     }
 
     @Override
-    public void onStudentsReceivedError(String Str_Msg) {
-        TAG = "onStudentsReceivedError";
+    public void onClassListReceivedError(String Str_Msg) {
+
+    }
+
+    @Override
+    public void onSectionListReceived() {
+        TAG = "onSectionListReceived";
         Log.d(MODULE, TAG);
         try
         {
-
+            getSectionList();
+            showSectionList();
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+
         }
+    }
+
+    @Override
+    public void onSectionListReceivedError(String Str_Msg) {
+
     }
 
     @Override
@@ -319,15 +359,51 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
 
     }
 
-    public void showStudentsList()
+    public void getClassList()
     {
-        TAG = "showStudentsList";
+        TAG = "getClassList";
         Log.d(MODULE, TAG);
         try
         {
-            StudentPagerAdapter adapter = new StudentPagerAdapter(mActivity,mListStudents);
-            vp_student.setAdapter(adapter);
-            getHomeWorks(0,Str_Date);
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_CLASS_LIST, "");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if (Str_Json.length() > 0)
+            {
+                responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
+                mListClass = responseCommon.getCclass();
+                Log.d(MODULE, TAG + " mListClass : " + mListClass.size());
+            }
+            else
+            {
+                new ClassList_Process(mActivity, this).GetClassList();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSectionList()
+    {
+        TAG = "getSectionList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_SECTION_LIST, "");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if (Str_Json.length() > 0)
+            {
+                responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
+                mListSection = responseCommon.getCclass();
+                Log.d(MODULE, TAG + " mListSection : " + mListSection.size());
+            }
+            else
+            {
+                new SectionList_Process(mActivity, this).GetSectionList();
+            }
         }
         catch (Exception ex)
         {
@@ -350,6 +426,40 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
                 mListHomeWork = response.getChomework();
                 Log.d(MODULE, TAG + " mListHomeWork : " + mListHomeWork.size());
             }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showClassList()
+    {
+        TAG = "showClassList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            String[] items = AppUtils.getArray(mListClass,getString(R.string.lbl_select_class));
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_class.setAdapter(adapter);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showSectionList()
+    {
+        TAG = "showSectionList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            String[] items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_section.setAdapter(adapter);
         }
         catch (Exception ex)
         {
@@ -399,41 +509,6 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
 
     }
 
-    public void getHomeWorks(int position,String Str_Date)
-    {
-        TAG = "getHomeWorks";
-        Log.d(MODULE, TAG);
-        try
-        {
-            mSelectedUser = mListStudents.get(position);
-            new GetHomeWorkList(Str_HomeWorkList_Url,Payload_HomeWork(Str_Date),this).getHomeWorks();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public JSONObject Payload_StudentList()
-    {
-        TAG = "Payload";
-        Log.d(MODULE, TAG);
-
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("ParentId", Str_Id);
-            obj.put("ClassId", "");
-            obj.put("SectionId", "");
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.d(MODULE, TAG + " obj : " + obj.toString());
-
-        return obj;
-    }
-
     public JSONObject Payload_HomeWork(String Str_Date)
     {
         TAG = "Payload";
@@ -441,8 +516,8 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("ClassId", mSelectedUser.getClassId());
-            obj.put("SectionId", mSelectedUser.getSectionId());
+            obj.put("ClassId", Str_Date);
+            obj.put("SectionId",Str_SectionId);
             obj.put("HomeWorkDate", Str_Date);
         }
         catch (JSONException e) {
@@ -469,13 +544,13 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
     }
 
     public void selectDate(View view) {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_HomeWork.this);
+        DialogFragment newFragment = new SelectDateFragment(Fragment_HomeWork_Staff.this);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 
     public void populateSetDate(int year, int month, int day) {
         Str_Date = year + "-" + month + "-"+day;
-        getHomeWorks(mSelectedPosition,Str_Date);
+        getHomeWorksFromService(Str_Date);
     }
 
 }

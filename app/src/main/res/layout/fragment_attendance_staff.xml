@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_section_class_selector" />
+
+    <!-- Select Student & Select Month Starts -->
+
+    <LinearLayout
+        style="@style/match_wrap_style"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/space_layout_padding"
+        android:paddingRight="@dimen/space_layout_padding"
+        android:paddingBottom="@dimen/space_layout_padding">
+
+        <!-- Spinner Select Student Starts Here -->
+
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_lbl_student"
+                style="@style/text_view_label_teacher"
+                android:text="@string/lbl_select_student" />
+
+            <Spinner
+                android:id="@+id/spinner_student"
+                style="@style/spinner_style"></Spinner>
+
+        </LinearLayout>
+
+        <!-- Spinner Select Student Ends Here -->
+
+        <!-- Spinner Select Month Starts Here -->
+
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_lbl_month"
+                style="@style/text_view_label_teacher"
+                android:text="@string/lbl_month" />
+
+            <Spinner
+                android:id="@+id/spinner_month"
+                style="@style/spinner_style"></Spinner>
+
+        </LinearLayout>
+
+        <!-- Spinner Select Month Ends Here -->
+
+
+    </LinearLayout>
+
+    <!-- Select Student & Select Month Ends -->
+
+    <include layout="@layout/view_attendance_details" />
+
+
+</LinearLayout>

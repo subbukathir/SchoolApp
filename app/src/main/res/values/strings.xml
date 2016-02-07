@@ -148,6 +148,7 @@
 
     <!-- Attendance View -->
 
+    <string name="lbl_select_student">Select Student</string>
     <string name="lbl_month">Select Month</string>
     <string name="lbl_working_days">Working Days  </string>
     <string name="lbl_present_days">Present Days  </string>
