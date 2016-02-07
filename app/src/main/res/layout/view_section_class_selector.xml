@@ -30,6 +30,7 @@
         <!-- Spinner Selection Section Starts Here -->
 
             <LinearLayout
+                android:id="@+id/layout_section"
                 style="@style/match_wrap_style"
                 android:layout_weight="1"
                 android:orientation="vertical">
