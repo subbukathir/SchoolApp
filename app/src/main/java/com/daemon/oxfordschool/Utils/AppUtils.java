@@ -113,13 +113,13 @@ public class AppUtils extends Dialog
         return RetValue;
     }
 
-    public static void saveImage(Bitmap photo, AppCompatActivity mActivity)
+    public static void saveImage(Bitmap photo, AppCompatActivity mActivity,String Str_Name)
     {
         File sdIconStorageDir = new File(getProfilePicturePath(mActivity));
         sdIconStorageDir.mkdirs();
         try
         {
-            String filePath = sdIconStorageDir.toString() + "/profile.png";
+            String filePath = sdIconStorageDir.toString() + "/" + Str_Name + ".png";
             FileOutputStream fileOutputStream = new FileOutputStream(filePath);
             BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
             photo.compress(Bitmap.CompressFormat.PNG, 100, bos);

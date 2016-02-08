@@ -110,12 +110,9 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             tv_lbl_profile_address=(TextView) view.findViewById(R.id.tv_lbl_profile_address);
             tv_profile_address=(TextView) view.findViewById(R.id.tv_profile_address);
             image_view_profile = (ImageView) view.findViewById(R.id.iv_profile);
-
             profile_header = (RelativeLayout) view.findViewById(R.id.view_profile_header);
-
             profile_header.setOnClickListener(_onClickListener);
             initImageLoader();
-            SetProfileImage();
             setProperties();
         }
         catch (Exception ex)
@@ -136,6 +133,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         {
             getProfile();
             setProfile();
+            SetProfileImage();
         }
         catch (Exception ex)
         {
@@ -262,7 +260,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
                 if (extras2 != null)
                 {
                     Bitmap photo = extras2.getParcelable("data");
-                    AppUtils.saveImage(photo, mActivity);
+                    AppUtils.saveImage(photo, mActivity,mUser.getMobile_Number());
                     SetProfileImage();
                 }
             }
@@ -280,7 +278,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
                     if(data.getExtras()!=null)
                     {
                         Bitmap photo = (Bitmap) data.getExtras().get("data");
-                        AppUtils.saveImage(photo, mActivity);
+                        AppUtils.saveImage(photo, mActivity,mUser.getMobile_Number());
                         image_view_profile.setImageBitmap(photo);
                     }
                 }
@@ -342,6 +340,9 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
 
     private void initImageLoader()
     {
+        TAG = "initImageLoader";
+        Log.d(MODULE, TAG);
+
         try
         {
             imageLoader = ImageLoader.getInstance();
@@ -356,9 +357,12 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
 
     public void SetProfileImage()
     {
+        TAG = "SetProfileImage";
+        Log.d(MODULE, TAG);
+
         try
         {
-            String Str_ImagePath ="file://" + AppUtils.getProfilePicturePath(mActivity) + "/profile.png";
+            String Str_ImagePath ="file://" + AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
             MemoryCacheUtils.removeFromCache(Str_ImagePath, ImageLoader.getInstance().getMemoryCache());
             DiskCacheUtils.removeFromCache(Str_ImagePath, ImageLoader.getInstance().getDiskCache());
             imageLoader.displayImage(Str_ImagePath, image_view_profile, options);
@@ -380,7 +384,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         try
         {
             String Str_ImagePath = "file://" + Str_Path;
-            new ImageSaving(mActivity,this,Str_ImagePath).execute();
+            new ImageSaving(mActivity,this,Str_ImagePath,mUser.getMobile_Number()).execute();
         }
         catch (Exception ex)
         {

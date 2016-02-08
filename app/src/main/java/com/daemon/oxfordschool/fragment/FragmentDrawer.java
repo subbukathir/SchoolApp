@@ -283,7 +283,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         try
         {
             String Str_ImagePath = "file://" + Str_Path;
-            new ImageSaving(mActivity,this,Str_ImagePath).execute();
+            new ImageSaving(mActivity,this,Str_ImagePath,"profile").execute();
         }
         catch (Exception ex)
         {
@@ -342,7 +342,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             Bitmap bmpProfile = AppUtils.getScaledBitmap(imageBitmap, 240, 320);
-            AppUtils.saveImage(bmpProfile,mActivity);
+            AppUtils.saveImage(bmpProfile,mActivity,"profile");
         }
     }
 

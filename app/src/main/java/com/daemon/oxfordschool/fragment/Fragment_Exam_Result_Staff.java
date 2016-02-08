@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,24 +27,31 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.ExamListAdapter;
+import com.daemon.oxfordschool.adapter.ExamResultAdapter;
+import com.daemon.oxfordschool.adapter.ExamResultStaffAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetExamList;
+import com.daemon.oxfordschool.asyncprocess.GetExamResult;
 import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
 import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
 import com.daemon.oxfordschool.classes.CExam;
+import com.daemon.oxfordschool.classes.CResult;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.ClassListListener;
 import com.daemon.oxfordschool.listeners.ExamListListener;
+import com.daemon.oxfordschool.listeners.ExamResultListener;
 import com.daemon.oxfordschool.listeners.ExamTypeListListener;
 import com.daemon.oxfordschool.listeners.Exam_List_Item_Click_Listener;
+import com.daemon.oxfordschool.listeners.Exam_Result_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.SectionListListener;
 import com.daemon.oxfordschool.listeners.SubjectListListener;
 import com.daemon.oxfordschool.response.CommonList_Response;
 import com.daemon.oxfordschool.response.ExamList_Response;
+import com.daemon.oxfordschool.response.ExamResult_Response;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -52,8 +60,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class Fragment_Exam_Result_Staff extends Fragment implements ClassListListener,
-        SectionListListener,ExamTypeListListener,SubjectListListener
+public class Fragment_Exam_Result_Staff extends Fragment implements ClassListListener,SectionListListener,
+        ExamTypeListListener,SubjectListListener,ExamResultListener,Exam_Result_List_Item_Click_Listener
 {
 
     public static String MODULE = "Fragment_Exam_Schedule_Staff";
@@ -74,18 +82,19 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
     ArrayList<Common_Class> mListSection =new ArrayList<Common_Class>();
     ArrayList<Common_Class> mListExamType =new ArrayList<Common_Class>();
     ArrayList<Common_Class> mListSubjects = new ArrayList<Common_Class>();
+    ArrayList<CResult> mListResult =new ArrayList<CResult>();
 
     CommonList_Response responseCommon;
     CommonList_Response subjectListResponse;
     CommonList_Response examListResponse;
-    ExamList_Response response;
+    ExamResult_Response response;
 
     AppCompatActivity mActivity;
-    String Str_Id,Str_ClassId,Str_SectionId,Str_ExamTypeId="";
+    String Str_Id,Str_ClassId,Str_SectionId,Str_ExamTypeId,Str_SubjectId="";
     int mMargin=0;int mMarginBottom=0;float mDensity=0;
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_ExamResult_Url = ApiConstants.EXAM_RESULT_URL;
-
+    String Str_ExamResult_Url = ApiConstants.EXAM_RESULT_URL_STAFF;
+    Fragment mFragment;
 
     public Fragment_Exam_Result_Staff()
     {
@@ -104,6 +113,7 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             mDensity =  mActivity.getResources().getDisplayMetrics().density;
             mMargin = (int) (mActivity.getResources().getDimension(R.dimen.space_layout_margin)); // mDensity);
             mMarginBottom = (int) (mActivity.getResources().getDimension(R.dimen.space_layout_margin_small)); // mDensity);
+            mFragment = this;
             getProfile();
             getClassList();
             getSectionList();
@@ -200,6 +210,7 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             tv_lbl_exam_subject.setTypeface(font.getHelveticaBold());
             tv_lbl_exam_marks.setTypeface(font.getHelveticaBold());
             tv_lbl_exam_result.setTypeface(font.getHelveticaBold());
+            tv_lbl_exam_subject.setGravity(Gravity.CENTER);
 
             text_view_empty.setTypeface(font.getHelveticaRegular());
             mLayoutManager = new LinearLayoutManager(getActivity());
@@ -207,6 +218,7 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             spinner_class.setOnItemSelectedListener(_OnClassItemSelectedListener);
             spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
             spinner_exam_type.setOnItemSelectedListener(_OnItemSelectedListener);
+            spinner_subject.setOnItemSelectedListener(_OnSubjectItemSelectedListener);
             text_view_empty.setText(getString(R.string.lbl_no_result));
             tv_lbl_exam_subject.setText(getString(R.string.lbl_name));
 
@@ -334,6 +346,22 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
         }
     };
 
+    AdapterView.OnItemSelectedListener _OnSubjectItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+
+            if(position>0)
+            {
+                Str_SubjectId = mListSubjects.get(position-1).getID();
+                new GetExamResult(Str_ExamResult_Url,Payload_ExamResult(),mFragment).getExamResult();
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
     @Override
     public void onClassListReceived() {
         TAG = "onClassListReceived";
@@ -427,6 +455,41 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
 
     }
 
+    @Override
+    public void onExamResultReceived() {
+        TAG = "onExamTypeListReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getExamResult();
+            showExamResult();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onExamResultReceivedError(String Str_Msg) {
+        TAG = "onClassListReceived";
+        Log.d(MODULE, TAG);
+
+        try
+        {
+            showEmptyView();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onExamResultListItemClicked(int position) {
+
+    }
+
     public void getClassList()
     {
         TAG = "getClassList";
@@ -492,6 +555,27 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             {
                 examListResponse = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>(){}.getType());
                 mListExamType = examListResponse.getCclass();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getExamResult()
+    {
+        TAG = "getExamResult";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_EXAM_RESULT,"");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if(Str_Json.length()>0)
+            {
+                response = (ExamResult_Response) AppUtils.fromJson(Str_Json, new TypeToken<ExamResult_Response>(){}.getType());
+                mListResult = response.getCresult();
             }
         }
         catch (Exception ex)
@@ -574,6 +658,30 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
         }
     }
 
+    public void showExamResult()
+    {
+        TAG = "showExamResult";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if(mListResult.size()>0)
+            {
+                ExamResultStaffAdapter adapter = new ExamResultStaffAdapter(mListResult,this);
+                recycler_view.setAdapter(adapter);
+                layout_empty.setVisibility(View.GONE);
+                recycler_view.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                showEmptyView();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     public void showEmptyView()
     {
         TAG = "showEmptyView";
@@ -589,6 +697,27 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             ex.printStackTrace();
         }
 
+    }
+
+    public JSONObject Payload_ExamResult()
+    {
+        TAG = "Payload_ExamList";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("ExamTypeId", Str_ExamTypeId);
+            obj.put("ClassId", Str_ClassId);
+            obj.put("SectionId", Str_SectionId);
+            obj.put("SubjectId", Str_SubjectId);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
     }
 
 }

@@ -23,12 +23,14 @@ public class ImageSaving extends AsyncTask<Void, Void, Integer>
     Fragment mFragment;
     ImageSavingListener mCallBack;
     String Str_ImagePath;
+    String Str_Name;
 
-    public ImageSaving(AppCompatActivity mActivity,Fragment mFragment,String Str_ImagePath)
+    public ImageSaving(AppCompatActivity mActivity,Fragment mFragment,String Str_ImagePath,String Str_Name)
     {
         this.mActivity = mActivity;
         this.mFragment = mFragment;
         this.Str_ImagePath = Str_ImagePath;
+        this.Str_Name = Str_Name;
         mCallBack = (ImageSavingListener)mFragment;
     }
 
@@ -48,7 +50,7 @@ public class ImageSaving extends AsyncTask<Void, Void, Integer>
             Uri imageUri = Uri.parse(Str_ImagePath);
             Bitmap bmp = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), imageUri);
             Bitmap bmpProfile = AppUtils.getScaledBitmap(bmp, 640, 480);
-            AppUtils.saveImage(bmpProfile,mActivity);
+            AppUtils.saveImage(bmpProfile,mActivity,Str_Name);
         }
         catch (Exception ex)
         {
