@@ -97,7 +97,7 @@ public class UserLogin_Process
                             }
                             else
                             {
-                                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                                Str_Msg = response.getString("Message");
                                 mCallBack.onLoginFailed(Str_Msg);
                             }
                         }

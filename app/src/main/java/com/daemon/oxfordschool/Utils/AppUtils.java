@@ -272,4 +272,18 @@ public class AppUtils extends Dialog
         return array;
     }
 
+    public static void showDialog(AppCompatActivity mActivity,String Str_Msg)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setMessage(Str_Msg)
+                .setCancelable(false)
+                .setPositiveButton(mActivity.getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 }

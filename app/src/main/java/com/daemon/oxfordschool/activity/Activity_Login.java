@@ -126,6 +126,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         TAG = "onLoginFailed";
         Log.d(MODULE,TAG + msg);
         AppUtils.hideProgressDialog();
+        AppUtils.showDialog(this,msg);
     }
 
     public JSONObject Payload()
