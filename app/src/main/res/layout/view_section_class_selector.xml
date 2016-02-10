@@ -6,7 +6,9 @@
     <LinearLayout
         style="@style/match_wrap_style"
         android:orientation="horizontal"
-        android:padding="@dimen/space_layout_padding">
+        android:paddingLeft="@dimen/space_layout_padding"
+        android:paddingRight="@dimen/space_layout_padding"
+        android:paddingTop="@dimen/space_layout_margin_small">
 
         <!-- Spinner Selection Class Starts Here -->
 

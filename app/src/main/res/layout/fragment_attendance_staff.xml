@@ -6,61 +6,66 @@
 
     <include layout="@layout/view_section_class_selector" />
 
-    <!-- Select Student & Select Month Starts -->
-
     <LinearLayout
-        style="@style/match_wrap_style"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/space_layout_padding"
-        android:paddingRight="@dimen/space_layout_padding"
-        android:paddingBottom="@dimen/space_layout_padding">
+        style="@style/match_parent_style"
+        android:orientation="vertical">
 
-        <!-- Spinner Select Student Starts Here -->
 
         <LinearLayout
             style="@style/match_wrap_style"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/space_layout_padding"
+            android:paddingRight="@dimen/space_layout_padding">
 
-            <TextView
-                android:id="@+id/tv_lbl_student"
-                style="@style/text_view_label_teacher"
-                android:text="@string/lbl_select_student" />
+            <!-- Select Date Starts Here -->
 
-            <Spinner
-                android:id="@+id/spinner_student"
-                style="@style/spinner_style"></Spinner>
+            <LinearLayout
+                style="@style/match_wrap_style"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_lbl_select_date"
+                    style="@style/text_view_label_teacher"
+                    android:text="@string/lbl_select_date" />
+
+                <Button
+                    android:id="@+id/btn_select_date"
+                    style="@style/btn_style_select_date" />
+
+            </LinearLayout>
+
+            <!-- Select Date Ends Here -->
+
 
         </LinearLayout>
 
-        <!-- Spinner Select Student Ends Here -->
-
-        <!-- Spinner Select Month Starts Here -->
+        <!-- Attendance options Starts Here -->
 
         <LinearLayout
+            android:id="@+id/ll_attendance_view"
+            android:orientation="vertical"
             style="@style/match_wrap_style"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/vertical_gap_heading"
+            android:paddingTop="@dimen/space_layout_margin">
 
-            <TextView
-                android:id="@+id/tv_lbl_month"
-                style="@style/text_view_label_teacher"
-                android:text="@string/lbl_month" />
+            <Button
+                android:id="@+id/btn_take_attendance"
+                style="@style/btn_login_style"
+                android:text="@string/lbl_take_attendance"/>
 
-            <Spinner
-                android:id="@+id/spinner_month"
-                style="@style/spinner_style"></Spinner>
+            <Button
+                android:id="@+id/btn_view_attendance"
+                style="@style/btn_login_style"
+                android:text="@string/lbl_view_attendance"
+                android:layout_marginTop="@dimen/space_layout_margin"/>
 
         </LinearLayout>
 
-        <!-- Spinner Select Month Ends Here -->
-
+        <!-- Attendance options Ends Here -->
 
     </LinearLayout>
 
-    <!-- Select Student & Select Month Ends -->
-
-    <include layout="@layout/view_attendance_details" />
-
 
 </LinearLayout>
+
