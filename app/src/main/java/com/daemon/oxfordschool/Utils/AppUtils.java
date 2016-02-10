@@ -61,7 +61,7 @@ public class AppUtils extends Dialog
     public static String B_CLASS_ID="Bundle_ClassId";
     public static String B_SECTION_ID="Bundle_SectionId";
     public static String B_ATTENDANCE_LIST="Bundle_List";
-    public static String B_DATE="Bundle_Mode";
+    public static String B_DATE="Bundle_Date";
 
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;

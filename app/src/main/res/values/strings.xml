@@ -163,7 +163,7 @@
     <string name="lbl_absent">Absent</string>
     <string name="lbl_save">Save</string>
     <string name="lbl_select_all">Select All</string>
-    <string name="lbl_attendance_not_found">No Attendance</string>
+    <string name="lbl_attendance_not_found">Attendance details not found.</string>
 
     <string-array name="array_months">
         <item>Select Month</item>

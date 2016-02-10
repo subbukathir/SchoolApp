@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,6 +173,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         Log.d(MODULE, TAG);
         try
         {
+
             tv_lbl_class.setTypeface(font.getHelveticaRegular());
             tv_lbl_section.setTypeface(font.getHelveticaRegular());
             tv_lbl_select_date.setTypeface(font.getHelveticaRegular());
@@ -296,6 +298,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                      break;
                 case R.id.btn_view_attendance:
                      isTakeAttendancePressed=false;
+                     getAttendanceFromService();
                      break;
                 default:
                      break;
@@ -353,8 +356,8 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
             getStudentsList();
             if(mListStudents.size()>0)
             {
-                setAttendanceList();
                 mSelectedPosition=0;
+                setDefaultAttendanceList();
             }
         }
         catch (Exception ex)
@@ -409,6 +412,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         {
             AppUtils.hideProgressDialog();
             getAttendanceDetails();
+            setAttendanceList();
         }
         catch (Exception ex)
         {
@@ -423,6 +427,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         AppUtils.hideProgressDialog();
         TAG = "onAttendanceReceivedError";
         Log.d(MODULE, TAG + "error " + Str_Msg);
+        setAttendanceList();
     }
 
     @Override
@@ -551,9 +556,9 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         }
     }
 
-    public void setAttendanceList()
+    public void setDefaultAttendanceList()
     {
-        TAG = "setAttendanceList";
+        TAG = "setDefaultAttendanceList";
         Log.d(MODULE, TAG);
         try
         {
@@ -567,17 +572,49 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                 studentAttendance.setSelected(true);
                 mListAttendance.add(studentAttendance);
             }
-            int count = mListAttendance.size();
-            if(count>0)
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void setAttendanceList()
+    {
+        TAG = "setAttendanceList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if(mAttendanceResult.size()>0)
             {
-                if(isTakeAttendancePressed) AppUtils.DialogMessage(mActivity,getString(R.string.lbl_attendance_already_taken));
-                else Goto_Fragment_Attendance_Add(AppUtils.MODE_UPDATE);
+                int count = mListAttendance.size();
+                if(count>0)
+                {
+                    if(isTakeAttendancePressed) AppUtils.DialogMessage(mActivity,getString(R.string.lbl_attendance_already_taken));
+                    else
+                    {
+                        for(int i=0;i<count;i++)
+                        {
+                            for(int j=0;j<mAttendanceResult.size();j++)
+                            {
+                                if(mListAttendance.get(i).getStudentId().equals(mAttendanceResult.get(j).getStudentId()))
+                                {
+                                    mListAttendance.get(i).setStatus(mAttendanceResult.get(j).getIsPresent());
+                                    mListAttendance.get(i).setAttendanceId(mAttendanceResult.get(j).getAttendanceId());
+                                    break;
+                                }
+                            }
+                        }
+                        Goto_Fragment_Attendance_Add(AppUtils.MODE_UPDATE);
+                    }
+                }
             }
-            else if(count==0)
+            else
             {
                 if(isTakeAttendancePressed) Goto_Fragment_Attendance_Add(AppUtils.MODE_ADD);
-                else AppUtils.DialogMessage(mActivity,getString(R.string.lbl_attendance_not_found));
+                else AppUtils.DialogMessage(mActivity, getString(R.string.lbl_attendance_not_found));
             }
+
         }
         catch (Exception ex)
         {
@@ -675,18 +712,18 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         try
         {
             Bundle Args=new Bundle();
-            Args.putInt(AppUtils.B_MODE,mMode);
-            Args.putString(AppUtils.B_USER_ID,Str_Id);
-            Args.putString(AppUtils.B_CLASS_ID,Str_ClassId);
-            Args.putString(AppUtils.B_SECTION_ID,Str_SectionId);
-            Args.putString(AppUtils.B_DATE,Str_Date);
-            Args.putParcelableArrayList(AppUtils.B_ATTENDANCE_LIST,mListAttendance);
+            Args.putInt(AppUtils.B_MODE, mMode);
+            Args.putString(AppUtils.B_USER_ID, Str_Id);
+            Args.putString(AppUtils.B_CLASS_ID, Str_ClassId);
+            Args.putString(AppUtils.B_SECTION_ID, Str_SectionId);
+            Args.putString(AppUtils.B_DATE, Str_Date);
+            Args.putParcelableArrayList(AppUtils.B_ATTENDANCE_LIST, mListAttendance);
 
             mManager = mActivity.getSupportFragmentManager();
             FragmentTransaction mTransaction = mManager.beginTransaction();
             Fragment_Attendance_Add fragment = new Fragment_Attendance_Add();
             fragment.setArguments(Args);
-            mTransaction.replace(R.id.container_body, fragment,AppUtils.FRAGMENT_ADD_ATTENDANCE);
+            mTransaction.replace(R.id.container_body, fragment, AppUtils.FRAGMENT_ADD_ATTENDANCE);
             mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_ATTENDANCE + "");
             mTransaction.commit();
         }
@@ -695,6 +732,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
             ex.printStackTrace();
         }
     }
+
 
 
 }

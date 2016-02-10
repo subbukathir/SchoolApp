@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,7 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Fragment_Attendance_Add extends Fragment
+public class Fragment_Attendance_Add extends Fragment implements Attendance_List_Item_Click_Listener
 {
 
     public static String MODULE = "Fragment_Attendance_Add ";
@@ -75,6 +76,7 @@ public class Fragment_Attendance_Add extends Fragment
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_UserId,Str_ClassId,Str_SectionId,Str_Date="";
     Bundle Args;
+    String Str_Mode="";
     int mMode=0;
 
     public Fragment_Attendance_Add()
@@ -95,7 +97,7 @@ public class Fragment_Attendance_Add extends Fragment
             Args = getArguments();
             if(Args!=null)
             {
-                mMode = Args.getInt(AppUtils.B_MODE);
+                mMode =  Args.getInt(AppUtils.B_MODE);
                 Str_UserId = Args.getString(AppUtils.B_USER_ID);
                 Str_ClassId = Args.getString(AppUtils.B_CLASS_ID);
                 Str_SectionId = Args.getString(AppUtils.B_SECTION_ID);
@@ -161,6 +163,8 @@ public class Fragment_Attendance_Add extends Fragment
         Log.d(MODULE, TAG);
         try
         {
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            recycler_view.setLayoutManager(mLayoutManager);
             text_view_empty.setTypeface(font.getHelveticaRegular());
             btn_save.setTypeface(font.getHelveticaRegular());
         }
@@ -168,6 +172,11 @@ public class Fragment_Attendance_Add extends Fragment
         {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void onAttendanceListItemClicked(int position) {
+
     }
 
     public void showAttendanceList()
