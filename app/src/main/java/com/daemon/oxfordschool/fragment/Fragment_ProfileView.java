@@ -80,6 +80,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         {
             mActivity = (AppCompatActivity) getActivity();
             mManager = mActivity.getSupportFragmentManager();
+            getProfile();
         }
         catch (Exception ex)
         {
@@ -131,7 +132,6 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
 
         try
         {
-            getProfile();
             setProfile();
             SetProfileImage();
         }

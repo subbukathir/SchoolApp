@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.LinearLayout;
@@ -51,6 +52,11 @@ public class AppUtils extends Dialog
     public static String SHARED_ATTENTANCE = "Shared_Attendance";
     public static String SHARED_TIMETABLE = "Shared_TimeTable";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
+
+    public static int MODE_UPDATE=1;
+    public static int MODE_ADD=0;
+
+    public static String B_MODE="Bundle_Mode";
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
     public static String SHARED_DIALOG_PICKER = "Shared_Dialog_Picker";

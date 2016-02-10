@@ -36,7 +36,8 @@ public class CResult implements Parcelable
     private String IsPresent;
     private String IsHalfDay;
     private String IsAfterNoon;
-
+    private String FirstName;
+    private String LastName;
 
 
     @Override
@@ -73,6 +74,8 @@ public class CResult implements Parcelable
         dest.writeString(IsPresent);
         dest.writeString(IsHalfDay);
         dest.writeString(IsAfterNoon);
+        dest.writeString(FirstName);
+        dest.writeString(LastName);
     }
 
     public CResult(Parcel source) {
@@ -101,6 +104,8 @@ public class CResult implements Parcelable
         this.IsPresent=source.readString();
         this.IsHalfDay=source.readString();
         this.IsAfterNoon=source.readString();
+        this.FirstName=source.readString();
+        this.LastName=source.readString();
 
     }
 
@@ -317,4 +322,21 @@ public class CResult implements Parcelable
     public void setIsAfterNoon(String isAfterNoon) {
         IsAfterNoon = isAfterNoon;
     }
+
+    public String getFirstName() {
+        return FirstName;
+    }
+
+    public void setFirstName(String firstName) {
+        FirstName = firstName;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public void setLastName(String lastName) {
+        LastName = lastName;
+    }
+
 }

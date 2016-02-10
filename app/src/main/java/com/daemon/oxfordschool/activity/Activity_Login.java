@@ -68,7 +68,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Login");
 
-        et_username.setText("9600557948");
+        et_username.setText("");
         et_password.setText("daemon");
 
     }
@@ -141,6 +141,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         }
         return obj;
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -163,7 +164,6 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         }
         return true;
     }
-
 
     private boolean validatePassword() {
         if (et_password.getText().toString().trim().isEmpty()) {
