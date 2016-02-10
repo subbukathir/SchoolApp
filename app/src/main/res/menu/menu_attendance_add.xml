@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_take_attendance"
+        android:title="@string/lbl_take_attendance"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="ifRoom" />
+</menu>

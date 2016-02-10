@@ -57,9 +57,17 @@ public class AppUtils extends Dialog
     public static int MODE_ADD=0;
 
     public static String B_MODE="Bundle_Mode";
+    public static String B_USER_ID="Bundle_UserId";
+    public static String B_CLASS_ID="Bundle_ClassId";
+    public static String B_SECTION_ID="Bundle_SectionId";
+    public static String B_ATTENDANCE_LIST="Bundle_List";
+    public static String B_DATE="Bundle_Mode";
+
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
     public static String SHARED_DIALOG_PICKER = "Shared_Dialog_Picker";
+
+    public static final String FRAGMENT_ADD_ATTENDANCE = "500";
 
     public static File root = android.os.Environment.getExternalStorageDirectory();
     public static String RootPath = "/Android/data/com.daemon.oxfordschool";

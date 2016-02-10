@@ -8,32 +8,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.adapter.AttendanceStaffAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetAttendance;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
@@ -42,7 +32,6 @@ import com.daemon.oxfordschool.classes.CResult;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.StudentAttendance;
 import com.daemon.oxfordschool.classes.User;
-import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.AttendanceListener;
 import com.daemon.oxfordschool.listeners.Attendance_List_Item_Click_Listener;
@@ -94,8 +83,8 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
     TextView tv_lbl_class,tv_lbl_section,tv_lbl_select_date,text_view_empty;
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
     String Str_Attendance_Url = ApiConstants.ATTENDANCE_URL;
-    Bundle Args;
-    int mMode=0;
+    FragmentManager mManager;
+    boolean isTakeAttendancePressed=false;
 
     public Fragment_Attendance_Staff()
     {
@@ -232,8 +221,6 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         {
             AppUtils.showProgressDialog(mActivity);
             new GetAttendance(Str_Attendance_Url,Payload_Attendance(),Fragment_Attendance_Staff.this).getAttendance();
-            text_view_empty.setText(getString(R.string.lbl_attendance_not_found));
-
         }
         catch(Exception ex)
         {
@@ -304,8 +291,11 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                      selectDate(view);
                      break;
                 case R.id.btn_take_attendance:
+                     isTakeAttendancePressed=true;
+                     getAttendanceFromService();
                      break;
                 case R.id.btn_view_attendance:
+                     isTakeAttendancePressed=false;
                      break;
                 default:
                      break;
@@ -417,6 +407,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
 
         try
         {
+            AppUtils.hideProgressDialog();
             getAttendanceDetails();
         }
         catch (Exception ex)
@@ -505,10 +496,10 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                 attendance_response = (Attendance_Response) AppUtils.fromJson(Str_Json, new TypeToken<Attendance_Response>(){}.getType());
                 mSuccess = Integer.parseInt(attendance_response.getSuccess());
                 mAttendanceResult=attendance_response.getCresult();
+                int count = mAttendanceResult.size();
+                Log.d(MODULE, TAG + " ListSize of attendance : " + count);
 
-                Log.d(MODULE, TAG + " ListSize of attendance : " + mAttendanceResult.size());
-
-                for (int i = 0; i < mAttendanceResult.size(); i++) {
+                for (int i = 0; i < count; i++) {
                     final CResult mAttendance = mAttendanceResult.get(i);
 
                     Log.d(MODULE, TAG + " AttendanceId : " + mAttendance.getAttendanceId());
@@ -517,10 +508,6 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                     Log.d(MODULE, TAG + " IsAfterNoon : " + mAttendance.getIsAfterNoon());
                     Log.d(MODULE, TAG + " IsHalfDay : " + mAttendance.getIsHalfDay());
                 }
-
-
-                Log.d(MODULE, TAG + " Success_Code : " + mSuccess.toString());
-
             }
         }
         catch (Exception ex)
@@ -579,6 +566,17 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                 studentAttendance.setLastName(mListStudents.get(i).getLastName());
                 studentAttendance.setSelected(true);
                 mListAttendance.add(studentAttendance);
+            }
+            int count = mListAttendance.size();
+            if(count>0)
+            {
+                if(isTakeAttendancePressed) AppUtils.DialogMessage(mActivity,getString(R.string.lbl_attendance_already_taken));
+                else Goto_Fragment_Attendance_Add(AppUtils.MODE_UPDATE);
+            }
+            else if(count==0)
+            {
+                if(isTakeAttendancePressed) Goto_Fragment_Attendance_Add(AppUtils.MODE_ADD);
+                else AppUtils.DialogMessage(mActivity,getString(R.string.lbl_attendance_not_found));
             }
         }
         catch (Exception ex)
@@ -648,7 +646,6 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
     public void populateSetDate(int year, int month, int day) {
         Str_Date = year + "-" + month + "-"+day;
         btn_select_date.setText(ConvertedDate());
-        getAttendanceFromService();
     }
 
     public String ConvertedDate()
@@ -671,31 +668,33 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         return Str_ReturnValue;
     }
 
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    public void Goto_Fragment_Attendance_Add(int mMode)
     {
-        inflater.inflate(R.menu.menu_attendance_add, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+        TAG = "Goto_Fragment_Attendance_Add";
+        Log.d(MODULE,TAG);
+        try
+        {
+            Bundle Args=new Bundle();
+            Args.putInt(AppUtils.B_MODE,mMode);
+            Args.putString(AppUtils.B_USER_ID,Str_Id);
+            Args.putString(AppUtils.B_CLASS_ID,Str_ClassId);
+            Args.putString(AppUtils.B_SECTION_ID,Str_SectionId);
+            Args.putString(AppUtils.B_DATE,Str_Date);
+            Args.putParcelableArrayList(AppUtils.B_ATTENDANCE_LIST,mListAttendance);
+
+            mManager = mActivity.getSupportFragmentManager();
+            FragmentTransaction mTransaction = mManager.beginTransaction();
+            Fragment_Attendance_Add fragment = new Fragment_Attendance_Add();
+            fragment.setArguments(Args);
+            mTransaction.replace(R.id.container_body, fragment,AppUtils.FRAGMENT_ADD_ATTENDANCE);
+            mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_ATTENDANCE + "");
+            mTransaction.commit();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle presses on the action bar items
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            case R.id.action_take_attendance:
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
 
 }

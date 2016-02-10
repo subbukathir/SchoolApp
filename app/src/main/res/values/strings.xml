@@ -149,6 +149,7 @@
     </string-array>
 
     <!-- Attendance View -->
+    <string name="lbl_attendance_already_taken">Attendance already taken.</string>
     <string name="lbl_view_attendance">View Attendance</string>
     <string name="lbl_take_attendance">Take Attendance</string>
     <string name="lbl_select_student">Select Student</string>
