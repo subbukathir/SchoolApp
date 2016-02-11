@@ -21,6 +21,7 @@ public class ApiConstants
     public static String HOMEWORK_LIST_URL=SERVER_URL + "HomeWorkList.php";
     public static String ATTENDANCE_URL=SERVER_URL + "Attendance.php";
     public static String TIME_TABLE_URL=SERVER_URL + "TimeTable.php";
+    public static String ADD_HOMEWORK_URL=SERVER_URL + "AddHomeWork.php";
 
     public static String SUCCESS_CODE="0";
 

@@ -69,13 +69,23 @@
     <string name="lbl_starts_on">Starts On</string>
 
     <!-- HomeWork -->
-
+    <string name="lbl_class_hw">Class </string>
+    <string name="lbl_update">Update </string>
+    <string name="lbl_section_hw">Sec </string>
     <string name="lbl_select_date">Select Date</string>
     <string name="lbl_no_homework">No homework on </string>
     <string name="lbl_assignmentI"> Assignment I </string>
     <string name="lbl_assignmentII"> Assignment II </string>
+    <string name="lbl_no_homeworks">No HomeWork found </string>
+    <string name="msg_future_date">Please Select Today date or future date to give Assignment </string>
+    <string name="lbl_msg_blank_assignmentI">Please fill AssignmentI for this class</string>
+    <string name="lbl_msg_blank_assignmentII">Please fill AssignmentII for this class</string>
 
+    <string name="lbl_msg_valid_assignmentI">AssignmentI should contain atleast 4 characters</string>
+    <string name="lbl_msg_valid_assignmentII">AssignmentII should contain atleast 4 characters</string>
 
+    <string name="lbl_msg_success_homework">HomeWork has successfully added to database</string>
+    <string name="lbl_msg_validation">Please give valid input, Some entries are not given </string>
     <!-- Exam Schedule -->
 
     <string name="lbl_select_exam_type">Select Exam Type</string>

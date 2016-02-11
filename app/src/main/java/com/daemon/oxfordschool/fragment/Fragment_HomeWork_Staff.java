@@ -6,8 +6,11 @@ package com.daemon.oxfordschool.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +50,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,6 +70,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     Spinner spinner_class,spinner_section;
     SharedPreferences mPreferences;
     User mUser;
+    FloatingActionButton fab_add_homework;
 
     ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
     ArrayList<Common_Class> mListSection =new ArrayList<Common_Class>();
@@ -73,9 +78,12 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
 
     CommonList_Response responseCommon;
     HomeWorkList_Response response;
+    CHomework cHomework;
 
     AppCompatActivity mActivity;
+    Bundle mBundle;
     String Str_Id="";
+    Boolean flag=false;
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_ClassId,Str_SectionId="",Str_Date="";
 
@@ -99,6 +107,14 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             getClassList();
             getSectionList();
             Str_Date=GetTodayDate();
+
+            mBundle=this.getArguments();
+            if(mBundle !=null)
+            {
+
+                setDetails();
+                flag=true;
+            }
         }
         catch (Exception ex)
         {
@@ -128,7 +144,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
 
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
-
+            fab_add_homework = (FloatingActionButton) view.findViewById(R.id.fab);
             tv_lbl_select_date = (TextView) view.findViewById(R.id.tv_lbl_select_date);
             btn_select_date = (Button) view.findViewById(R.id.btn_select_date);
 
@@ -183,7 +199,28 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             StringBuilder Str_EmptyMessage = new StringBuilder();
             Str_EmptyMessage.append(getString(R.string.lbl_no_homework)).append(" ");
             Str_EmptyMessage.append(Str_Date);
+
+            if(flag)
+            {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date hw_date;
+                try
+                {
+                    hw_date = sdf.parse(mBundle.getString("HomeWorkDate"));
+                    Str_Date = format.format(hw_date);
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+                btn_select_date.setText(Str_Date);
+                getHomeWorksFromService(Str_Date);
+            }
+
+
             text_view_empty.setText(Str_EmptyMessage.toString());
+            fab_add_homework.setOnClickListener(_OnClickListener);
 
         }
         catch (Exception ex)
@@ -230,11 +267,35 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
 
     View.OnClickListener _OnClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            selectDate(view);
+        public void onClick(View view)
+        {
+            switch (view.getId())
+            {
+                case R.id.fab:
+                    goto_Fragment_AddHomeWork();
+                    break;
+                case R.id.btn_select_date:
+                    selectDate(view);
+                    break;
+                default:
+                    break;
+            }
+
         }
     };
 
+    public void goto_Fragment_AddHomeWork()
+    {
+        TAG = "goto_Fragment";
+        Log.d(MODULE, TAG);
+
+        flag=false;
+        FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+        Fragment fragment=new Fragment_Add_HomeWork();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_body, fragment,"Add_homeWork");
+        fragmentTransaction.commit();
+    }
     AdapterView.OnItemSelectedListener _OnClassItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
@@ -355,8 +416,12 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     }
 
     @Override
-    public void onHomeWorkListItemClicked(int position) {
+    public void onHomeWorkListItemClicked(int position)
+    {
+        TAG = "onHomeWorkListItemClicked";
+        Log.d(MODULE, TAG);
 
+        gotoFragmentUpdate(position);
     }
 
     public void getClassList()
@@ -443,6 +508,19 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_class.setAdapter(adapter);
+            if(flag)
+            {
+                for(int i=0; i<=mListClass.size(); i++)
+                {
+                    String Str_Value=mListClass.get(i).getID();
+
+                    if(Str_Value.equals(Str_ClassId))
+                    {
+                        spinner_class.setSelection(i+1);
+                    }
+                }
+            }
+
         }
         catch (Exception ex)
         {
@@ -460,6 +538,19 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_section.setAdapter(adapter);
+
+            if(flag)
+            {
+                for(int i=0; i<=mListSection.size(); i++)
+                {
+                    String Str_Value=mListSection.get(i).getID();
+
+                    if(Str_Value.equals(Str_ClassId))
+                    {
+                        spinner_section.setSelection(i+1);
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -551,6 +642,52 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     public void populateSetDate(int year, int month, int day) {
         Str_Date = year + "-" + month + "-"+day;
         getHomeWorksFromService(Str_Date);
+    }
+
+    public void setDetails()
+    {
+        TAG = "setDetails";
+        Log.d(MODULE, TAG);
+        Str_ClassId = mBundle.getString("ClassId");
+        Str_SectionId = mBundle.getString("SectionId");
+        Str_Date = mBundle.getString("HomeWorkDate");
+        Log.d(MODULE, TAG + Str_ClassId + " " + Str_SectionId + " " + Str_Date);
+
+    }
+
+    public void gotoFragmentUpdate(int position)
+    {
+        TAG = "gotoFragmentUpdate";
+        Log.d(MODULE, TAG);
+
+        if(mListHomeWork.size()>0)
+        {
+            cHomework = mListHomeWork.get(position);
+            Log.d(MODULE, TAG + "values of list " + cHomework.getClassId() + cHomework.getClassName());
+            Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getSectionId());
+            Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getHomeWorkDate());
+            Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getAssignment_I());
+
+            mBundle = new Bundle();
+
+            mBundle.putString("ClassId", cHomework.getClassId());
+            mBundle.putString("SectionId", cHomework.getSectionId());
+            mBundle.putString("HomeWorkDate", cHomework.getHomeWorkDate());
+            mBundle.putString("Assignment_I", cHomework.getAssignment_I());
+            mBundle.putString("Assignment_II", cHomework.getAssignment_II());
+            mBundle.putString("HomeWorkId", cHomework.getHomeWorkId());
+            mBundle.putString("SubjectId", cHomework.getSubjectId());
+            mBundle.putString("SubjectName", cHomework.getSubjectName());
+            mBundle.putString("Mode", "1");
+
+            Fragment mFragment = new Fragment_Add_HomeWork();
+            FragmentManager mManager = mActivity.getSupportFragmentManager();
+            FragmentTransaction mTransaction = mManager.beginTransaction();
+            mTransaction.replace(R.id.container_body, mFragment);
+            mFragment.setArguments(mBundle);
+            mManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            mTransaction.commit();
+        }
     }
 
 }
