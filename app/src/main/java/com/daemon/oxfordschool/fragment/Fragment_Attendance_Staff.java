@@ -222,6 +222,8 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
             btn_select_date.setTypeface(font.getHelveticaRegular());
             btn_take_attendance.setTypeface(font.getHelveticaRegular());
             btn_view_attendance.setTypeface(font.getHelveticaRegular());
+            btn_take_attendance.setEnabled(false);
+            btn_view_attendance.setEnabled(false);
             btn_select_date.setOnClickListener(_OnClickListener);
             btn_take_attendance.setOnClickListener(_OnClickListener);
             btn_view_attendance.setOnClickListener(_OnClickListener);
@@ -395,6 +397,8 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         Log.d(MODULE, TAG);
         try
         {
+            btn_take_attendance.setEnabled(true);
+            btn_view_attendance.setEnabled(true);
             getStudentsList();
             if(mListStudents.size()>0)
             {
@@ -413,7 +417,8 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         Log.d(MODULE, TAG);
         try
         {
-
+            btn_take_attendance.setEnabled(false);
+            btn_view_attendance.setEnabled(false);
         }
         catch (Exception ex)
         {

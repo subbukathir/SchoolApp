@@ -29,10 +29,12 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.AttendanceStaffAdapter;
+import com.daemon.oxfordschool.asyncprocess.AttendanceAdd_Process;
 import com.daemon.oxfordschool.classes.StudentAttendance;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
+import com.daemon.oxfordschool.listeners.AttendanceAddListener;
 import com.daemon.oxfordschool.listeners.Attendance_List_Item_Click_Listener;
 
 import org.json.JSONArray;
@@ -44,7 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Fragment_Attendance_Add extends Fragment implements Attendance_List_Item_Click_Listener
+public class Fragment_Attendance_Add extends Fragment implements AttendanceAddListener
 {
 
     public static String MODULE = "Fragment_Attendance_Add ";
@@ -82,6 +84,7 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
             mActivity = (AppCompatActivity) getActivity();
             setHasOptionsMenu(true);
             Args = getArguments();
+            mManager=mActivity.getSupportFragmentManager();
             if(Args!=null)
             {
                 mMode =  Args.getInt(AppUtils.B_MODE);
@@ -175,6 +178,9 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
 
     public void SetActionBar()
     {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+
         try
         {
             if (mActivity != null)
@@ -203,7 +209,33 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
     };
 
     @Override
-    public void onAttendanceListItemClicked(int position) {
+    public void onAttendanceAddReceived(String Str_Msg) {
+        TAG = "onAttendanceAddReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            AppUtils.DialogMessage(mActivity,Str_Msg);
+            mManager.popBackStack();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onAttendanceAddReceivedError(String Str_Msg) {
+
+        TAG = "onAttendanceAddReceivedError";
+        Log.d(MODULE, TAG);
+        try
+        {
+            AppUtils.DialogMessage(mActivity,Str_Msg);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
     }
 
@@ -344,8 +376,15 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
     {
         TAG = "sendAttendance";
         Log.d(MODULE,TAG);
+        try
+        {
+            new AttendanceAdd_Process(mActivity,Payload_AttendanceAdd(),this).AddAttendance();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
-        Payload_AttendanceAdd();
 
     }
 
