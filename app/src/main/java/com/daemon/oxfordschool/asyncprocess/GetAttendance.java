@@ -98,6 +98,9 @@ public class GetAttendance
                     else
                     {
                         Str_Msg = response.getString("message");
+                        editor = mPreferences.edit();
+                        editor.putString(AppUtils.SHARED_ATTENTANCE, "");
+                        editor.commit();
                         mCallBack.onAttendanceReceivedError(Str_Msg);
                     }
                 }
@@ -105,6 +108,9 @@ public class GetAttendance
             catch (Exception ex)
             {
                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                editor = mPreferences.edit();
+                editor.putString(AppUtils.SHARED_ATTENTANCE, "");
+                editor.commit();
                 mCallBack.onAttendanceReceivedError(Str_Msg);
             }
 
@@ -142,6 +148,9 @@ public class GetAttendance
             {
                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
             }
+            editor = mPreferences.edit();
+            editor.putString(AppUtils.SHARED_ATTENTANCE, "");
+            editor.commit();
             mCallBack.onAttendanceReceivedError(Str_Msg);
         }
     };

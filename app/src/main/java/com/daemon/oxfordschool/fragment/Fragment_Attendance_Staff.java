@@ -465,10 +465,19 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
     @Override
     public void onAttendanceReceivedError(String Str_Msg)
     {
-        AppUtils.hideProgressDialog();
         TAG = "onAttendanceReceivedError";
         Log.d(MODULE, TAG + "error " + Str_Msg);
-        setAttendanceList();
+
+        try
+        {
+            AppUtils.hideProgressDialog();
+            mAttendanceResult.clear();
+            setAttendanceList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     @Override

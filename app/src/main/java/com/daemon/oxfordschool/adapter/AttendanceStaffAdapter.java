@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,14 +55,16 @@ public class AttendanceStaffAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     LinearLayout.LayoutParams params;
     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    static int mMode=0;
 
-    public AttendanceStaffAdapter(ArrayList<StudentAttendance> mListAttendance, Fragment mFragment)
+    public AttendanceStaffAdapter(ArrayList<StudentAttendance> mListAttendance, Fragment mFragment,int mMode)
     {
         TAG = "AttendanceAdapter";
         Log.d(MODULE, TAG);
         Log.d(MODULE, TAG + " mListAttendance Size : " + mListAttendance.size());
         this.mListAttendance = mListAttendance;
         this.mFragment = mFragment;
+        this.mMode=mMode;
         this.mActivity = (FragmentActivity)mFragment.getActivity();
         mManager = mActivity.getSupportFragmentManager();
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
@@ -84,7 +87,7 @@ public class AttendanceStaffAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         {
             if(mHolder instanceof Attendance_ListHolders)
             {
-                Log.d(MODULE, TAG + "mHolder is instance of Exam_ListHolders");
+                Log.d(MODULE, TAG + "mHolder is instance of Attendance_ListHolders");
                 Attendance_ListHolders holder = (Attendance_ListHolders) mHolder;
                 final StudentAttendance mStudentAttendance = mListAttendance.get(position);
 
@@ -93,6 +96,13 @@ public class AttendanceStaffAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 Str_Name.append(mStudentAttendance.getLastName());
 
                 holder.tv_name.setText(Str_Name.toString());
+                holder.chk_box_status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(b) mListAttendance.get(position).setSelected(true);
+                        else mListAttendance.get(position).setSelected(false);
+                    }
+                });
 
                 if(mStudentAttendance.isSelected())
                 {
@@ -117,6 +127,8 @@ public class AttendanceStaffAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         }
                     }
                 });
+
+
 
             }
             else if(mHolder instanceof LoadingMessageHolder)
@@ -194,6 +206,11 @@ public class AttendanceStaffAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 this.itemView = itemView;
                 tv_name = (TextView) itemView.findViewById(R.id.tv_name);
                 chk_box_status = (CheckBox) itemView.findViewById(R.id.chk_box_status);
+                if(mMode==AppUtils.MODE_UPDATE)
+                {
+                    chk_box_status.setClickable(false);
+                    chk_box_status.setEnabled(false);
+                }
                 //Setting properties
                 mActivity.runOnUiThread(new Runnable() {
                     @Override

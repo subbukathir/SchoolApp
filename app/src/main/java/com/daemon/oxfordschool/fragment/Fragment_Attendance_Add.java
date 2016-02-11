@@ -58,6 +58,7 @@ import com.daemon.oxfordschool.response.CommonList_Response;
 import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -177,7 +178,17 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
             recycler_view.setLayoutManager(mLayoutManager);
             text_view_empty.setTypeface(font.getHelveticaRegular());
             btn_save.setTypeface(font.getHelveticaRegular());
-            if(mMode==AppUtils.MODE_UPDATE)recycler_view.setEnabled(false);
+            btn_save.setOnClickListener(_OnClickListener);
+            if(mMode==AppUtils.MODE_UPDATE)
+            {
+                btn_save.setEnabled(false);
+                btn_save.setClickable(false);
+            }
+            else
+            {
+                btn_save.setEnabled(true);
+                btn_save.setClickable(true);
+            }
             SetActionBar();
         }
         catch (Exception ex)
@@ -208,6 +219,13 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
         }
     }
 
+    View.OnClickListener _OnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            sendAttendance();
+        }
+    };
+
     @Override
     public void onAttendanceListItemClicked(int position) {
 
@@ -221,7 +239,7 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
         {
             if(mListAttendance.size()>0)
             {
-                AttendanceStaffAdapter adapter = new AttendanceStaffAdapter(mListAttendance,this);
+                AttendanceStaffAdapter adapter = new AttendanceStaffAdapter(mListAttendance,this,mMode);
                 recycler_view.setAdapter(adapter);
             }
             else
@@ -296,6 +314,60 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public JSONObject Payload_AttendanceAdd()
+    {
+        TAG = "Payload_AttendanceAdd";
+        Log.d(MODULE,TAG);
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("UserId",Str_UserId);
+            obj.put("ClassId",Str_ClassId);
+            obj.put("SectionId", Str_SectionId);
+            obj.put("AttendanceDate", Str_Date);
+        }
+        catch (JSONException ex)
+        {
+            ex.printStackTrace();
+        }
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+        return obj;
+    }
+
+    /*public JSONArray getStatusDetails()
+    {
+        TAG = "getStatusDetails";
+        Log.d(MODULE,TAG);
+
+        JSONArray jsonArray = new JSONArray();
+
+        try
+        {
+            for(int i=0;i<mListAttendance.size();i++)
+            {
+                JSONObject obj = new JSONObject();
+                obj.put("StudentId",mListAttendance.get(i).getStudentId());
+                obj.put("IsPresent","0");
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }*/
+
+    public void sendAttendance()
+    {
+        TAG = "sendAttendance";
+        Log.d(MODULE,TAG);
+
+        for(int i=0;i<mListAttendance.size();i++)
+        {
+           Log.d(MODULE,TAG + " " + mListAttendance.get(i).getFirstName() + " : " + mListAttendance.get(i).isSelected());
+        }
     }
 
 }
