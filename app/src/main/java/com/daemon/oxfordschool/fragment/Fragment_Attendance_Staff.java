@@ -10,10 +10,13 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -62,9 +65,9 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
 
     Spinner spinner_class,spinner_section;
     SharedPreferences mPreferences;
-
+    Toolbar mToolbar;
     User mUser;
-    int mSelectedPosition=0;
+    int mClassListPosition=0,mSectionListPosition=0;
     Button btn_select_date,btn_take_attendance,btn_view_attendance;
     ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
     ArrayList<Common_Class> mListSection =new ArrayList<Common_Class>();
@@ -86,6 +89,10 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
     String Str_Attendance_Url = ApiConstants.ATTENDANCE_URL;
     FragmentManager mManager;
     boolean isTakeAttendancePressed=false;
+    Bundle mSavedInstanceState;
+
+    final static String ARG_CLASS_LIST_POSITION = "Class_List_Position";
+    final static String ARG_SECTION_LIST_POSITION = "Section_List_Position";
 
     public Fragment_Attendance_Staff()
     {
@@ -102,6 +109,8 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         {
             mActivity = (AppCompatActivity) getActivity();
             setHasOptionsMenu(true);
+            setRetainInstance(false);
+            mSavedInstanceState=savedInstanceState;
             getProfile();
             getClassList();
             getSectionList();
@@ -158,6 +167,12 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
 
         try
         {
+            if(mSavedInstanceState!=null)
+            {
+                mClassListPosition=mSavedInstanceState.getInt(ARG_CLASS_LIST_POSITION);
+                mSectionListPosition=mSavedInstanceState.getInt(ARG_SECTION_LIST_POSITION);
+            }
+            SetActionBar();
             if(mListClass.size()>0) showClassList();
             if(mListSection.size()>0) showSectionList();
         }
@@ -167,13 +182,40 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         }
     }
 
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_attendance);
+                mToolbar.setSubtitle("");
+                FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        FragmentDrawer.mDrawerToggle.syncState();
+                    }
+                });
+                mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
     public void setProperties()
     {
         TAG = "setProperties";
         Log.d(MODULE, TAG);
         try
         {
-
             tv_lbl_class.setTypeface(font.getHelveticaRegular());
             tv_lbl_section.setTypeface(font.getHelveticaRegular());
             tv_lbl_select_date.setTypeface(font.getHelveticaRegular());
@@ -221,6 +263,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         Log.d(MODULE,TAG);
         try
         {
+            Log.d(MODULE,TAG + " " + Str_Attendance_Url);
             AppUtils.showProgressDialog(mActivity);
             new GetAttendance(Str_Attendance_Url,Payload_Attendance(),Fragment_Attendance_Staff.this).getAttendance();
         }
@@ -303,7 +346,6 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                 default:
                      break;
             }
-
         }
     };
 
@@ -356,7 +398,6 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
             getStudentsList();
             if(mListStudents.size()>0)
             {
-                mSelectedPosition=0;
                 setDefaultAttendanceList();
             }
         }
@@ -532,6 +573,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_class.setAdapter(adapter);
+            spinner_class.setSelection(mClassListPosition);
         }
         catch (Exception ex)
         {
@@ -549,6 +591,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_section.setAdapter(adapter);
+            spinner_section.setSelection(mSectionListPosition);
         }
         catch (Exception ex)
         {
@@ -583,11 +626,14 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
     {
         TAG = "setAttendanceList";
         Log.d(MODULE, TAG);
+
         try
         {
             if(mAttendanceResult.size()>0)
             {
                 int count = mListAttendance.size();
+                boolean isSelected=false;
+                String Str_Status="";
                 if(count>0)
                 {
                     if(isTakeAttendancePressed) AppUtils.DialogMessage(mActivity,getString(R.string.lbl_attendance_already_taken));
@@ -599,9 +645,12 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                             {
                                 if(mListAttendance.get(i).getStudentId().equals(mAttendanceResult.get(j).getStudentId()))
                                 {
-                                    mListAttendance.get(i).setStatus(mAttendanceResult.get(j).getIsPresent());
+                                    Str_Status = mAttendanceResult.get(j).getIsPresent();
+                                    if(Str_Status.equals("1")) isSelected=false;
+                                    else isSelected=true;
+                                    mListAttendance.get(i).setSelected(isSelected);
+                                    mListAttendance.get(i).setStatus(Str_Status);
                                     mListAttendance.get(i).setAttendanceId(mAttendanceResult.get(j).getAttendanceId());
-                                    break;
                                 }
                             }
                         }
@@ -711,6 +760,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         Log.d(MODULE,TAG);
         try
         {
+            mSavedInstanceState=getSavedState();
             Bundle Args=new Bundle();
             Args.putInt(AppUtils.B_MODE, mMode);
             Args.putString(AppUtils.B_USER_ID, Str_Id);
@@ -733,6 +783,53 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
 
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        TAG = "onSaveInstanceState";
+        Log.d(MODULE, TAG);
+        mSavedInstanceState=getSavedState();
+    }
+
+    public Bundle getSavedState()
+    {
+        TAG = "getSavedState";
+        Log.d(MODULE, TAG);
+
+        Bundle outState = new Bundle();
+        try
+        {
+            outState.putInt(ARG_CLASS_LIST_POSITION,spinner_class.getSelectedItemPosition());
+            outState.putInt(ARG_SECTION_LIST_POSITION,spinner_section.getSelectedItemPosition());
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+
+        Log.d(MODULE, TAG);
+        return outState;
+    }
 
 }

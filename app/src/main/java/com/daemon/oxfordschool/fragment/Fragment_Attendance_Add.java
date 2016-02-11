@@ -6,14 +6,22 @@ package com.daemon.oxfordschool.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -68,7 +76,9 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
     Button btn_save;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
+    FragmentManager mManager;
     SharedPreferences mPreferences;
+    Toolbar mToolbar;
     User mUser;
     int mSelectedPosition=0;
     ArrayList<StudentAttendance> mListAttendance = new ArrayList<StudentAttendance>();
@@ -167,6 +177,30 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
             recycler_view.setLayoutManager(mLayoutManager);
             text_view_empty.setTypeface(font.getHelveticaRegular());
             btn_save.setTypeface(font.getHelveticaRegular());
+            if(mMode==AppUtils.MODE_UPDATE)recycler_view.setEnabled(false);
+            SetActionBar();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetActionBar()
+    {
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                if(mMode==AppUtils.MODE_ADD) mToolbar.setTitle(R.string.lbl_take_attendance);
+                else mToolbar.setTitle(R.string.lbl_view_attendance);
+                mToolbar.setSubtitle(ConvertedDate());
+                final ActionBar ab = mActivity.getSupportActionBar();
+                ab.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+                ab.setDisplayHomeAsUpEnabled(true);
+            }
         }
         catch (Exception ex)
         {
@@ -224,4 +258,44 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
         }
 
     }
+
+    public String ConvertedDate()
+    {
+        TAG = "ConvertedDate";
+        Log.d(MODULE,TAG);
+        String Str_ReturnValue="";
+        try
+        {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat format1 = new SimpleDateFormat("E, MMM dd yyyy");
+            Date date;
+            date = sdf1.parse(Str_Date);
+            Str_ReturnValue = format1.format(date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return Str_ReturnValue;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        TAG = "onOptionsItemSelected";
+        Log.d(MODULE, TAG);
+
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                mManager = mActivity.getSupportFragmentManager();
+                mManager.popBackStack();
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
