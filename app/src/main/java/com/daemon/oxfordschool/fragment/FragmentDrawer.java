@@ -254,7 +254,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
 
     private void StartPicking()
     {
-        TAG = "Goto_Fragment_BankList";
+        TAG = "StartPicking";
         Log.d(MODULE, TAG);
 
         mManager = mActivity.getSupportFragmentManager();
