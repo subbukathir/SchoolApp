@@ -48,7 +48,6 @@ public class AttendanceStaffAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     static Typeface mTypeFace;
     private boolean isFooterEnabled = false;
     int mMargin=0;float mDensity=0;
-    Attendance_List_Item_Click_Listener mItemCallBack;
 
     private static String MODULE = "AttendanceAdapter";
     private static String TAG="";
@@ -71,7 +70,6 @@ public class AttendanceStaffAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mTypeFace = font.getHelveticaRegular();
         mDensity =  mActivity.getResources().getDisplayMetrics().density;
         mMargin = (int) (mActivity.getResources().getDimension(R.dimen.space_layout_margin) / mDensity);
-        mItemCallBack = (Attendance_List_Item_Click_Listener) mFragment;
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         params = new LinearLayout.LayoutParams(width,height,1);
@@ -112,24 +110,6 @@ public class AttendanceStaffAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 {
                     holder.chk_box_status.setChecked(false);
                 }
-
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try
-                        {
-                            mItemCallBack.onAttendanceListItemClicked(position);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            ex.printStackTrace();
-                        }
-                    }
-                });
-
-
-
             }
             else if(mHolder instanceof LoadingMessageHolder)
             {

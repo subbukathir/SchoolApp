@@ -4,11 +4,9 @@ package com.daemon.oxfordschool.fragment;
  * Created by Ravi on 29/07/15.
  */
 
-import android.content.Context;
+
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -19,16 +17,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.daemon.oxfordschool.MyApplication;
@@ -36,27 +29,11 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.AttendanceStaffAdapter;
-import com.daemon.oxfordschool.adapter.EventsAdapter;
-import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
-import com.daemon.oxfordschool.asyncprocess.GetAttendance;
-import com.daemon.oxfordschool.asyncprocess.GetStudentList;
-import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
-import com.daemon.oxfordschool.classes.CResult;
-import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.StudentAttendance;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.AttendanceListener;
 import com.daemon.oxfordschool.listeners.Attendance_List_Item_Click_Listener;
-import com.daemon.oxfordschool.listeners.ClassListListener;
-import com.daemon.oxfordschool.listeners.DateSetListener;
-import com.daemon.oxfordschool.listeners.SectionListListener;
-import com.daemon.oxfordschool.listeners.StudentsListListener;
-import com.daemon.oxfordschool.response.Attendance_Response;
-import com.daemon.oxfordschool.response.CommonList_Response;
-import com.daemon.oxfordschool.response.StudentsList_Response;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,14 +58,13 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
     SharedPreferences mPreferences;
     Toolbar mToolbar;
     User mUser;
-    int mSelectedPosition=0;
     ArrayList<StudentAttendance> mListAttendance = new ArrayList<StudentAttendance>();
     AppCompatActivity mActivity;
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_UserId,Str_ClassId,Str_SectionId,Str_Date="";
     Bundle Args;
-    String Str_Mode="";
     int mMode=0;
+    String Str_Url = ApiConstants.ADD_ATTENDANCE;
 
     public Fragment_Attendance_Add()
     {
@@ -326,7 +302,9 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
             obj.put("UserId",Str_UserId);
             obj.put("ClassId",Str_ClassId);
             obj.put("SectionId", Str_SectionId);
+            obj.put("AttendanceDetails", getStatusDetails());
             obj.put("AttendanceDate", Str_Date);
+            obj.put("Mode", "0");
         }
         catch (JSONException ex)
         {
@@ -336,7 +314,7 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
         return obj;
     }
 
-    /*public JSONArray getStatusDetails()
+    public JSONArray getStatusDetails()
     {
         TAG = "getStatusDetails";
         Log.d(MODULE,TAG);
@@ -349,7 +327,9 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
             {
                 JSONObject obj = new JSONObject();
                 obj.put("StudentId",mListAttendance.get(i).getStudentId());
-                obj.put("IsPresent","0");
+                if(mListAttendance.get(i).isSelected()) obj.put("IsPresent","0");
+                else obj.put("IsPresent","1");
+                jsonArray.put(obj);
             }
         }
         catch (Exception ex)
@@ -357,17 +337,16 @@ public class Fragment_Attendance_Add extends Fragment implements Attendance_List
             ex.printStackTrace();
         }
 
-    }*/
+        return jsonArray;
+    }
 
     public void sendAttendance()
     {
         TAG = "sendAttendance";
         Log.d(MODULE,TAG);
 
-        for(int i=0;i<mListAttendance.size();i++)
-        {
-           Log.d(MODULE,TAG + " " + mListAttendance.get(i).getFirstName() + " : " + mListAttendance.get(i).isSelected());
-        }
+        Payload_AttendanceAdd();
+
     }
 
 }
