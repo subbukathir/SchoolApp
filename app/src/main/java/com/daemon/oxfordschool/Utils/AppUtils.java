@@ -51,6 +51,7 @@ public class AppUtils extends Dialog
     public static String SHARED_HOMEWORK_LIST = "Shared_HomeWork_List";
     public static String SHARED_ATTENTANCE = "Shared_Attendance";
     public static String SHARED_TIMETABLE = "Shared_TimeTable";
+    public static String SHARED_ADDHOMEWORK = "Shared_Add_HomeWork";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
 
     public static int MODE_UPDATE=1;
