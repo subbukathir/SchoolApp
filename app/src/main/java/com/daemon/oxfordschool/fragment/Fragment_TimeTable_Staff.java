@@ -104,6 +104,8 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
             mActivity = (AppCompatActivity) getActivity();
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
+            getClassList();
+            getSectionList();
             getSubjects();
         }
         catch (Exception ex)
@@ -129,8 +131,8 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
         Log.d(MODULE, TAG);
         try
         {
-            tv_lbl_class.setTypeface(font.getHelveticaRegular());
-            tv_lbl_section.setTypeface(font.getHelveticaRegular());
+            tv_lbl_class = (TextView) view.findViewById(R.id.tv_lbl_class);
+            tv_lbl_section = (TextView) view.findViewById(R.id.tv_lbl_section);
             vp_time_table=(ViewPager) view.findViewById(R.id.vp_time_table);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
@@ -173,7 +175,8 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
 
         try
         {
-
+            if(mListClass.size() > 0) showClassList();
+            if(mListSection.size() > 0) showSectionList();
         }
         catch (Exception ex)
         {
@@ -209,10 +212,7 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
         Log.d(MODULE, TAG);
         try
         {
-            mSelectedUser = mListStudents.get(mSelectedPosition);
-            Str_ClassId = mSelectedUser.getClassId();
-            Str_SectionId = mSelectedUser.getSectionId();
-            new GetTimeTable(Str_TimeTable_Url,Payload_TimeTable(),this).getTimeTable();
+           new GetTimeTable(Str_TimeTable_Url,Payload_TimeTable(),this).getTimeTable();
         }
         catch (Exception ex)
         {
@@ -223,7 +223,7 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
     AdapterView.OnItemSelectedListener _OnClassItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            if(position > 0) Str_ClassId=mListClass.get(position).getID();
+            if(position > 0) Str_ClassId=mListClass.get(position-1).getID();
 
         }
 
@@ -238,7 +238,7 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 if(position > 0)
                 {
-                    Str_SectionId = mListSection.get(position).getID();
+                    Str_SectionId = mListSection.get(position-1).getID();
                     getTimeTableFromService();
                 }
 
