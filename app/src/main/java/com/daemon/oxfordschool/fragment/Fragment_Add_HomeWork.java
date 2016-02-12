@@ -13,11 +13,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -32,6 +36,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
 import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
@@ -64,6 +69,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
     public static String TAG = "";
 
     SharedPreferences mPreferences;
+    Toolbar mToolbar;
     User mUser;
     ArrayList<Common_Class> mListSubject =new ArrayList<Common_Class>();
     ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
@@ -81,7 +87,8 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
     Date tdate,selectedDate;
 
     AppCompatActivity mActivity;
-    String Str_Id="", Str_Mode="0";
+    FragmentManager mManager;
+    String Str_Id=""; int mMode=0;
     Boolean flag=false;
 
     DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -89,6 +96,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_Url = ApiConstants.ADD_HOMEWORK_URL;
     Fragment fragment;
+
     public Fragment_Add_HomeWork()
     {
         // Required empty public constructor
@@ -103,20 +111,20 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         try
         {
             mActivity = (AppCompatActivity) getActivity();
+            setHasOptionsMenu(true);
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            mManager = mActivity.getSupportFragmentManager();
             mBundle = this.getArguments();
+            Str_Date=GetTodayDate();
             if(mBundle !=null)
             {
-
                 getBundle();
                 flag=true;
             }
-
             getProfile();
             getClassList();
             getSectionList();
             getSubjectList();
-            Str_Date=GetTodayDate();
         }
         catch (Exception ex)
         {
@@ -194,10 +202,13 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         Log.d(MODULE, TAG);
         try {
 
-            tv_lbl_class.setTypeface(font.getHelveticaBold());
-            tv_lbl_section.setTypeface(font.getHelveticaBold());
-            tv_lbl_select_date.setTypeface(font.getHelveticaBold());
-            tv_lbl_subject.setTypeface(font.getHelveticaBold());
+            SetActionBar();
+            tv_lbl_class.setTypeface(font.getHelveticaRegular());
+            tv_lbl_section.setTypeface(font.getHelveticaRegular());
+            tv_lbl_select_date.setTypeface(font.getHelveticaRegular());
+            tv_lbl_subject.setTypeface(font.getHelveticaRegular());
+            btn_select_date.setTypeface(font.getHelveticaRegular());
+            btn_add_homework.setTypeface(font.getHelveticaRegular());
 
             et_add_assignment_I.setTypeface(font.getHelveticaRegular());
             et_add_assignment_II.setTypeface(font.getHelveticaRegular());
@@ -213,7 +224,8 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
 
             btn_select_date.setOnClickListener(_onClickListener);
             btn_add_homework.setOnClickListener(_onClickListener);
-            if (Str_Mode.equals("1") && flag==true)
+
+            if (mMode==AppUtils.MODE_UPDATE && flag==true)
             {
                 TAG = "setProperties from bundle";
                 Log.d(MODULE, TAG);
@@ -233,8 +245,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
                 {
                     ex.printStackTrace();
                 }
-                btn_select_date.setText(Str_Date);
-
+                btn_select_date.setText(ConvertedDate());
                 btn_add_homework.setText(getResources().getString(R.string.lbl_update));
 
             }
@@ -243,9 +254,34 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         }
         catch (Exception ex)
         {
-
+            ex.printStackTrace();
         }
     }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                if(mMode==AppUtils.MODE_ADD) mToolbar.setTitle(R.string.lbl_add_homework);
+                else mToolbar.setTitle(R.string.lbl_update_homework);
+                final ActionBar ab = mActivity.getSupportActionBar();
+                ab.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+                ab.setDisplayHomeAsUpEnabled(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -269,7 +305,6 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         return true;
     }
 
-
     private boolean validateAssignmentII() {
         if (et_add_assignment_II.getText().toString().trim().isEmpty()) {
             til_add_assignment_II.setError(getString(R.string.lbl_msg_blank_assignmentII));
@@ -286,6 +321,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
 
         return true;
     }
+
     private class MyTextWatcher implements TextWatcher {
 
         private View view;
@@ -314,6 +350,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             }
         }
     }
+
     public void getProfile()
     {
         TAG = "getProfile";
@@ -344,7 +381,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             Log.d(MODULE, TAG);
             try
             {
-                if(Str_Mode.equals("1") && position==0)
+                if(mMode==AppUtils.MODE_UPDATE && position==0)
                 {
                     int pos=Integer.parseInt(mBundle.getString("ClassId"));
                     spinner_class.setSelection(Integer.parseInt(mListClass.get(pos-1).getID()));
@@ -371,7 +408,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             Log.d(MODULE, TAG);
             try
             {
-                if(Str_Mode.equals("1") && position==0)
+                if(mMode==AppUtils.MODE_UPDATE && position==0)
                 {
                     int pos=Integer.parseInt(mBundle.getString("SectionId"));
                     spinner_section.setSelection(Integer.parseInt(mListSection.get(pos-1).getID()));
@@ -395,6 +432,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
 
         }
     };
+
     AdapterView.OnItemSelectedListener _OnSubjecttItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
@@ -502,8 +540,16 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
     {
         TAG = "onAddHomeWorkReceived";
         Log.d(MODULE, TAG);
-        AppUtils.hideProgressDialog();
-        view_fragment_HomeworkStaff();
+        try
+        {
+            AppUtils.hideProgressDialog();
+            mManager.popBackStack();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     @Override
@@ -519,7 +565,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
     {
         TAG = "getBundle";
         Log.d(MODULE, TAG);
-        Str_Mode = mBundle.getString("Mode");
+        mMode = mBundle.getInt("Mode");
         mAssignmentI = mBundle.getString("Assignment_I");
         mAssignmentII = mBundle.getString("Assignment_II");
         mHomeWorkId = mBundle.getString("HomeWorkId");
@@ -578,6 +624,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             ex.printStackTrace();
         }
     }
+
     public void getSubjectList()
     {
         TAG = "getSubjectList";
@@ -603,6 +650,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             ex.printStackTrace();
         }
     }
+
     public void showClassList()
     {
         TAG = "showClassList";
@@ -648,9 +696,9 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_subject.setAdapter(adapter);
 
-            if(Str_Mode.equals("1"))
+            if(mMode==AppUtils.MODE_UPDATE)
             {
-                for(int i=0; i<=mListSubject.size(); i++)
+                for(int i=0; i<mListSubject.size(); i++)
                 {
                     String Str_Value=mListSubject.get(i).getID();
 
@@ -695,7 +743,6 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         {
             tdate=mDateFormat.parse(Str_Date);
             selectedDate = mDateFormat.parse(currDate);
-
         }
         catch (Exception ex)
         {
@@ -704,16 +751,15 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         if(selectedDate.before(tdate))
         {
             AppUtils.showDialog(mActivity, getResources().getString(R.string.msg_future_date));
-            btn_select_date.setText(Str_Date);
-
+            btn_select_date.setText(ConvertedDate());
         }
         else
         {
-
-            btn_select_date.setText(currDate);
             Str_Date=currDate;
+            btn_select_date.setText(ConvertedDate());
         }
     }
+
     public boolean IsValid() {
         TAG = "IsValid";
         Log.d(MODULE, TAG);
@@ -735,6 +781,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         new AddHomeWork(Str_Url,this,homework_PayLoad()).addHomeWork();
 
     }
+
     public JSONObject homework_PayLoad()
     {
         TAG = "homework_PayLoad";
@@ -750,7 +797,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             obj.put("HomeWorkDate",Str_Date);
             obj.put("Assignment_I",mAssignmentI);
             obj.put("Assignment_II",mAssignmentII);
-            obj.put("Mode",Str_Mode);
+            obj.put("Mode",mMode);
             obj.put("HomeWorkId",mHomeWorkId);
 
         }
@@ -760,23 +807,44 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         }
         return obj;
     }
-    public void view_fragment_HomeworkStaff()
+
+    public boolean onOptionsItemSelected(MenuItem item)
     {
-        TAG = "view_fragment_HomeworkStaff";
+        TAG = "onOptionsItemSelected";
         Log.d(MODULE, TAG);
 
-        FragmentManager mManager= mActivity.getSupportFragmentManager();
-        Fragment mFragment=new Fragment_HomeWork_Staff();
-        mBundle = new Bundle();
-        mBundle.putString("ClassId", Str_ClassId);
-        mBundle.putString("SectionId", Str_SectionId);
-        mBundle.putString("HomeWorkDate",Str_Date);
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                mManager = mActivity.getSupportFragmentManager();
+                mManager.popBackStack();
+                return true;
+            default:
+                break;
 
-        FragmentTransaction mFragmentTransaction=mManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.container_body,mFragment);
-        mFragment.setArguments(mBundle);
-        mFragmentTransaction.commit();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
+    public String ConvertedDate()
+    {
+        TAG = "ConvertedDate";
+        Log.d(MODULE,TAG);
+        String Str_ReturnValue="";
+        try
+        {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat format1 = new SimpleDateFormat("E, MMM dd yyyy");
+            Date date;
+            date = sdf1.parse(Str_Date);
+            Str_ReturnValue = format1.format(date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return Str_ReturnValue;
+    }
 
 }

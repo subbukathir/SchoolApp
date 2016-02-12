@@ -57,6 +57,7 @@
     <string name="lbl_no_student">No Student Found</string>
     <string name="lbl_students">Students</string>
     <string name="lbl_select_section">Select Section</string>
+    <string name="lbl_select_class_selection">Please select class and section.</string>
 
     <!-- Event View -->
 
@@ -86,6 +87,9 @@
 
     <string name="lbl_msg_success_homework">HomeWork has successfully added to database</string>
     <string name="lbl_msg_validation">Please give valid input, Some entries are not given </string>
+    <string name="lbl_add_homework">Add Homework</string>
+    <string name="lbl_update_homework">Update Homework</string>
+
     <!-- Exam Schedule -->
 
     <string name="lbl_select_exam_type">Select Exam Type</string>
@@ -168,6 +172,7 @@
     <string name="lbl_present_days">Present Days  </string>
     <string name="lbl_percentage">Percentage  </string>
     <string name="lbl_no_attendance">No Attendance for month </string>
+    <string name="lbl_select_class_date">Please select class,section and date </string>
     <string name="lbl_select_month">Please Select the month to see attendance </string>
     <string name="lbl_present">Present</string>
     <string name="lbl_absent">Absent</string>

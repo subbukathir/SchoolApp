@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -57,6 +58,8 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
     Spinner spinner_class,spinner_section;
+    RelativeLayout layout_empty;
+    TextView tv_lbl_class,tv_lbl_section,text_view_empty;
     SharedPreferences mPreferences;
     User mUser;
     ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
@@ -70,7 +73,6 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentUrl = ApiConstants.STUDENT_LIST;
     String Str_ClassId,Str_SectionId="";
-    TextView tv_lbl_class,tv_lbl_section;
 
     public Fragment_StudentList()
     {
@@ -115,6 +117,8 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         {
             tv_lbl_class = (TextView) view.findViewById(R.id.tv_lbl_class);
             tv_lbl_section = (TextView) view.findViewById(R.id.tv_lbl_section);
+            layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
+            text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
             spinner_class = (Spinner) view.findViewById(R.id.spinner_class);
             spinner_section = (Spinner) view.findViewById(R.id.spinner_section);
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_students);
@@ -153,10 +157,14 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         {
             tv_lbl_class.setTypeface(font.getHelveticaRegular());
             tv_lbl_section.setTypeface(font.getHelveticaRegular());
+            text_view_empty.setTypeface(font.getHelveticaRegular());
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
             spinner_class.setOnItemSelectedListener(_OnClassItemSelectedListener);
             spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
+            text_view_empty.setText(getString(R.string.lbl_select_class_selection));
+            layout_empty.setVisibility(View.VISIBLE);
+            recycler_view.setVisibility(View.GONE);
         }
         catch (Exception ex)
         {
@@ -273,6 +281,11 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
             {
                 showStudentsList();
             }
+            else
+            {
+                text_view_empty.setText(R.string.lbl_no_student);
+                showEmptyView();
+            }
         }
         catch (Exception ex)
         {
@@ -286,7 +299,8 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         Log.d(MODULE, TAG);
         try
         {
-
+            text_view_empty.setText(Str_Msg);
+            showEmptyView();
         }
         catch (Exception ex)
         {
@@ -415,6 +429,8 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         {
             StudentsListAdapter adapter = new StudentsListAdapter(mListStudents,this);
             recycler_view.setAdapter(adapter);
+            recycler_view.setVisibility(View.VISIBLE);
+            layout_empty.setVisibility(View.GONE);
         }
         catch (Exception ex)
         {
@@ -440,6 +456,23 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         Log.d(MODULE, TAG + " obj : " + obj.toString());
 
         return obj;
+    }
+
+    public void showEmptyView()
+    {
+        TAG = "showEmptyView";
+        Log.d(MODULE, TAG);
+
+        try
+        {
+            layout_empty.setVisibility(View.VISIBLE);
+            recycler_view.setVisibility(View.GONE);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
 }

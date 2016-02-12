@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<LinearLayout
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,28 +12,30 @@
 
     <LinearLayout
         style="@style/match_wrap_style"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <!-- Select Date Starts Here -->
 
         <LinearLayout
             style="@style/match_wrap_style"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/space_layout_padding_small"
             android:paddingLeft="@dimen/space_layout_padding"
-            android:paddingRight="@dimen/space_layout_padding"
-            android:paddingTop="@dimen/space_layout_padding_small">
+            android:paddingRight="@dimen/space_layout_padding">
 
             <TextView
                 android:id="@+id/tv_lbl_select_date"
-                style="@style/text_view_label"
-                android:gravity="center_vertical"
+                style="@style/text_view_label_teacher"
                 android:text="@string/lbl_select_date" />
 
             <Button
                 android:id="@+id/btn_select_date"
-                style="@style/btn_login_style"
-                android:layout_weight="1" />
+                style="@style/btn_style_select_date"
+                android:layout_marginLeft="@dimen/space_layout_margin"/>
+
         </LinearLayout>
+
+        <!-- Select Date Ends Here -->
 
         <LinearLayout
             style="@style/match_wrap_style"
@@ -45,7 +48,7 @@
 
             <TextView
                 android:id="@+id/tv_lbl_select_subject"
-                style="@style/text_view_label"
+                style="@style/text_view_label_teacher"
                 android:gravity="center_vertical"
                 android:text="@string/lbl_select_subject" />
 
@@ -53,12 +56,13 @@
                 android:id="@+id/spinner_subject"
                 style="@style/spinner_style" />
         </LinearLayout>
+
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
-
         android:id="@+id/til_add_assignment_I"
-        style="@style/match_wrap_style">
+        style="@style/match_wrap_style"
+        android:layout_marginTop="@dimen/space_layout_margin">
 
         <EditText
             android:id="@+id/et_add_assignment_I"
@@ -94,5 +98,7 @@
             style="@style/btn_login_style"
             android:text="ADD" />
     </LinearLayout>
+
 </LinearLayout>
+
 </ScrollView>

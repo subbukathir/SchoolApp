@@ -1,46 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:id="@+id/main_content"
+    style="@style/match_parent_style">
 
     <LinearLayout
-        style="@style/match_wrap_style"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/space_layout_padding_small"
-        android:paddingLeft="@dimen/space_layout_padding"
-        android:paddingRight="@dimen/space_layout_padding"
-        android:paddingTop="@dimen/space_layout_padding_small">
+        android:id="@+id/ll_homework_details"
+        style="@style/match_parent_style"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_lbl_select_date"
-            style="@style/text_view_label"
-            android:gravity="center_vertical"
-            android:text="@string/lbl_select_date" />
+        <!-- Select Date Starts Here -->
 
-        <Button
-            android:id="@+id/btn_select_date"
-            style="@style/btn_login_style"
-            android:layout_weight="0.8" />
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@android:drawable/ic_input_add"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp" />
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/space_layout_padding"
+            android:paddingRight="@dimen/space_layout_padding">
+
+            <TextView
+                android:id="@+id/tv_lbl_select_date"
+                style="@style/text_view_label_teacher"
+                android:text="@string/lbl_select_date" />
+
+            <Button
+                android:id="@+id/btn_select_date"
+                style="@style/btn_style_select_date" />
+
+        </LinearLayout>
+
+        <!-- Select Date Ends Here -->
+
+        <LinearLayout style="@style/match_parent_style">
+
+            <com.daemon.oxfordschool.components.RecycleEmptyErrorView
+                android:id="@+id/recycler_view_homework"
+                style="@style/match_parent_style" />
+
+            <include layout="@layout/view_list_empty"></include>
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout style="@style/match_parent_style">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        app:layout_anchor="@id/ll_homework_details"
+        app:layout_anchorGravity="bottom|right|end" />
 
-        <com.daemon.oxfordschool.components.RecycleEmptyErrorView
-            android:id="@+id/recycler_view_homework"
-            style="@style/match_parent_style" />
-
-        <include layout="@layout/view_list_empty"></include>
-
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
