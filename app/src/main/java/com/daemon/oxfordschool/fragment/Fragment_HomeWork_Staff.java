@@ -212,7 +212,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
 
             text_view_empty.setText(getString(R.string.lbl_select_class_date));
             fab_add_homework.setOnClickListener(_OnClickListener);
-
+            fab_add_homework.setVisibility(View.VISIBLE);
             SetActionBar();
         }
         catch (Exception ex)

@@ -33,6 +33,7 @@ import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable;
+import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Staff;
 import com.google.gson.reflect.TypeToken;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
@@ -165,8 +166,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }
                 break;
             case 8:
-                fragment = new Fragment_TimeTable();
-                title = getString(R.string.lbl_time_table);
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
+                    fragment = new Fragment_TimeTable_Staff();
+                    title = getString(R.string.lbl_time_table);
+                }
+                else
+                {
+                    fragment = new Fragment_TimeTable();
+                    title = getString(R.string.lbl_time_table);
+                }
                 break;
             default:
                 break;
