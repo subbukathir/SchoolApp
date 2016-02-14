@@ -5,8 +5,8 @@ package com.daemon.oxfordschool.constants;
  */
 public class ApiConstants
 {
-    public static String SERVER_URL = "http://192.168.1.212/OxfordSchool/";
-    //public static String SERVER_URL = "http://192.168.2.102/OxfordSchool/";
+    //public static String SERVER_URL = "http://192.168.1.212/OxfordSchool/";
+    public static String SERVER_URL = "http://192.168.2.103/OxfordSchool/";
     public static String LOGIN_URL = SERVER_URL + "User.php";
     public static String STUDENT_LIST= SERVER_URL + "StudentList.php";
 
@@ -23,11 +23,18 @@ public class ApiConstants
     public static String TIME_TABLE_URL=SERVER_URL + "TimeTable.php";
     public static String ADD_ATTENDANCE=SERVER_URL + "UpdateAttendance.php";
     public static String ADD_HOMEWORK_URL=SERVER_URL + "AddHomeWork.php";
+    public static String TERM_LIST_URL=SERVER_URL + "FeesTypeList.php";
+    public static String PAYMENT_DETAIL_URL=SERVER_URL + "GetPaymentDetail.php";
+    public static String PAYMENT_DETAIL_STUDENT_URL=SERVER_URL + "GetPaymentDetailByStudentId.php";
 
     public static String SUCCESS_CODE="0";
 
     public static String STUDENT="1";
     public static String STAFF="2";
     public static String PARENT="3";
+
+    public static int PAID=1;
+    public static int UNPAID=0;
+    public static int PARTIALLY_PAID=2;
 
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_section_class_selector" />
+
+    <LinearLayout
+        style="@style/match_parent_style"
+        android:orientation="vertical">
+
+
+        <!-- Term Fees Selection Starts Here -->
+
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/space_layout_margin"
+            android:paddingRight="@dimen/space_layout_margin"
+            android:paddingTop="@dimen/space_layout_margin_small">
+
+            <TextView
+                android:id="@+id/tv_select_term_fees"
+                style="@style/text_view_label_teacher"
+                android:gravity="left"
+                android:text="@string/lbl_select_term" />
+
+            <Spinner
+                android:id="@+id/spinner_term_fees"
+                style="@style/spinner_style">
+
+            </Spinner>
+
+        </LinearLayout>
+
+        <!-- Term Fees Selection Ends Here -->
+
+        <!-- List Header Starts -->
+
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:orientation="horizontal"
+            android:background="@color/color_app"
+            android:layout_marginTop="@dimen/space_layout_margin">
+
+            <TextView
+                android:id="@+id/tv_lbl_name"
+                style="@style/text_view_event_list_item"
+                android:gravity="center"
+                android:text="@string/lbl_name"
+                android:layout_weight="0.6"
+                android:textColor="@color/color_white" />
+
+            <TextView
+                android:id="@+id/tv_lbl_status"
+                style="@style/text_view_event_list_item"
+                android:gravity="center"
+                android:text="@string/lbl_status"
+                android:textColor="@color/color_white" />
+
+        </LinearLayout>
+
+        <!-- List Header  Ends -->
+
+
+        <!-- List Starts -->
+
+        <LinearLayout style="@style/match_parent_style">
+
+            <com.daemon.oxfordschool.components.RecycleEmptyErrorView
+                android:id="@+id/recycler_view_payment_detail"
+                style="@style/match_parent_style" />
+
+            <include layout="@layout/view_list_empty"></include>
+
+        </LinearLayout>
+
+        <!-- List Ends -->
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
