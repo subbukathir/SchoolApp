@@ -28,6 +28,8 @@ import com.daemon.oxfordschool.fragment.Fragment_Exam_Result_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Exam_Schedule_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork_Staff;
+import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail;
+import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
 import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
@@ -163,6 +165,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 {
                     fragment = new Fragment_ExamResult();
                     title = getString(R.string.lbl_exam_result);
+                }
+                break;
+            case 7:
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
+                    fragment = new Fragment_PaymentDetail_Staff();
+                    title = getString(R.string.lbl_fees_detail);
+                }
+                else
+                {
+                    fragment = new Fragment_PaymentDetail();
+                    title = getString(R.string.lbl_fees_detail);
                 }
                 break;
             case 8:
