@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daemon.oxfordschool.MyApplication;
@@ -21,10 +22,13 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
+import com.daemon.oxfordschool.asyncprocess.GetStudentProfile;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
+import com.daemon.oxfordschool.listeners.ViewStudentProfileListener;
 import com.daemon.oxfordschool.response.StudentsList_Response;
+import com.daemon.oxfordschool.response.UserLogin;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -32,24 +36,26 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Fragment_StudentProfile extends Fragment implements StudentsListListener
+public class Fragment_Student_View_Profile extends Fragment implements ViewStudentProfileListener
 {
 
-    public static String MODULE = "Fragment_StudentProfile ";
+    public static String MODULE = "Fragment_Student_View_Profile ";
     public static String TAG = "";
 
-    TextView tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address;
-    ViewPager vp_student;
+    TextView tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address,
+            tv_name,tv_class,tv_section;
+    ImageView imageView;
     SharedPreferences mPreferences;
-    User mUser,mSelectedUser;
+    User mUser,mStudent;
     ArrayList<User> mListStudents =new ArrayList<User>();
-    StudentsList_Response response;
-
     AppCompatActivity mActivity;
     String Str_Id="";
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_Url = ApiConstants.STUDENT_LIST;
-    public Fragment_StudentProfile()
+    String Str_Url = ApiConstants.STUDENT_PROFILE_URL;
+    UserLogin response;
+
+
+    public Fragment_Student_View_Profile()
     {
         // Required empty public constructor
     }
@@ -64,7 +70,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         {
             mActivity = (AppCompatActivity) getActivity();
             getProfile();
-            new GetStudentList(Str_Url,Payload(),this).getStudents();
+            new GetStudentProfile(Str_Url,Payload(),this).getStudentProfile();
         }
         catch (Exception ex)
         {
@@ -76,7 +82,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_studentprofile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_student_view_profile, container, false);
         TAG = "onCreateView";
         Log.d(MODULE, TAG);
         initView(rootView);
@@ -89,7 +95,10 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
-            vp_student = (ViewPager) view.findViewById(R.id.vp_student);
+            imageView = (ImageView) view.findViewById(R.id.iv_profile);
+            tv_name  = (TextView) view.findViewById(R.id.tv_header_name);
+            tv_class  = (TextView) view.findViewById(R.id.tv_class_name);
+            tv_section  = (TextView) view.findViewById(R.id.tv_section_name);
             tv_profile_mobile_number=(TextView) view.findViewById(R.id.tv_profile_mobile_number);
             tv_profile_email=(TextView) view.findViewById(R.id.tv_profile_email);
             tv_lbl_profile_address=(TextView) view.findViewById(R.id.tv_lbl_profile_address);
@@ -126,11 +135,14 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
+            tv_name.setTypeface(font.getHelveticaRegular());
+            tv_class.setTypeface(font.getHelveticaRegular());
+            tv_section.setTypeface(font.getHelveticaRegular());
             tv_profile_mobile_number.setTypeface(font.getHelveticaRegular());
             tv_profile_email.setTypeface(font.getHelveticaRegular());
             tv_lbl_profile_address.setTypeface(font.getHelveticaRegular());
             tv_profile_address.setTypeface(font.getHelveticaRegular());
-            vp_student.addOnPageChangeListener(_OnPageChangeListener);
+
         }
         catch (Exception ex)
         {
@@ -160,35 +172,14 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         }
     }
 
-    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            setProfile(position);
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    };
-
     @Override
-    public void onStudentsReceived() {
-        TAG = "onStudentsReceived";
+    public void onStudentProfileReceived() {
+        TAG = "onStudentProfileReceived";
         Log.d(MODULE, TAG);
         try
         {
-            getStudentsList();
-            if(mListStudents.size()>0)
-            {
-                showStudentsList();
-                setProfile(0);
-            }
+            getStudentProfile();
+            setProfile();
         }
         catch (Exception ex)
         {
@@ -197,8 +188,8 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
     }
 
     @Override
-    public void onStudentsReceivedError(String Str_Msg) {
-        TAG = "onStudentsReceivedError";
+    public void onStudentProfileReceivedError(String Str_Msg) {
+        TAG = "onStudentProfileReceivedError";
         Log.d(MODULE, TAG);
         try
         {
@@ -210,20 +201,19 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         }
     }
 
-    public void getStudentsList()
+    public void getStudentProfile()
     {
         TAG = "getStudentsList";
         Log.d(MODULE, TAG);
         try
         {
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_STUDENT_LIST,"");
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_STUDENT_PROFILE,"");
             Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
             if(Str_Json.length()>0)
             {
-                response = (StudentsList_Response) AppUtils.fromJson(Str_Json, new TypeToken<StudentsList_Response>(){}.getType());
-                mListStudents = response.getCstudents();
-                Log.d(MODULE, TAG + " mListStudents : " + mListStudents.size());
+                mStudent = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
+                Log.d(MODULE, TAG + " mStudent : " + mStudent.getClassName());
             }
         }
         catch (Exception ex)
@@ -232,36 +222,31 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         }
     }
 
-    public void showStudentsList()
-    {
-        TAG = "showStudentsList";
-        Log.d(MODULE, TAG);
-        try
-        {
-
-            StudentPagerAdapter adapter= new StudentPagerAdapter(mActivity,mListStudents);
-            vp_student.setAdapter(adapter);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public void setProfile(int position)
+    public void setProfile()
     {
         TAG = "setProfile";
         Log.d(MODULE, TAG);
 
         try
         {
-            mSelectedUser = mListStudents.get(position);
-            tv_profile_mobile_number.setText(mSelectedUser.getMobile_Number());
-            tv_profile_email.setText(mSelectedUser.getEmail());
+            StringBuilder Str_Name = new StringBuilder();
+            Str_Name.append(mStudent.getFirstName()).append(" ");
+            Str_Name.append(mStudent.getLastName());
+            StringBuilder Str_ClassName = new StringBuilder();
+            Str_ClassName.append(mActivity.getString(R.string.lbl_class)).append(" ");
+            Str_ClassName.append(mStudent.getClassName());
+            StringBuilder Str_SectionName = new StringBuilder();
+            Str_SectionName.append(mActivity.getString(R.string.lbl_section)).append(" ");
+            Str_SectionName.append(mStudent.getSectionName());
+            tv_name.setText(Str_Name.toString());
+            tv_class.setText(Str_ClassName);
+            tv_section.setText(Str_SectionName.toString());
+            tv_profile_mobile_number.setText(mStudent.getMobile_Number());
+            tv_profile_email.setText(mStudent.getEmail());
             StringBuilder Str_Address = new StringBuilder();
-            Str_Address.append(mSelectedUser.getAddress1()).append(" ");
-            Str_Address.append(mSelectedUser.getAddress2()).append(" ");
-            Str_Address.append(mSelectedUser.getAddress3()).append(" ");
+            Str_Address.append(mStudent.getAddress1()).append(" ");
+            Str_Address.append(mStudent.getAddress2()).append(" ");
+            Str_Address.append(mStudent.getAddress3()).append(" ");
             tv_profile_address.setText(Str_Address);
         }
         catch(Exception ex)
@@ -277,9 +262,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("ParentId", Str_Id);
-            obj.put("ClassId", "");
-            obj.put("SectionId", "");
+            obj.put("UserId", Str_Id);
         }
         catch (JSONException e) {
             e.printStackTrace();

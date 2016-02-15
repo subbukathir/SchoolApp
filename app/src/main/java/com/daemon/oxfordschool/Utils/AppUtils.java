@@ -40,6 +40,7 @@ public class AppUtils extends Dialog
 
     public static String SHARED_LOGIN_PROFILE = "Shared_Login";
     public static String SHARED_STUDENT_LIST = "Shared_Student_List";
+    public static String SHARED_STUDENT_PROFILE= "Shared_Student_Profile";
     public static String LOGIN_SHARED = "Shared_Login";
     public static String SHARED_SUBJECT_LIST = "Shared_Subject_List";
     public static String SHARED_SECTION_LIST = "Shared_Section_List";
