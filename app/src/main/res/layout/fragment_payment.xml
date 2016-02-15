@@ -20,12 +20,11 @@
             android:orientation="vertical"
             android:paddingLeft="@dimen/space_layout_margin"
             android:paddingRight="@dimen/space_layout_margin"
-            android:paddingTop="@dimen/space_layout_margin_small">
+            android:paddingTop="@dimen/space_layout_margin">
 
             <TextView
                 android:id="@+id/tv_select_term_fees"
                 style="@style/text_view_label_teacher"
-                android:gravity="left"
                 android:text="@string/lbl_select_term" />
 
             <Spinner
