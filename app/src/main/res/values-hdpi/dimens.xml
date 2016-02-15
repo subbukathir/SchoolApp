@@ -81,4 +81,8 @@
     <!-- Events -->
     <dimen name="lbl_event_tile">20sp</dimen>
 
+    <!-- ProgressBar -->
+
+    <dimen name="dim_progress_bar_width">42dp</dimen>
+
 </resources>

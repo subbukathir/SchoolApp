@@ -3,23 +3,25 @@
     android:id="@+id/layout_loading"
     style="@style/match_parent_style"
     android:gravity="center"
-    android:layout_centerInParent="true"
-    android:orientation="vertical"
-    android:visibility="gone">
+    android:orientation="horizontal"
+    android:padding="@dimen/space_layout_padding"
+    android:visibility="visible">
 
 
     <ProgressBar
-        android:layout_width="@dimen/img_width"
-        android:layout_height="@dimen/img_width"
+        android:layout_width="@dimen/dim_progress_bar_width"
+        android:layout_height="@dimen/dim_progress_bar_width"
+        android:layout_margin="@dimen/space_layout_margin"
         android:indeterminateTint="@color/color_app"
+        android:layout_gravity="center_vertical"
         android:indeterminateTintMode="src_in" />
 
     <TextView
         android:id="@+id/text_view_message"
         style="@style/match_wrap_style"
-        android:layout_marginTop="@dimen/space_layout_margin"
         android:gravity="center"
-        android:padding="@dimen/space_layout_padding"
+        android:paddingLeft="@dimen/space_layout_padding"
+        android:paddingRight="@dimen/space_layout_padding"
         android:text="@string/lbl_loading"
         android:textSize="@dimen/lbl_size" />
 
