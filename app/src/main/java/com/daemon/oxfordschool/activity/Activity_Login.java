@@ -52,6 +52,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         setContentView(R.layout.activity_login);
 
         mContext = getApplicationContext();
+        font= MyApplication.getInstance().getFontInstance();
 
         TAG = "onCreate";
         Log.d(MODULE, TAG);
@@ -68,11 +69,11 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
 
         et_username.addTextChangedListener(new MyTextWatcher(et_username));
         et_password.addTextChangedListener(new MyTextWatcher(et_password));
-
+/*
         tv_welcome.setTypeface(font.getHelveticaRegular());
         et_username.setTypeface(font.getHelveticaRegular());
         et_password.setTypeface(font.getHelveticaRegular());
-        button_login.setTypeface(font.getHelveticaRegular());
+        button_login.setTypeface(font.getHelveticaRegular());*/
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -155,7 +156,6 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         }
         return obj;
     }
-
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -178,6 +178,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         }
         return true;
     }
+
 
     private boolean validatePassword() {
         if (et_password.getText().toString().trim().isEmpty()) {
