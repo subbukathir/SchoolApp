@@ -10,8 +10,12 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
@@ -79,23 +83,25 @@ public class AppUtils extends Dialog
     public static String RootPath = "/Android/data/com.daemon.oxfordschool";
 
     private static ProgressDialog mPrograssDialog;
+    private static Font font= MyApplication.getInstance().getFontInstance();
+    private static AlertDialog alert;
 
     // SD card image directory
     public static final String PHOTO_ALBUM = AppUtils.root.getAbsolutePath() + AppUtils.RootPath;
 
     public static void DialogMessage(AppCompatActivity mActivity,String Str_Msg)
     {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(mActivity);
-        builder1.setMessage(Str_Msg);
-        builder1.setCancelable(true);
-        builder1.setPositiveButton(R.string.lbl_ok,
-                new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setMessage(Str_Msg)
+                .setCancelable(false)
+                .setPositiveButton(mActivity.getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //do things
                         dialog.cancel();
                     }
                 });
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public static Object fromJson(String jsonString, Type type)
@@ -185,21 +191,30 @@ public class AppUtils extends Dialog
         super(context);
     }
 
-    public static void showProgressDialog(Context context)
+    public static void showProgressDialog(AppCompatActivity mActivity)
     {
-        mPrograssDialog = new ProgressDialog(context);
-        mPrograssDialog.setProgressStyle(mPrograssDialog.THEME_DEVICE_DEFAULT_LIGHT);
-        mPrograssDialog.setMessage(context.getString(R.string.lbl_loading));
-        mPrograssDialog.setCancelable(true);
-        if(!mPrograssDialog.isShowing())
-        {
-            mPrograssDialog.show();
-        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        // Get the layout inflater
+        LayoutInflater inflater = mActivity.getLayoutInflater();
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+        View view = inflater.inflate(R.layout.view_loading_message, null);
+        TextView text_view_message= (TextView) view.findViewById(R.id.text_view_message);
+        text_view_message.setTypeface(font.getHelveticaRegular());
+        text_view_message.setText(mActivity.getString(R.string.lbl_loading));
+        builder.setView(view);
+        builder.setCancelable(false);
+        alert = builder.create();
+        alert.show();
     }
 
     public static void hideProgressDialog()
     {
-        mPrograssDialog.hide();
+        if(alert!=null)
+        {
+            alert.dismiss();
+            alert.cancel();
+        }
     }
 
     public static LinearLayout.LayoutParams getMatchParentParams()

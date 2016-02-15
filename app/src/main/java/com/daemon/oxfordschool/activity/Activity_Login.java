@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.daemon.oxfordschool.MyApplication;
+import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.asyncprocess.UserLogin_Process;
 import com.daemon.oxfordschool.listeners.LoginListener;
@@ -32,6 +35,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
     public static String TAG = "";
 
     boolean isAllEnteryFilled = true;
+    Font font= MyApplication.getInstance().getFontInstance();
     String username, password;
     String Url = ApiConstants.LOGIN_URL;
     Button button_login;
@@ -61,6 +65,10 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
 
         et_username.addTextChangedListener(new MyTextWatcher(et_username));
         et_password.addTextChangedListener(new MyTextWatcher(et_password));
+
+        et_username.setTypeface(font.getHelveticaRegular());
+        et_password.setTypeface(font.getHelveticaRegular());
+        button_login.setTypeface(font.getHelveticaRegular());
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -117,6 +125,8 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         TAG="onLoginSuccess";
         Log.d(MODULE, TAG);
         AppUtils.hideProgressDialog();
+        et_username.setText("");
+        et_password.setText("");
         Intent intent=new Intent(this,MainActivity.class);
         startActivity(intent);
     }
