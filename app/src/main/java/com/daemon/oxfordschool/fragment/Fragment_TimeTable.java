@@ -5,53 +5,32 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerTabStrip;
-import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.adapter.ExamResultAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.adapter.TimeTablePagerAdapter;
-import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
-import com.daemon.oxfordschool.asyncprocess.GetExamResult;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.asyncprocess.GetTimeTable;
 import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
-import com.daemon.oxfordschool.classes.CExam;
-import com.daemon.oxfordschool.classes.CResult;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.TimeTable;
 import com.daemon.oxfordschool.classes.User;
-import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.ExamResultListener;
-import com.daemon.oxfordschool.listeners.ExamTypeListListener;
-import com.daemon.oxfordschool.listeners.Exam_Result_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
 import com.daemon.oxfordschool.listeners.SubjectListListener;
 import com.daemon.oxfordschool.listeners.TimeTableListener;
 import com.daemon.oxfordschool.response.CommonList_Response;
-import com.daemon.oxfordschool.response.ExamList_Response;
-import com.daemon.oxfordschool.response.ExamResult_Response;
 import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
 
@@ -59,10 +38,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import it.neokree.materialtabs.MaterialTab;
-import it.neokree.materialtabs.MaterialTabHost;
-import it.neokree.materialtabs.MaterialTabListener;
 
 public class Fragment_TimeTable extends Fragment implements StudentsListListener,TimeTableListener,SubjectListListener
 {

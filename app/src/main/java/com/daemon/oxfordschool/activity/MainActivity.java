@@ -42,6 +42,7 @@ import com.daemon.oxfordschool.fragment.Fragment_HomeWork_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Student;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule_Student;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Student;
+import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Student;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -203,6 +204,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 if(mUser.getUserType().equals(ApiConstants.STAFF))
                 {
                     fragment = new Fragment_PaymentDetail_Staff();
+                    title = getString(R.string.lbl_fees_detail);
+                }
+                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+                {
+                    fragment = new Fragment_PaymentDetail_Student();
                     title = getString(R.string.lbl_fees_detail);
                 }
                 else
