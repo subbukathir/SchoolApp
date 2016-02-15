@@ -77,7 +77,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
 
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
-    String Str_Attendance_Url = ApiConstants.ATTENDANCE_URL;
+    String Str_Attendance_Url = ApiConstants.ATTENDANCE_BY_STUDENT_URL;
 
 
     public Fragment_Attendance()
@@ -490,8 +490,6 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         try
         {
             obj.put("Month",mMonth);
-            obj.put("ClassId",mSelectedUser.getClassId());
-            obj.put("SectionId", mSelectedUser.getSectionId());
             obj.put("StudentId", mSelectedUser.getStudentId());
         }
         catch (JSONException ex)

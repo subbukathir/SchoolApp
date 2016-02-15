@@ -76,7 +76,7 @@ public class Fragment_Attendance_Student extends Fragment implements ViewStudent
 
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_Url = ApiConstants.STUDENT_PROFILE_URL;
-    String Str_Attendance_Url = ApiConstants.ATTENDANCE_URL;
+    String Str_Attendance_Url = ApiConstants.ATTENDANCE_BY_STUDENT_URL;
 
 
     public Fragment_Attendance_Student()
@@ -411,8 +411,6 @@ public class Fragment_Attendance_Student extends Fragment implements ViewStudent
         try
         {
             obj.put("Month",mMonth);
-            obj.put("ClassId",mStudent.getClassId());
-            obj.put("SectionId", mStudent.getSectionId());
             obj.put("StudentId", mStudent.getStudentId());
         }
         catch (JSONException ex)
@@ -422,7 +420,6 @@ public class Fragment_Attendance_Student extends Fragment implements ViewStudent
         Log.d(MODULE, TAG + " obj : " + obj.toString());
         return obj;
     }
-
 
     public void getStudentProfile()
     {
