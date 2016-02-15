@@ -28,10 +28,13 @@ import com.daemon.oxfordschool.fragment.Fragment_Exam_Result_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Exam_Schedule_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork_Staff;
+import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail;
+import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
 import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
+import com.daemon.oxfordschool.fragment.Fragment_Student_View_Profile;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Staff;
 import com.google.gson.reflect.TypeToken;
@@ -107,6 +110,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     fragment = new Fragment_StudentList();
                     title = getString(R.string.lbl_students);
                 }
+                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+                {
+                    fragment = new Fragment_Student_View_Profile();
+                    title = getString(R.string.lbl_students);
+                }
                 else
                 {
                     fragment = new Fragment_StudentProfile();
@@ -163,6 +171,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 {
                     fragment = new Fragment_ExamResult();
                     title = getString(R.string.lbl_exam_result);
+                }
+                break;
+            case 7:
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
+                    fragment = new Fragment_PaymentDetail_Staff();
+                    title = getString(R.string.lbl_fees_detail);
+                }
+                else
+                {
+                    fragment = new Fragment_PaymentDetail();
+                    title = getString(R.string.lbl_fees_detail);
                 }
                 break;
             case 8:

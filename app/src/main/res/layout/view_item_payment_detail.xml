@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- List Values Starts -->
+
+    <LinearLayout
+        style="@style/match_wrap_style"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/space_layout_margin">
+
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/text_view_event_list_item"
+            android:gravity="center"
+            android:text="@string/lbl_name"
+            android:layout_weight="0.6"
+            android:textColor="@color/color_black" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            style="@style/text_view_event_list_item"
+            android:gravity="center"
+            android:text="@string/lbl_status"
+            android:textColor="@color/color_black" />
+
+    </LinearLayout>
+
+    <!-- List Values  Ends -->
+
+
+</LinearLayout>
+

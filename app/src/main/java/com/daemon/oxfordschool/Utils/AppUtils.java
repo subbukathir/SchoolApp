@@ -40,6 +40,7 @@ public class AppUtils extends Dialog
 
     public static String SHARED_LOGIN_PROFILE = "Shared_Login";
     public static String SHARED_STUDENT_LIST = "Shared_Student_List";
+    public static String SHARED_STUDENT_PROFILE= "Shared_Student_Profile";
     public static String LOGIN_SHARED = "Shared_Login";
     public static String SHARED_SUBJECT_LIST = "Shared_Subject_List";
     public static String SHARED_SECTION_LIST = "Shared_Section_List";
@@ -52,6 +53,9 @@ public class AppUtils extends Dialog
     public static String SHARED_ATTENTANCE = "Shared_Attendance";
     public static String SHARED_TIMETABLE = "Shared_TimeTable";
     public static String SHARED_ADDHOMEWORK = "Shared_Add_HomeWork";
+    public static String SHARED_FEES_DETAIL = "Shared_Fees_Detail";
+    public static String SHARED_PAYMENT_DETAIL = "Shared_Payment_Detail";
+    public static String SHARED_TERM_LIST= "Shared_Term_List";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
 
     public static int MODE_UPDATE=1;
