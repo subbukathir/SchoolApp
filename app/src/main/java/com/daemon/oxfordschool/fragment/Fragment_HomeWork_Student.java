@@ -47,6 +47,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -172,7 +173,7 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
             btn_select_date.setOnClickListener(_OnClickListener);
-            btn_select_date.setText(Str_Date);
+            btn_select_date.setText(ConvertedDate());
             StringBuilder Str_EmptyMessage = new StringBuilder();
             Str_EmptyMessage.append(getString(R.string.lbl_no_homework)).append(" ");
             Str_EmptyMessage.append(Str_Date);
@@ -462,5 +463,23 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
 
         return obj;
     }
-
+    public String ConvertedDate()
+    {
+        TAG = "ConvertedDate";
+        Log.d(MODULE,TAG);
+        String Str_ReturnValue="";
+        try
+        {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat format1 = new SimpleDateFormat("E, MMM dd yyyy");
+            Date date;
+            date = sdf1.parse(Str_Date);
+            Str_ReturnValue = format1.format(date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return Str_ReturnValue;
+    }
 }
