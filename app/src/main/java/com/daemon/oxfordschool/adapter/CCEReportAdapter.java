@@ -19,7 +19,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.classes.CceResult;
+import com.daemon.oxfordschool.classes.CCEResult;
 import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
 
 import java.text.DateFormat;
@@ -28,12 +28,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class CceReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
-    private static ArrayList<CceResult> mListEvents = new ArrayList<CceResult>();
+
+    private static ArrayList<CCEResult> mListCCEReport= new ArrayList<CCEResult>();
     Fragment mFragment;
     FragmentManager mManager;
     static FragmentActivity mActivity;
@@ -42,26 +43,24 @@ public class CceReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static Font font= MyApplication.getInstance().getFontInstance();
     static Typeface mTypeFace;
     private boolean isFooterEnabled = false;
-    int mMargin=0;float mDensity=0;
     Event_List_Item_Click_Listener mItemCallBack;
+    int mMargin=0;float mDensity=0;
 
-    private static String MODULE = "EventsAdapter";
+    private static String MODULE = "CCEReportAdapter";
     private static String TAG="";
     LinearLayout.LayoutParams params;
 
-    public CceReportAdapter(ArrayList<CceResult> mListEvents, Fragment mFragment)
+    public CCEReportAdapter(ArrayList<CCEResult> mListCCEReport, Fragment mFragment)
     {
         TAG = "EventsAdapter";
         Log.d(MODULE, TAG);
-        Log.d(MODULE, TAG + "mListEvents Size: " + mListEvents.size());
-        this.mListEvents = mListEvents;
+        Log.d(MODULE, TAG + "mListEvents Size: " + mListCCEReport.size());
+        this.mListCCEReport = mListCCEReport;
         this.mFragment = mFragment;
         this.mActivity = (FragmentActivity)mFragment.getActivity();
         mManager = mActivity.getSupportFragmentManager();
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         mTypeFace = font.getHelveticaRegular();
-        mDensity =  mActivity.getResources().getDisplayMetrics().density;
-        mMargin = (int) (mActivity.getResources().getDimension(R.dimen.space_layout_margin) / mDensity);
         mItemCallBack = (Event_List_Item_Click_Listener) mFragment;
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -78,51 +77,13 @@ public class CceReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             if(mHolder instanceof Event_ListHolders)
             {
-                Log.d(MODULE, TAG + "mHolder is instance of Event_ListHolders");
+                Log.d(MODULE, TAG + "mHolder is instance of cce_reportholders");
                 Event_ListHolders holder = (Event_ListHolders) mHolder;
-                final CEvents mEvent = mListEvents.get(position);
+                final CCEResult mCCEResult = mListCCEReport.get(position);
 
-                Log.d(MODULE, TAG + " mEvent Name : " + mEvent.getName());
-                Log.d(MODULE, TAG + " mEvent Description : " + mEvent.getDescription());
-                Log.d(MODULE, TAG + " mEvent OrganizerId : " +  mEvent.getOrganizerId());
-                Log.d(MODULE, TAG + " mEvent StartDate : " + mEvent.getStartDate());
-                Log.d(MODULE, TAG + " mEvent EndDate : " + mEvent.getEndDate());
-                Log.d(MODULE, TAG + " mEvent Organizer First Name : " + mEvent.getOrganizer_First_Name());
-                Log.d(MODULE, TAG + " mEvent Organizer Last Name : " + mEvent.getOrganizer_Last_Name());
+                Log.d(MODULE, TAG + " Subject Name : " + mCCEResult.getSubjectName());
 
-                holder.tv_event_name.setText(mEvent.getName());
-                StringBuilder Str_OrganizerName = new StringBuilder();
-                Str_OrganizerName.append(mActivity.getString(R.string.lbl_organizer)).append(" : ");
-                Str_OrganizerName.append(mEvent.getOrganizer_First_Name()).append(" ");
-                Str_OrganizerName.append(mEvent.getOrganizer_Last_Name());
-                holder.tv_event_organizer.setText(Str_OrganizerName.toString());
-                holder.tv_event_organizer.setLayoutParams(params);
-
-                String Str_Sdate = mEvent.getStartDate();
-                String Str_Edate = mEvent.getEndDate();
-
-                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                DateFormat format1 = new SimpleDateFormat("E, MMM dd yy HH:mm a");
-
-                Date Sdate, Edate;
-                try {
-                    Sdate = sdf1.parse(Str_Sdate);
-                    Edate = sdf1.parse(Str_Edate);
-                    String str_sdate = format1.format(Sdate);
-                    String str_edate = format1.format(Edate);
-                    Log.d(MODULE, TAG + "start date" + str_sdate);
-
-                    StringBuilder Str_StartDate = new StringBuilder();
-                    Str_StartDate.append(mActivity.getString(R.string.lbl_starts_on)).append(" : ");
-                    Str_StartDate.append(str_sdate);
-                    holder.tv_event_start_date.setText(Str_StartDate.toString());
-                    holder.tv_event_end_date.setText(str_edate);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
+                holder.tv_subject_name.setText(mCCEResult.getSubjectName());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -166,7 +127,7 @@ public class CceReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         RecyclerView.ViewHolder mHolder=null;
         if(viewType == VIEW_ITEM)
         {
-            View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_event,parent,false);
+            View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_cce_reports,parent,false);
             mHolder = new Event_ListHolders(layoutView);
         }
         else if(viewType == VIEW_PROG)
@@ -180,13 +141,13 @@ public class CceReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount()
     {
-        return  (isFooterEnabled) ? mListEvents.size() + 1 : mListEvents.size();
+        return  (isFooterEnabled) ? mListCCEReport.size() + 1 : mListCCEReport.size();
     }
 
     @Override
     public int getItemViewType(int position)
     {
-        return (isFooterEnabled && position >= mListEvents.size() ) ? VIEW_PROG : VIEW_ITEM;
+        return (isFooterEnabled && position >= mListCCEReport.size() ) ? VIEW_PROG : VIEW_ITEM;
     }
 
     /**
@@ -202,8 +163,7 @@ public class CceReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public static class Event_ListHolders extends RecyclerView.ViewHolder
     {
         //Declaring parent view items
-        public TextView  tv_event_name,tv_event_start_date,tv_event_end_date,tv_event_organizer;
-        public ImageView image_view;
+        public TextView  tv_subject_name;
         public View itemView;
 
 
@@ -213,10 +173,8 @@ public class CceReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             try
             {
                 this.itemView = itemView;
-                tv_event_name = (TextView) itemView.findViewById(R.id.tv_event_name);
-                tv_event_start_date = (TextView) itemView.findViewById(R.id.tv_event_start_date);
-                tv_event_end_date = (TextView) itemView.findViewById(R.id.tv_event_end_date);
-                tv_event_organizer = (TextView) itemView.findViewById(R.id.tv_event_organizer);
+                tv_subject_name = (TextView) itemView.findViewById(R.id.tv_subject_name);
+
                 //Setting properties
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
@@ -237,10 +195,7 @@ public class CceReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {
             try
             {
-                tv_event_name.setTypeface(font.getHelveticaRegular());
-                tv_event_start_date.setTypeface(mTypeFace);
-                tv_event_end_date.setTypeface(mTypeFace);
-                tv_event_organizer.setTypeface(mTypeFace);
+                tv_subject_name.setTypeface(font.getHelveticaRegular());
             }
             catch (Exception ex)
             {
