@@ -3,6 +3,7 @@ package com.daemon.oxfordschool.fragment;
 /**
  * Created by Ravi on 29/07/15.
  */
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,9 +31,11 @@ import com.daemon.oxfordschool.asyncprocess.GetCCE_ExamReport;
 import com.daemon.oxfordschool.asyncprocess.GetExamResult;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.classes.CCEResult;
+import com.daemon.oxfordschool.classes.Result;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
+import com.daemon.oxfordschool.listeners.CCEExam_Report_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.CCE_ExamReport_Listener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
 import com.daemon.oxfordschool.response.CCE_ExamReport_Response;
@@ -43,7 +47,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Fragment_CCE_ExamReport extends Fragment implements StudentsListListener,CCE_ExamReport_Listener
+public class Fragment_CCE_ExamReport extends Fragment implements StudentsListListener,CCE_ExamReport_Listener,
+        CCEExam_Report_Item_Click_Listener
 {
 
     public static String MODULE = "Fragment_CCE_ExamReport";
@@ -51,7 +56,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
 
     TextView text_view_empty,tv_lbl_subject_name,tv_lbl_average,tv_lbl_grade;
     RelativeLayout layout_empty;
-    int mSelectedPosition;
+    int mSelectedPosition,mSelectedRowPosition;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
 
@@ -70,6 +75,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
     String Str_CCEExamReport_Url = ApiConstants.CCE_EXAM_REPORT_URL;
+    private AlertDialog alert;
 
     public Fragment_CCE_ExamReport()
     {
@@ -311,6 +317,21 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         }
     }
 
+    @Override
+    public void onReportItemClicked(int position) {
+        TAG = "onReportItemClicked";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mSelectedRowPosition=position;
+            showDetail();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     public void showStudentsList()
     {
         TAG = "showStudentsList";
@@ -423,5 +444,44 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         return obj;
     }
 
+    public void showDetail()
+    {
+        TAG = "showDetail";
+        Log.d(MODULE, TAG);
+
+        try
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+            // Get the layout inflater
+            LayoutInflater inflater = mActivity.getLayoutInflater();
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            View view = inflater.inflate(R.layout.view_item_cce_reports_row, null);
+            ArrayList<Result> mList = mListCCEReport.get(mSelectedRowPosition).getResult();
+            LinearLayout ll_mark_details = (LinearLayout) view.findViewById(R.id.ll_mark_details);
+            ll_mark_details.removeAllViews();
+            for(int i=0;i<mList.size();i++)
+            {
+                View view_inner = inflater.inflate(R.layout.view_item_cce_reports_inner_row, null);
+                TextView tv_exam_name = (TextView) view_inner.findViewById(R.id.tv_exam_name);
+                TextView tv_marks = (TextView) view_inner.findViewById(R.id.tv_marks);
+                tv_exam_name.setTypeface(font.getHelveticaRegular());
+                tv_marks.setTypeface(font.getHelveticaRegular());
+                tv_exam_name.setText(mList.get(i).getExamName());
+                tv_marks.setText(mList.get(i).getObtainedMarks());
+                ll_mark_details.addView(view_inner);
+            }
+            builder.setView(view);
+            builder.setTitle(mListCCEReport.get(mSelectedRowPosition).getSubjectName());
+            builder.setCancelable(true);
+            alert = builder.create();
+            alert.show();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
 
 }

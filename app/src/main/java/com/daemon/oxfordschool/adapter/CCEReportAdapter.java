@@ -21,6 +21,7 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.classes.CCEResult;
 import com.daemon.oxfordschool.classes.Result;
+import com.daemon.oxfordschool.listeners.CCEExam_Report_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
 
 import java.text.DateFormat;
@@ -50,6 +51,7 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static String TAG="";
     LinearLayout.LayoutParams params;
     LayoutInflater inflater;
+    CCEExam_Report_Item_Click_Listener mCallBack;
 
     public CCEReportAdapter(ArrayList<CCEResult> mListCCEReport, Fragment mFragment)
     {
@@ -66,6 +68,7 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         params = new LinearLayout.LayoutParams(width,height,1);
         inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mCallBack = (CCEExam_Report_Item_Click_Listener) mFragment;
     }
 
     @Override
@@ -85,6 +88,12 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 holder.tv_subject_name.setText(mCCEResult.getSubjectName());
                 holder.tv_average.setText(mCCEResult.getAverage());
                 holder.tv_grade.setText(mCCEResult.getGrade());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mCallBack.onReportItemClicked(position);
+                    }
+                });
             }
             else if(mHolder instanceof LoadingMessageHolder)
             {
