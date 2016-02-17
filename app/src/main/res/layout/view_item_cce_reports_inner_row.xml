@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/match_parent_style"
+    android:orientation="horizontal"
+    android:padding="@dimen/space_layout_padding">
+
+    <TextView
+        android:id="@+id/tv_exam_name"
+        style="@style/text_view_label_teacher"
+        android:layout_weight="0.7"/>
+
+    <TextView
+        android:id="@+id/tv_marks"
+        style="@style/text_view_label_teacher"
+        android:gravity="right" />
+
+</LinearLayout>

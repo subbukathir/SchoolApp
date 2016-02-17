@@ -20,6 +20,7 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.classes.CCEResult;
+import com.daemon.oxfordschool.classes.Result;
 import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
 
 import java.text.DateFormat;
@@ -43,12 +44,12 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static Font font= MyApplication.getInstance().getFontInstance();
     static Typeface mTypeFace;
     private boolean isFooterEnabled = false;
-    Event_List_Item_Click_Listener mItemCallBack;
     int mMargin=0;float mDensity=0;
 
     private static String MODULE = "CCEReportAdapter";
     private static String TAG="";
     LinearLayout.LayoutParams params;
+    LayoutInflater inflater;
 
     public CCEReportAdapter(ArrayList<CCEResult> mListCCEReport, Fragment mFragment)
     {
@@ -61,10 +62,10 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mManager = mActivity.getSupportFragmentManager();
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         mTypeFace = font.getHelveticaRegular();
-        mItemCallBack = (Event_List_Item_Click_Listener) mFragment;
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         params = new LinearLayout.LayoutParams(width,height,1);
+        inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -78,28 +79,12 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if(mHolder instanceof CCEReport_ListHolders)
             {
                 Log.d(MODULE, TAG + "mHolder is instance of CCEReport_ListHolders");
-                CCEReport_ListHolders holder = (CCEReport_ListHolders) mHolder;
+                final CCEReport_ListHolders holder = (CCEReport_ListHolders) mHolder;
                 final CCEResult mCCEResult = mListCCEReport.get(position);
-
                 Log.d(MODULE, TAG + " Subject Name : " + mCCEResult.getSubjectName());
-
                 holder.tv_subject_name.setText(mCCEResult.getSubjectName());
-
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try
-                        {
-                            mItemCallBack.onEventListItemClicked(position);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            ex.printStackTrace();
-                        }
-                    }
-                });
-
+                holder.tv_average.setText(mCCEResult.getAverage());
+                holder.tv_grade.setText(mCCEResult.getGrade());
             }
             else if(mHolder instanceof LoadingMessageHolder)
             {
@@ -163,7 +148,8 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public static class CCEReport_ListHolders extends RecyclerView.ViewHolder
     {
         //Declaring parent view items
-        public TextView  tv_subject_name;
+        public TextView  tv_subject_name,tv_average,tv_grade;
+        public LinearLayout ll_marks_detail;
         public View itemView;
 
 
@@ -174,7 +160,9 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             {
                 this.itemView = itemView;
                 tv_subject_name = (TextView) itemView.findViewById(R.id.tv_subject_name);
-
+                tv_average = (TextView) itemView.findViewById(R.id.tv_average);
+                tv_grade = (TextView) itemView.findViewById(R.id.tv_grade);
+                //ll_marks_detail = (LinearLayout) itemView.findViewById(R.id.ll_marks_detail);
                 //Setting properties
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
@@ -196,6 +184,8 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             try
             {
                 tv_subject_name.setTypeface(font.getHelveticaRegular());
+                tv_average.setTypeface(font.getHelveticaRegular());
+                tv_grade.setTypeface(font.getHelveticaRegular());
             }
             catch (Exception ex)
             {
@@ -219,6 +209,21 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             layout_loading_message = (LinearLayout) itemView.findViewById(R.id.layout_loading);
             text_view_loading_message = (TextView) itemView.findViewById(R.id.text_view_message);
             text_view_loading_message.setTypeface(mTypeFace);
+        }
+    }
+
+    public void AddDetail(CCEReport_ListHolders holder,ArrayList<Result> mList)
+    {
+        for(int i=0;i<mList.size();i++)
+        {
+            View view_inner = inflater.inflate(R.layout.view_item_cce_reports_inner_row, null);
+            TextView tv_exam_name = (TextView) view_inner.findViewById(R.id.tv_exam_name);
+            TextView tv_marks = (TextView) view_inner.findViewById(R.id.tv_marks);
+            tv_exam_name.setTypeface(font.getHelveticaRegular());
+            tv_marks.setTypeface(font.getHelveticaRegular());
+            tv_exam_name.setText(mList.get(i).getExamName());
+            tv_marks.setText(mList.get(i).getObtainedMarks());
+            holder.ll_marks_detail.addView(view_inner);
         }
     }
 

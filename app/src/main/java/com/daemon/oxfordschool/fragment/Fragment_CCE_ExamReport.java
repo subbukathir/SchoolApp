@@ -25,6 +25,7 @@ import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.CCEReportAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
+import com.daemon.oxfordschool.asyncprocess.GetCCE_ExamReport;
 import com.daemon.oxfordschool.asyncprocess.GetExamResult;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.classes.CCEResult;
@@ -48,7 +49,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
     public static String MODULE = "Fragment_CCE_ExamReport";
     public static String TAG = "";
 
-    TextView text_view_empty;
+    TextView text_view_empty,tv_lbl_subject_name,tv_lbl_average,tv_lbl_grade;
     RelativeLayout layout_empty;
     int mSelectedPosition;
     RecycleEmptyErrorView recycler_view;
@@ -87,7 +88,6 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
             getStudentsList();
-            new ExamTypeList_Process(mActivity,this).GetExamTypeList();
         }
         catch (Exception ex)
         {
@@ -116,6 +116,9 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_cce_exam_report);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
+            tv_lbl_subject_name = (TextView) view.findViewById(R.id.tv_lbl_subject_name);
+            tv_lbl_average = (TextView) view.findViewById(R.id.tv_lbl_average);
+            tv_lbl_grade = (TextView) view.findViewById(R.id.tv_lbl_grade);
             setProperties();
         }
         catch (Exception ex)
@@ -151,6 +154,10 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
             vp_student.addOnPageChangeListener(_OnPageChangeListener);
+            text_view_empty.setTypeface(font.getHelveticaRegular());
+            tv_lbl_subject_name.setTypeface(font.getHelveticaBold());
+            tv_lbl_average.setTypeface(font.getHelveticaBold());
+            tv_lbl_grade.setTypeface(font.getHelveticaBold());
         }
         catch (Exception ex)
         {
@@ -197,6 +204,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
                 {
                     new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
                 }
+                else  getCCEExamReportFromService();
             }
         }
         catch (Exception ex)
@@ -231,7 +239,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         {
             mSelectedUser = mListStudents.get(mSelectedPosition);
             Str_StudentId = mSelectedUser.getStudentId();
-            new GetExamResult(Str_CCEExamReport_Url,Payload_CCE_Exam_Report(),this).getExamResult();
+            new GetCCE_ExamReport(Str_CCEExamReport_Url,Payload_CCE_Exam_Report(),this).getCCE_ExamReport();
         }
         catch (Exception ex)
         {
@@ -250,6 +258,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             {
                 showStudentsList();
                 mSelectedPosition=0;
+                getCCEExamReportFromService();
             }
         }
         catch (Exception ex)

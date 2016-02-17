@@ -142,6 +142,13 @@
     <string name="lbl_7hour">7 Hour</string>
     <string name="lbl_8hour">8 Hour</string>
 
+    <!-- CCE Report -->
+    <string name="lbl_average">Average</string>
+    <string name="lbl_avg">Avg</string>
+    <string name="lbl_grade">Grade</string>
+
+
+
 
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>
     <string name="lbl_msg_blank_last_name">Please fill out last name</string>
