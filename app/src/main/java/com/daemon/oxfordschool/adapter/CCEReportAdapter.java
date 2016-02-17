@@ -52,9 +52,9 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public CCEReportAdapter(ArrayList<CCEResult> mListCCEReport, Fragment mFragment)
     {
-        TAG = "EventsAdapter";
+        TAG = "CCEReportAdapter";
         Log.d(MODULE, TAG);
-        Log.d(MODULE, TAG + "mListEvents Size: " + mListCCEReport.size());
+        Log.d(MODULE, TAG + "mListCCEReport Size: " + mListCCEReport.size());
         this.mListCCEReport = mListCCEReport;
         this.mFragment = mFragment;
         this.mActivity = (FragmentActivity)mFragment.getActivity();
@@ -75,10 +75,10 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         try
         {
-            if(mHolder instanceof Event_ListHolders)
+            if(mHolder instanceof CCEReport_ListHolders)
             {
-                Log.d(MODULE, TAG + "mHolder is instance of cce_reportholders");
-                Event_ListHolders holder = (Event_ListHolders) mHolder;
+                Log.d(MODULE, TAG + "mHolder is instance of CCEReport_ListHolders");
+                CCEReport_ListHolders holder = (CCEReport_ListHolders) mHolder;
                 final CCEResult mCCEResult = mListCCEReport.get(position);
 
                 Log.d(MODULE, TAG + " Subject Name : " + mCCEResult.getSubjectName());
@@ -128,7 +128,7 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if(viewType == VIEW_ITEM)
         {
             View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_cce_reports,parent,false);
-            mHolder = new Event_ListHolders(layoutView);
+            mHolder = new CCEReport_ListHolders(layoutView);
         }
         else if(viewType == VIEW_PROG)
         {
@@ -160,14 +160,14 @@ public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.isFooterEnabled = isEnabled;
     }
 
-    public static class Event_ListHolders extends RecyclerView.ViewHolder
+    public static class CCEReport_ListHolders extends RecyclerView.ViewHolder
     {
         //Declaring parent view items
         public TextView  tv_subject_name;
         public View itemView;
 
 
-        public Event_ListHolders(View itemView)
+        public CCEReport_ListHolders(View itemView)
         {
             super(itemView);
             try

@@ -21,6 +21,7 @@ import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
+import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
 import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule;
@@ -232,6 +233,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 {
                     fragment = new Fragment_TimeTable();
                     title = getString(R.string.lbl_time_table);
+                }
+                break;
+            case 9:
+                if(mUser.getUserType().equals(ApiConstants.STUDENT) || mUser.getUserType().equals(ApiConstants.PARENT))
+                {
+                    fragment = new Fragment_CCE_ExamReport();
+                    title = getString(R.string.lbl_reports);
                 }
                 break;
             default:

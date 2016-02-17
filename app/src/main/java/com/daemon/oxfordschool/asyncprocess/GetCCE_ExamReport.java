@@ -92,7 +92,7 @@ public class GetCCE_ExamReport
                     if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                     {
                         editor = mPreferences.edit();
-                        editor.putString(AppUtils.SHARED_EXAM_RESULT, response.toString());
+                        editor.putString(AppUtils.SHARED_CCE_EXAM_REPORT, response.toString());
                         editor.commit();
                         mCallBack.onCCEExamReportReceived();
                     }
