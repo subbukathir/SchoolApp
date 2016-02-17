@@ -27,6 +27,7 @@ public class ApiConstants
     public static String TERM_LIST_URL=SERVER_URL + "FeesTypeList.php";
     public static String PAYMENT_DETAIL_URL=SERVER_URL + "GetPaymentDetail.php";
     public static String PAYMENT_DETAIL_STUDENT_URL=SERVER_URL + "GetPaymentDetailByStudentId.php";
+    public static String CCE_EXAM_REPORT_URL=SERVER_URL + "CCE_ExamReport.php";
 
     public static String STUDENT_PROFILE_URL=SERVER_URL + "ViewStudentProfile.php";
 
