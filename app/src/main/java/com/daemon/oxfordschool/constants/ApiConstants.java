@@ -20,12 +20,14 @@ public class ApiConstants
     public static String EXAM_RESULT_URL_STAFF=SERVER_URL + "ExamResult.php";
     public static String HOMEWORK_LIST_URL=SERVER_URL + "HomeWorkList.php";
     public static String ATTENDANCE_URL=SERVER_URL + "Attendance.php";
+    public static String ATTENDANCE_BY_STUDENT_URL=SERVER_URL + "AttendanceByStudentId.php";
     public static String TIME_TABLE_URL=SERVER_URL + "TimeTable.php";
     public static String ADD_ATTENDANCE=SERVER_URL + "UpdateAttendance.php";
     public static String ADD_HOMEWORK_URL=SERVER_URL + "AddHomeWork.php";
     public static String TERM_LIST_URL=SERVER_URL + "FeesTypeList.php";
     public static String PAYMENT_DETAIL_URL=SERVER_URL + "GetPaymentDetail.php";
     public static String PAYMENT_DETAIL_STUDENT_URL=SERVER_URL + "GetPaymentDetailByStudentId.php";
+    public static String CCE_EXAM_REPORT_URL=SERVER_URL + "CCE_ExamReport.php";
 
     public static String STUDENT_PROFILE_URL=SERVER_URL + "ViewStudentProfile.php";
 

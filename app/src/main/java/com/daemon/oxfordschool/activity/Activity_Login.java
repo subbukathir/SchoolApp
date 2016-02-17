@@ -47,43 +47,47 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
     Toolbar mToolbar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        try
+        {
+            setContentView(R.layout.activity_login);
+            TAG = "onCreate";
+            Log.d(MODULE, TAG);
+            mContext = getApplicationContext();
 
-        mContext = getApplicationContext();
-        font= MyApplication.getInstance().getFontInstance();
+            tv_welcome = (TextView) findViewById(R.id.tv_welcome);
+            button_login = (Button) findViewById(R.id.btn_login);
+            et_username = (EditText) findViewById(R.id.et_login_username);
+            et_password = (EditText) findViewById(R.id.et_login_password);
 
-        TAG = "onCreate";
-        Log.d(MODULE, TAG);
+            til_username= (TextInputLayout) findViewById(R.id.til_login_username);
+            til_password= (TextInputLayout) findViewById(R.id.til_login_password);
 
-        tv_welcome = (TextView) this.findViewById(R.id.tv_welcome);
-        button_login = (Button) findViewById(R.id.btn_login);
-        et_username = (EditText) findViewById(R.id.et_login_username);
-        et_password = (EditText) findViewById(R.id.et_login_password);
+            button_login.setOnClickListener(_OnClickListner);
 
-        til_username= (TextInputLayout) findViewById(R.id.til_login_username);
-        til_password= (TextInputLayout) findViewById(R.id.til_login_password);
+            et_username.addTextChangedListener(new MyTextWatcher(et_username));
+            et_password.addTextChangedListener(new MyTextWatcher(et_password));
 
-        button_login.setOnClickListener(_OnClickListner);
+            tv_welcome.setTypeface(font.getHelveticaRegular());
+            et_username.setTypeface(font.getHelveticaRegular());
+            et_password.setTypeface(font.getHelveticaRegular());
+            button_login.setTypeface(font.getHelveticaRegular());
 
-        et_username.addTextChangedListener(new MyTextWatcher(et_username));
-        et_password.addTextChangedListener(new MyTextWatcher(et_password));
-/*
-        tv_welcome.setTypeface(font.getHelveticaRegular());
-        et_username.setTypeface(font.getHelveticaRegular());
-        et_password.setTypeface(font.getHelveticaRegular());
-        button_login.setTypeface(font.getHelveticaRegular());*/
+            mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Login");
 
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Login");
+            et_username.setText("");
+            et_password.setText("daemon");
+        }
+        catch (Exception ex)
+        {
 
-        et_username.setText("");
-        et_password.setText("daemon");
-
+        }
     }
 
     View.OnClickListener _OnClickListner = new View.OnClickListener() {
@@ -156,6 +160,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         }
         return obj;
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -178,7 +183,6 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         }
         return true;
     }
-
 
     private boolean validatePassword() {
         if (et_password.getText().toString().trim().isEmpty()) {

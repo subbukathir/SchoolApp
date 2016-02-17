@@ -83,6 +83,7 @@ public class Fragment_Exam_Schedule_Staff extends Fragment implements ClassListL
     String Str_ExamList_Url = ApiConstants.EXAM_LIST_URL;
     LinearLayout.LayoutParams params;
 
+
     public Fragment_Exam_Schedule_Staff()
     {
         // Required empty public constructor
@@ -101,10 +102,11 @@ public class Fragment_Exam_Schedule_Staff extends Fragment implements ClassListL
             mDensity =  mActivity.getResources().getDisplayMetrics().density;
             mMargin = (int) (mActivity.getResources().getDimension(R.dimen.space_layout_margin)); // mDensity);
             mMarginBottom = (int) (mActivity.getResources().getDimension(R.dimen.space_layout_margin_small)); // mDensity);
-            params.setMargins(mMargin,0,mMargin,mMarginBottom);
+            params.setMargins(mMargin,mMargin ,mMargin,mMarginBottom);
             getProfile();
             getClassList();
             getSectionList();
+            new ExamTypeList_Process(mActivity,Fragment_Exam_Schedule_Staff.this).GetExamTypeList();
         }
         catch (Exception ex)
         {
@@ -181,6 +183,7 @@ public class Fragment_Exam_Schedule_Staff extends Fragment implements ClassListL
         {
             layout_empty.setVisibility(View.GONE);
             layout_section.setVisibility(View.GONE);
+
             tv_lbl_class.setTypeface(font.getHelveticaRegular());
             tv_lbl_section.setTypeface(font.getHelveticaRegular());
 
@@ -252,7 +255,6 @@ public class Fragment_Exam_Schedule_Staff extends Fragment implements ClassListL
                 if (position > 0)
                 {
                     Str_ClassId = mListClass.get(position - 1).getID();
-                    new ExamTypeList_Process(mActivity,Fragment_Exam_Schedule_Staff.this).GetExamTypeList();
                 }
             }
             catch (Exception ex)

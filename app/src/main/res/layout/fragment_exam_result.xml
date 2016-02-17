@@ -14,39 +14,39 @@
 
         <!-- Exam Selection For Result Starts Here -->
 
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:orientation="horizontal">
+
             <LinearLayout
-                style="@style/match_wrap_style"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_select_exam_type"
+                    style="@style/text_view_label"
+                    android:gravity="left"
+                    android:text="@string/lbl_select_exam_type" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="@dimen/space_layout_margin"
+                    android:layout_marginRight="@dimen/space_layout_margin">
 
-                    <TextView
-                        android:id="@+id/tv_select_exam_type"
-                        style="@style/text_view_label"
-                        android:gravity="left"
-                        android:text="@string/lbl_select_exam_type" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/space_layout_margin"
-                        android:layout_marginRight="@dimen/space_layout_margin">
-
-                        <Spinner
-                            android:id="@+id/spinner_exam_type"
-                            style="@style/spinner_style"></Spinner>
-                    </LinearLayout>
+                    <Spinner
+                        android:id="@+id/spinner_exam_type"
+                        style="@style/spinner_style"></Spinner>
                 </LinearLayout>
-
             </LinearLayout>
+
+        </LinearLayout>
 
         <!-- Exam Selection For Result Ends Here -->
 
-       <include layout="@layout/view_exam_result_details" />
+        <include layout="@layout/view_exam_result_details" />
 
     </LinearLayout>
 

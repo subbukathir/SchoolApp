@@ -32,6 +32,7 @@
                 android:src="@drawable/daemonlogo" />
 
             <TextView
+                android:id="@+id/tv_welcome"
                 style="@style/text_view_welcome"
                 android:text="@string/lbl_welcome"
                 android:textStyle="bold" />

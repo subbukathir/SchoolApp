@@ -60,6 +60,7 @@ public class AppUtils extends Dialog
     public static String SHARED_FEES_DETAIL = "Shared_Fees_Detail";
     public static String SHARED_PAYMENT_DETAIL = "Shared_Payment_Detail";
     public static String SHARED_TERM_LIST= "Shared_Term_List";
+    public static String SHARED_CCE_EXAM_REPORT= "Shared_CCE_ExamReport";
     public static final String SHARED_PREFS = "MY_PREFERENCES";
 
     public static int MODE_UPDATE=1;
