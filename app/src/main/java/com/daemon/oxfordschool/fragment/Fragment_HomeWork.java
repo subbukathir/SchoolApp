@@ -47,6 +47,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -169,11 +170,8 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
             recycler_view.setLayoutManager(mLayoutManager);
             vp_student.addOnPageChangeListener(_OnPageChangeListener);
             btn_select_date.setOnClickListener(_OnClickListener);
-            btn_select_date.setText(Str_Date);
-            StringBuilder Str_EmptyMessage = new StringBuilder();
-            Str_EmptyMessage.append(getString(R.string.lbl_no_homework)).append(" ");
-            Str_EmptyMessage.append(Str_Date);
-            text_view_empty.setText(Str_EmptyMessage.toString());
+            btn_select_date.setText(ConvertedDate());
+
         }
         catch (Exception ex)
         {
@@ -306,6 +304,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         Log.d(MODULE, TAG);
         try
         {
+            text_view_empty.setText(Str_Msg);
             showEmptyView();
         }
         catch (Exception ex)
@@ -372,6 +371,10 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
             }
             else
             {
+                StringBuilder Str_EmptyMessage = new StringBuilder();
+                Str_EmptyMessage.append(getString(R.string.lbl_no_homework)).append(" ");
+                Str_EmptyMessage.append(ConvertedDate());
+                text_view_empty.setText(Str_EmptyMessage.toString());
                 showEmptyView();
             }
 
@@ -475,7 +478,29 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
 
     public void populateSetDate(int year, int month, int day) {
         Str_Date = year + "-" + month + "-"+day;
+        btn_select_date.setText(ConvertedDate());
         getHomeWorks(mSelectedPosition,Str_Date);
     }
+
+    public String ConvertedDate()
+    {
+        TAG = "ConvertedDate";
+        Log.d(MODULE,TAG);
+        String Str_ReturnValue="";
+        try
+        {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat format1 = new SimpleDateFormat("E, MMM dd yyyy");
+            Date date;
+            date = sdf1.parse(Str_Date);
+            Str_ReturnValue = format1.format(date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return Str_ReturnValue;
+    }
+
 
 }
