@@ -30,4 +30,7 @@
             android:text="@string/lbl_Result" />
     </LinearLayout>
 
+    <View
+        style="@style/divider_style" />
+
 </LinearLayout>
