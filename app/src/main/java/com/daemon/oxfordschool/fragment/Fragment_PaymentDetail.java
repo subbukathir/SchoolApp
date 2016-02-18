@@ -87,7 +87,7 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
     FeesList_Response feesListResponse;
 
     AppCompatActivity mActivity;
-    String Str_Id,Str_TermFeesId,Str_StudentId="";
+    String Str_Id="",Str_TermFeesId="",Str_StudentId="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
     String Str_TermList_Url = ApiConstants.TERM_LIST_URL;
@@ -267,8 +267,16 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
 
         @Override
         public void onPageSelected(int position) {
-            mSelectedPosition=position;
-            if(mListTermFees.size()>0 && (!Str_TermFeesId.equals("")))getPaymentDetailFromService();
+            try
+            {
+                mSelectedPosition=position;
+                if(mListTermFees.size()>0 && (!Str_TermFeesId.equals("")))getPaymentDetailFromService();
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+
         }
 
         @Override

@@ -80,7 +80,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
     CommonList_Response examListResponse;
 
     AppCompatActivity mActivity;
-    int mSelectedPosition;
+    int mSelectedPosition,mSelectedExamTypePosition;
     String Str_Id="",Str_ExamTypeId="",Str_ClassId="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
@@ -242,6 +242,10 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         @Override
         public void onPageSelected(int position) {
             mSelectedPosition=position;
+            if(mSelectedExamTypePosition>0)
+            {
+                getExamListFromService(mSelectedExamTypePosition);
+            }
         }
 
         @Override
@@ -254,6 +258,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
+            mSelectedExamTypePosition=position;
             Str_ExamTypeId = mListExamType.get(position).getID();
             getExamListFromService(position);
         }

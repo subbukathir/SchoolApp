@@ -44,6 +44,7 @@ import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Fragment_ProfileView extends Fragment implements ImagePickListener,ImageSavingListener
 {
@@ -321,14 +322,24 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             DiskCacheUtils.removeFromCache(Str_ImagePath, ImageLoader.getInstance().getDiskCache());
             imageLoader.displayImage(Str_ImagePath, image_view_profile, options);*/
             String Str_ImagePath = AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
-            Uri uri = Uri.fromFile(new File(Str_ImagePath));
-            image_view_profile.setImageURI(uri);
+            File file = new File(Str_ImagePath);
+            if(file==null) image_view_profile.setImageResource(R.drawable.ic_profile);
+            else
+            {
+                if(file.exists())
+                {
+                    Uri uri = Uri.fromFile(new File(Str_ImagePath));
+                    if(uri!=null) image_view_profile.setImageURI(uri);
+                    else image_view_profile.setImageResource(R.drawable.ic_profile);
+                }
+                else image_view_profile.setImageResource(R.drawable.ic_profile);
+            }
         }
         catch (Exception ex)
         {
+            Log.d(MODULE, TAG + " Exception : " + ex.getMessage());
             ex.printStackTrace();
         }
-
     }
 
     @Override
