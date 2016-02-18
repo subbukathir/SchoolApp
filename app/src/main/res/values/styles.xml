@@ -131,7 +131,9 @@
         <item name="android:textSize">@dimen/lbl_size</item>
         <item name="android:textColor">@color/color_dark_grey</item>
         <item name="android:singleLine">true</item>
-        <item name="android:padding">@dimen/space_layout_padding</item>
+        <item name="android:paddingLeft">@dimen/space_layout_padding</item>
+        <item name="android:paddingRight">@dimen/space_layout_padding</item>
+        <item name="android:paddingBottom">@dimen/space_layout_padding</item>
         <item name="android:layout_margin">@dimen/space_layout_margin_small</item>
         <item name="android:drawablePadding">@dimen/space_layout_padding_small</item>
         <item name="android:gravity">center_vertical</item>

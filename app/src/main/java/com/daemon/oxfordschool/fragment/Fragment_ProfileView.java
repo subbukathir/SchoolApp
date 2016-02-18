@@ -219,7 +219,8 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                dispatchTakePictureIntent();
+                                StartPicking();
+                                //dispatchTakePictureIntent();
                                 break;
                             case 1:
                                 StartPicking();
