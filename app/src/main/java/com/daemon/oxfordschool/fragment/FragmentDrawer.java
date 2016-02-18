@@ -7,6 +7,7 @@ package com.daemon.oxfordschool.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -37,9 +38,12 @@ import com.daemon.oxfordschool.activity.DialogGallery;
 import com.daemon.oxfordschool.adapter.NavigationDrawerAdapter;
 import com.daemon.oxfordschool.asyncprocess.ImageSaving;
 import com.daemon.oxfordschool.classes.Action;
+import com.daemon.oxfordschool.classes.User;
+import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.ImagePickListener;
 import com.daemon.oxfordschool.listeners.ImageSavingListener;
 import com.daemon.oxfordschool.model.NavDrawerItem;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
@@ -50,6 +54,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
 
     private RecyclerView recyclerView;
     public ImageView image_view_profile;
+    SharedPreferences mPreferences;
     public static ActionBarDrawerToggle mDrawerToggle;
     public static DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
@@ -61,25 +66,37 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     FragmentManager mManager;
     private DisplayImageOptions options;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static User mUser;
+    String Str_Id="";
 
     public static String MODULE = "FragmentDrawer";
     public static String TAG="";
 
     public FragmentDrawer()
     {
+        TAG="FragmentDrawer";
+        Log.d(MODULE,TAG);
 
     }
 
     public void setDrawerListener(FragmentDrawerListener listener)
     {
+        TAG="setDrawerListener";
+        Log.d(MODULE,TAG);
+
         this.drawerListener = listener;
     }
 
     public static List<NavDrawerItem> getData()
     {
+        TAG="setDrawerListener";
+        Log.d(MODULE,TAG);
+        int itemCount = 0;
+        if(mUser.getUserType().equals(ApiConstants.STAFF)) itemCount=titles.length-1;
+        else itemCount=titles.length;
         List<NavDrawerItem> data = new ArrayList<>();
         // preparing navigation drawer items
-        for (int i = 0; i < titles.length; i++)
+        for (int i = 0; i <itemCount; i++)
         {
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles[i]);
@@ -97,11 +114,14 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         // drawer labels
         titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
         mActivity = (AppCompatActivity) getActivity();
+        getProfile();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        TAG="onCreateView";
+        Log.d(MODULE,TAG);
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
@@ -131,6 +151,9 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
 
     private void initImageLoader()
     {
+        TAG="initImageLoader";
+        Log.d(MODULE,TAG);
+
         try
         {
             imageLoader = ImageLoader.getInstance();
@@ -152,6 +175,9 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar)
     {
+        TAG="setUp";
+        Log.d(MODULE,TAG);
+
         containerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close)
@@ -367,6 +393,28 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
                });
         builder.show();
 
+    }
+
+    public void getProfile()
+    {
+        TAG = "getProfile";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_LOGIN_PROFILE,"");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if(Str_Json.length()>0)
+            {
+                mUser = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
+                Str_Id = mUser.getID();
+                Log.d(MODULE, TAG + " Str_Id : " + Str_Id);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
 }

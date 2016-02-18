@@ -14,7 +14,7 @@
     <string name="lbl_exam_result">Exam Result</string>
     <string name="lbl_fees_detail">Fees Detail</string>
     <string name="lbl_time_table">Time Table</string>
-    <string name="lbl_reports">Report Details</string>
+    <string name="lbl_reports">CCE Report</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
