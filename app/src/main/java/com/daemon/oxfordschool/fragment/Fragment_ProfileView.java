@@ -41,6 +41,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
+import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 
@@ -219,8 +220,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                StartPicking();
-                                //dispatchTakePictureIntent();
+                                dispatchTakePictureIntent();
                                 break;
                             case 1:
                                 StartPicking();
@@ -251,64 +251,17 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         TAG = "onActivityResult";
-        Log.d(MODULE, TAG);
+        Log.d(MODULE, TAG + " requestCode ::: " + requestCode);
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2)
+        if (requestCode == 101 && resultCode==mActivity.RESULT_OK)
         {
-            if (data != null)
-            {
-                Bundle extras2 = data.getExtras();
-                if (extras2 != null)
-                {
-                    Bitmap photo = extras2.getParcelable("data");
-                    AppUtils.saveImage(photo, mActivity,mUser.getMobile_Number());
-                    SetProfileImage();
-                }
-            }
+            beginCrop(mImageCaptureUri);
         }
-        if (requestCode == 101)
+        else if (requestCode == 10)
         {
-            cropImage();
+            handleCrop(resultCode, data);
         }
-        if (requestCode == 102)
-        {
-            try
-            {
-                if(data!=null)
-                {
-                    if(data.getExtras()!=null)
-                    {
-                        Bitmap photo = (Bitmap) data.getExtras().get("data");
-                        AppUtils.saveImage(photo, mActivity,mUser.getMobile_Number());
-                        image_view_profile.setImageBitmap(photo);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-    }
 
-    private void cropImage()
-    {
-        try
-        {
-            Intent intent = new Intent("com.android.camera.action.CROP");
-            intent.setDataAndType(mImageCaptureUri, "image/*");
-            intent.putExtra("outputX", 600);
-            intent.putExtra("outputY", 600);
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("scale", true);
-            intent.putExtra("return-data", true);
-            startActivityForResult(intent, 102);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
     }
 
     private void StartPicking()
@@ -363,10 +316,13 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
 
         try
         {
-            String Str_ImagePath ="file://" + AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
+            /*String Str_ImagePath ="file://" + AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
             MemoryCacheUtils.removeFromCache(Str_ImagePath, ImageLoader.getInstance().getMemoryCache());
             DiskCacheUtils.removeFromCache(Str_ImagePath, ImageLoader.getInstance().getDiskCache());
-            imageLoader.displayImage(Str_ImagePath, image_view_profile, options);
+            imageLoader.displayImage(Str_ImagePath, image_view_profile, options);*/
+            String Str_ImagePath = AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
+            Uri uri = Uri.fromFile(new File(Str_ImagePath));
+            image_view_profile.setImageURI(uri);
         }
         catch (Exception ex)
         {
@@ -384,8 +340,12 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         Log.d(MODULE,TAG + " Single Path : " + Str_Path);
         try
         {
-            String Str_ImagePath = "file://" + Str_Path;
-            new ImageSaving(mActivity,this,Str_ImagePath,mUser.getMobile_Number()).execute();
+            //String Str_ImagePath = "file://" + Str_Path;
+            String Str_ImagePath = Str_Path;
+            Uri uri = Uri.fromFile(new File(Str_ImagePath));
+            Log.d(MODULE, TAG + " Uri - " + uri);
+            beginCrop(uri);
+            //new ImageSaving(mActivity,this,Str_ImagePath,mUser.getMobile_Number()).execute();
         }
         catch (Exception ex)
         {
@@ -409,4 +369,26 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         AppUtils.DialogMessage(mActivity,"Cannot Save");
     }
 
+    private void beginCrop(Uri source)
+    {
+        //String Str_ImagePath ="file://" + AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
+        String Str_ImagePath = AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
+        Uri destination = Uri.fromFile(new File(Str_ImagePath));
+        Crop.of(source, destination).withMaxSize(640,420).start(mActivity, this, 10);
+    }
+
+    private void handleCrop(int resultCode, Intent result)
+    {
+        if (resultCode == getActivity().RESULT_OK) {
+            try {
+                image_view_profile.setImageDrawable(null);
+                SetProfileImage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Log.d(TAG,MODULE + ":::" + Crop.getError(result).getMessage());
+        }
+    }
 }

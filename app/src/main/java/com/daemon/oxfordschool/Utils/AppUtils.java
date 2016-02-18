@@ -112,8 +112,8 @@ public class AppUtils extends Dialog
 
     public static DisplayImageOptions getOptions() {
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .displayer(new RoundedBitmapDisplayer(0)).cacheInMemory(true)
-                .cacheOnDisk(true).imageScaleType(ImageScaleType.EXACTLY)
+                .displayer(new SimpleBitmapDisplayer()).cacheInMemory(true)
+                .cacheOnDisk(true).imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .showImageOnLoading(R.drawable.ic_profile)
                 .showImageForEmptyUri(R.drawable.ic_profile)
