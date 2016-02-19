@@ -84,7 +84,8 @@ public class AddHomeWork
                         editor = mPreferences.edit();
                         editor.putString(AppUtils.SHARED_ADDHOMEWORK, response.toString());
                         editor.commit();
-                        mCallBack.onAddHomeWorkReceived();
+                        Str_Msg = response.getString("message");
+                        mCallBack.onAddHomeWorkReceived(Str_Msg);
                     }
                     else
                     {
