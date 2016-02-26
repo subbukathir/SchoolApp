@@ -11,6 +11,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.Utils.LruBitmapCache;
+import com.daemon.oxfordschool.helper.MyPreferenceManager;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -29,7 +30,7 @@ public class MyApplication extends Application {
     private static MyApplication mInstance;
 
     private Font font;
-
+    private MyPreferenceManager pref;
     private ImageLoader mImageLoader;
 
     @Override
@@ -62,6 +63,14 @@ public class MyApplication extends Application {
 
     public static synchronized MyApplication getInstance() {
         return mInstance;
+    }
+
+    public MyPreferenceManager getPrefManager() {
+        if (pref == null) {
+            pref = new MyPreferenceManager(this);
+        }
+
+        return pref;
     }
 
     public RequestQueue getRequestQueue() {

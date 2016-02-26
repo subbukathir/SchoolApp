@@ -1,22 +1,30 @@
 package com.daemon.oxfordschool.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.daemon.oxfordschool.Config;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
+import com.daemon.oxfordschool.asyncprocess.RegisterDevice;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
@@ -32,6 +40,7 @@ import com.daemon.oxfordschool.fragment.Fragment_HomeWork_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
+import com.daemon.oxfordschool.fragment.Fragment_School_Profile;
 import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
@@ -45,23 +54,39 @@ import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule_Student;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Student;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Student;
 
+import com.daemon.oxfordschool.gcm.GcmIntentService;
+import com.daemon.oxfordschool.listeners.RegistrationListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.reflect.TypeToken;
 
-public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener,
+        RegistrationListener
+{
 
     private static final String MODULE ="MainActivity" ;
-    private static String TAG = MainActivity.class.getSimpleName();
+    private static String TAG = "";
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     User mUser;
     SharedPreferences mPreferences;
-    String Str_Id="";
+    String Str_Id="",Str_DeviceId="",Str_Token="",Str_Url="";
+
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private static String[] titles = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TAG = "onCreate";
+        Log.d(MODULE,TAG);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -74,184 +99,249 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
         // display the first navigation drawer view on app launch
-        displayView(0);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+        titles = this.getResources().getStringArray(R.array.nav_drawer_labels);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
+        mRegistrationBroadcastReceiver = new BroadcastReceiver()
         {
-            case R.id.action_settings:
-                 return true;
-            case android.R.id.home:
-                 FragmentDrawer.mDrawerLayout.openDrawer(Gravity.LEFT);
-                 return false;
-            default:
-                break;
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                TAG = "onReceive";
+                Log.d(MODULE,TAG);
+                try
+                {
+                    // checking for type intent filter
+                    if (intent.getAction().equals(Config.REGISTRATION_COMPLETE))
+                    {
+                        TAG = "REGISTRATION_COMPLETE";
+                        Log.d(MODULE,TAG);
+                        String token = intent.getStringExtra("token");
+                        Str_Token = token;
+                        sendRegistrationToServer();
+                    }
+                    else if (intent.getAction().equals(Config.SENT_TOKEN_TO_SERVER))
+                    {
+                        // gcm registration id is stored in our server's MySQL
+                        TAG = "SENT_TOKEN_TO_SERVER";
+                        Log.d(MODULE,TAG);
+                    }
+                    else if (intent.getAction().equals(Config.PUSH_NOTIFICATION))
+                    {
+                        // new push notification is received
+                        TAG = "PUSH_NOTIFICATION";
+                        Log.d(MODULE,TAG);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+        };
+
+        if (checkPlayServices())
+        {
+            registerGCM();
         }
-        return super.onOptionsItemSelected(item);
+
     }
 
     @Override
-    public void onDrawerItemSelected(View view, int position) {
-        displayView(position);
+    protected void onResume()
+    {
+        super.onResume();
+        TAG="onResume";
+        Log.d(MODULE, TAG);
+        // register GCM registration complete receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(Config.REGISTRATION_COMPLETE));
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(Config.PUSH_NOTIFICATION));
     }
 
-    private void displayView(int position) {
+    @Override
+    protected void onPause()
+    {
+        TAG="onPause";
+        Log.d(MODULE, TAG);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
+    @Override
+    public void onDrawerItemSelected(View view, int position)
+    {
+        TAG = "onDrawerItemSelected";
+        Log.d(MODULE,TAG);
+        displayView(titles[position]);
+    }
+
+    private void displayView(String navItem) {
+
+        TAG = "displayView";
+        Log.d(MODULE,TAG);
+
         Fragment fragment = null;
         String title = getString(R.string.app_name);
-        switch (position) {
-            case 0:
-                fragment = new Fragment_ProfileView();
-                title = getString(R.string.lbl_profile);
-                break;
-            case 1:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_StudentList();
-                    title = getString(R.string.lbl_students);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_Student_View_Profile();
-                    title = getString(R.string.lbl_students);
-                }
-                else
-                {
-                    fragment = new Fragment_StudentProfile();
-                    title = getString(R.string.lbl_students);
-                }
-                break;
-            case 2:
-                fragment = new Fragment_Events();
-                title = getString(R.string.lbl_events);
-                break;
-            case 3:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_HomeWork_Staff();
-                    title = getString(R.string.lbl_homework);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_HomeWork_Student();
-                    title = getString(R.string.lbl_homework);
-                }
-                else
-                {
-                    fragment = new Fragment_HomeWork();
-                    title = getString(R.string.lbl_homework);
-                }
-                break;
-            case 4:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_Attendance_Staff();
-                    title = getString(R.string.lbl_attendance);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_Attendance_Student();
-                    title = getString(R.string.lbl_attendance);
-                }
-                else
-                {
-                    fragment = new Fragment_Attendance();
-                    title = getString(R.string.lbl_attendance);
-                }
-                break;
-            case 5:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_Exam_Schedule_Staff();
-                    title = getString(R.string.lbl_exam_schedule);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_ExamSchedule_Student();
-                    title = getString(R.string.lbl_exam_schedule);
-                }
-                else
-                {
-                    fragment = new Fragment_ExamSchedule();
-                    title = getString(R.string.lbl_exam_schedule);
-                }
-                break;
-            case 6:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_Exam_Result_Staff();
-                    title = getString(R.string.lbl_exam_result);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_ExamResult_Student();
-                    title = getString(R.string.lbl_exam_result);
-                }
-                else
-                {
-                    fragment = new Fragment_ExamResult();
-                    title = getString(R.string.lbl_exam_result);
-                }
-                break;
-            case 7:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_PaymentDetail_Staff();
-                    title = getString(R.string.lbl_fees_detail);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_PaymentDetail_Student();
-                    title = getString(R.string.lbl_fees_detail);
-                }
-                else
-                {
-                    fragment = new Fragment_PaymentDetail();
-                    title = getString(R.string.lbl_fees_detail);
-                }
-                break;
-            case 8:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_TimeTable_Staff();
-                    title = getString(R.string.lbl_time_table);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_TimeTable_Student();
-                    title = getString(R.string.lbl_time_table);
-                }
-                else
-                {
-                    fragment = new Fragment_TimeTable();
-                    title = getString(R.string.lbl_time_table);
-                }
-                break;
-            case 9:
-                if(mUser.getUserType().equals(ApiConstants.STUDENT) || mUser.getUserType().equals(ApiConstants.PARENT))
-                {
-                    fragment = new Fragment_CCE_ExamReport();
-                    title = getString(R.string.lbl_reports);
-                }
-                break;
-            default:
-                break;
+
+        if(getString(R.string.lbl_about_us).equals(navItem))
+        {
+            fragment = new Fragment_School_Profile();
+            title = getString(R.string.lbl_about_us);
+        }
+        else if(getString(R.string.lbl_profile).equals(navItem))
+        {
+            fragment = new Fragment_ProfileView();
+            title = getString(R.string.lbl_profile);
         }
 
-        if (fragment != null) {
+        else if(getString(R.string.lbl_student_profile).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_StudentList();
+                title = getString(R.string.lbl_students);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_Student_View_Profile();
+                title = getString(R.string.lbl_students);
+            }
+            else
+            {
+                fragment = new Fragment_StudentProfile();
+                title = getString(R.string.lbl_students);
+            }
+        }
+        else if(getString(R.string.lbl_events).equals(navItem))
+        {
+            fragment = new Fragment_Events();
+            title = getString(R.string.lbl_events);
+        }
+        else if(getString(R.string.lbl_homework).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_HomeWork_Staff();
+                title = getString(R.string.lbl_homework);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_HomeWork_Student();
+                title = getString(R.string.lbl_homework);
+            }
+            else
+            {
+                fragment = new Fragment_HomeWork();
+                title = getString(R.string.lbl_homework);
+            }
+        }
+        else if(getString(R.string.lbl_attendance).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Attendance_Staff();
+                title = getString(R.string.lbl_attendance);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_Attendance_Student();
+                title = getString(R.string.lbl_attendance);
+            }
+            else
+            {
+                fragment = new Fragment_Attendance();
+                title = getString(R.string.lbl_attendance);
+            }
+        }
+        else if(getString(R.string.lbl_exam_schedule).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Exam_Schedule_Staff();
+                title = getString(R.string.lbl_exam_schedule);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_ExamSchedule_Student();
+                title = getString(R.string.lbl_exam_schedule);
+            }
+            else
+            {
+                fragment = new Fragment_ExamSchedule();
+                title = getString(R.string.lbl_exam_schedule);
+            }
+        }
+        else if(getString(R.string.lbl_exam_result).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Exam_Result_Staff();
+                title = getString(R.string.lbl_exam_result);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_ExamResult_Student();
+                title = getString(R.string.lbl_exam_result);
+            }
+            else
+            {
+                fragment = new Fragment_ExamResult();
+                title = getString(R.string.lbl_exam_result);
+            }
+        }
+        else if(getString(R.string.lbl_fees_detail).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_PaymentDetail_Staff();
+                title = getString(R.string.lbl_fees_detail);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_PaymentDetail_Student();
+                title = getString(R.string.lbl_fees_detail);
+            }
+            else
+            {
+                fragment = new Fragment_PaymentDetail();
+                title = getString(R.string.lbl_fees_detail);
+            }
+        }
+        else if(getString(R.string.lbl_time_table).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_TimeTable_Staff();
+                title = getString(R.string.lbl_time_table);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_TimeTable_Student();
+                title = getString(R.string.lbl_time_table);
+            }
+            else
+            {
+                fragment = new Fragment_TimeTable();
+                title = getString(R.string.lbl_time_table);
+            }
+        }
+        else if(getString(R.string.lbl_reports).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STUDENT) || mUser.getUserType().equals(ApiConstants.PARENT))
+            {
+                fragment = new Fragment_CCE_ExamReport();
+                title = getString(R.string.lbl_reports);
+            }
+        }
+
+        if (fragment != null)
+        {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();
-
             // set the toolbar title
             getSupportActionBar().setTitle(title);
         }
@@ -285,5 +375,139 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             ex.printStackTrace();
         }
     }
+
+    private boolean checkPlayServices()
+    {
+        TAG = "checkPlayServices";
+        Log.d(MODULE,TAG);
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS)
+        {
+            if (apiAvailability.isUserResolvableError(resultCode))
+            {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }
+            else
+            {
+                Log.i(TAG, "This device is not supported. Google Play Services not installed!");
+                Toast.makeText(getApplicationContext(), "This device is not supported. Google Play Services not installed!", Toast.LENGTH_LONG).show();
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    // starting the service to register with GCM
+    private void registerGCM()
+    {
+        TAG = "registerGCM";
+        Log.d(MODULE,TAG);
+        try
+        {
+            Intent intent = new Intent(this, GcmIntentService.class);
+            intent.putExtra("key", "register");
+            startService(intent);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    private void sendRegistrationToServer()
+    {
+        // Send the registration token to our server
+        // to keep it in MySQL
+        TAG = "sendRegistrationToServer";
+        Log.d(MODULE,TAG);
+        Str_Url = ApiConstants.DEVICE_REG_URL;
+        try
+        {
+            GetUniqueDeviceId();
+            if(Str_DeviceId.length()!=0 && Str_Token.length()!=0)
+            {
+                new RegisterDevice(Str_Url,this,Payload()).registerDevice();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void GetUniqueDeviceId()
+    {
+        try
+        {
+            TelephonyManager TelephonyMgr = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+            Str_DeviceId = TelephonyMgr.getDeviceId();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
+    public JSONObject Payload()
+    {
+        TAG = "Payload";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("RegId", Str_Token);
+            obj.put("DeviceId",Str_DeviceId);
+            obj.put("UserId", Str_Id);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
+    }
+
+    @Override
+    public void onRegistrationReceived(String Str_Msg) {
+        TAG = "onRegistrationReceived";
+        Log.d(MODULE, TAG);
+        Log.d(MODULE, TAG + " Str_Msg : " + Str_Msg);
+        displayView(getString(R.string.lbl_about_us));
+    }
+
+    @Override
+    public void onRegistrationReceivedError(String Str_Msg) {
+        TAG = "onRegistrationReceivedError";
+        Log.d(MODULE, TAG);
+        Log.d(MODULE, TAG + " Str_Msg : " + Str_Msg);
+        displayView(getString(R.string.lbl_about_us));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.action_settings:
+                return true;
+            case android.R.id.home:
+                FragmentDrawer.mDrawerLayout.openDrawer(Gravity.LEFT);
+                return false;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

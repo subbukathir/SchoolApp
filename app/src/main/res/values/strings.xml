@@ -18,6 +18,7 @@
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
+        <item>@string/lbl_about_us</item>
         <item>@string/lbl_profile</item>
         <item>@string/lbl_student_profile</item>
         <item>@string/lbl_events</item>
@@ -227,5 +228,31 @@
     </string-array>
 
 
+    <string name="lbl_about_us">About Us</string>
+    <string name="lbl_our_aims">Our Aims</string>
+    <string name="lbl_facilities">Facilities</string>
+
+    <string name="lbl_about_us_text_one">A warm welcome to the Oxford School! Thank you for your interest and we hope to be able to welcome you in person when you make your way ‘up the hill’ to our lovely campuses.</string>
+    <string name="lbl_about_us_text_two">Oxford School was founded in 1899 to serve the Christian worker community of India and South-East Asia.  More than a century has passed and the School continues to fulfil its original purpose although it has grown in size and is styled an International School recognised as such by the Government of India and the State of Tamil Nadu.</string>
+    <string name="lbl_about_us_text_three">It is a co-educational and predominantly boarding school for children aged 8 years to 19 years.  About 10% of our students are day students (with staff children and children from the Defence Services Staff Training College in Wellington in addition).  Students study the English National Curriculum leading to IGCSE in Standards 10 and 11 and to A  levels in Standards 12 and 13.</string>
+
+    <string name="lbl_our_aims_text_one">1.To provide excellent educational opportunities through a strong academic curriculum and a wide range of extra-curricular activities;</string>
+    <string name="lbl_our_aims_text_two">2.To provide a personalised, caring, family-based environment;</string>
+    <string name="lbl_our_aims_text_three">3.To encourage students tostrive for excellence and to develop to their full potential in all areas of their lives;</string>
+    <string name="lbl_our_aims_text_four">4.To challenge students to work out the focus and direction of their lives in preparation for life after school;</string>
+    <string name="lbl_our_aims_text_five">5.To foster a genuine respect for others and to inspire the school community to live in the service of God and others;</string>
+    <string name="lbl_our_aims_text_six">6.To serve the neighbourhood and wider community;</string>
+    <string name="lbl_our_aims_text_seven">7.To provide a resource for Christian workers in Asia, and business communities requiring an international education for their children.</string>
+
+
+    <string name="lbl_facilities_one">Educational Facilities</string>
+    <string name="lbl_facilities_two">Food</string>
+    <string name="lbl_facilities_three">Medical</string>
+    <string name="lbl_facilities_four">Dormitory</string>
+
+    <string name="lbl_facilities_text_one">The school has six excellent computer labs. Our students have unlimited access to computers.</string>
+    <string name="lbl_facilities_text_two">A well-balanced, wholesome and nutritious food, both vegetarian and non-vegetarian.</string>
+    <string name="lbl_facilities_text_three">The school has two hospitals with two Resident Medical Officers and experienced and trained staff nurses.</string>
+    <string name="lbl_facilities_text_four">One of the primary concerns of the Institution since its inception is the provision of the amenities.</string>
 
 </resources>
