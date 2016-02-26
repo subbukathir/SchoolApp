@@ -5,6 +5,6 @@ package com.daemon.oxfordschool.listeners;
  */
 public interface AddHomeWorkListener
 {
-    public void onAddHomeWorkReceived();
+    public void onAddHomeWorkReceived(String Str_Msg);
     public void onAddHomeWorkReceivedError(String Str_Msg);
 }

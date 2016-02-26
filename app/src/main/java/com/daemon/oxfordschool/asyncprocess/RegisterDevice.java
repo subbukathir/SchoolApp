@@ -20,19 +20,20 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.AddHomeWorkListener;
+import com.daemon.oxfordschool.listeners.RegistrationListener;
 
 import org.json.JSONObject;
+
 
 /**
  * Created by daemonsoft on 4/12/15.
  */
-public class AddHomeWork
+public class RegisterDevice
 {
-    public static String MODULE = "AddHomeWork";
+    public static String MODULE = "RegisterDevice";
     public static String TAG ="";
     String Str_Msg = "",Str_Code="";
-    AddHomeWorkListener mCallBack;
+    RegistrationListener mCallBack;
     String Str_Url="";
     Fragment mFragment;
     AppCompatActivity mActivity;
@@ -40,13 +41,12 @@ public class AddHomeWork
     SharedPreferences.Editor editor;
     JSONObject object;
 
-    public AddHomeWork(String Str_Url, Fragment mFragment, JSONObject object)
+    public RegisterDevice(String Str_Url, AppCompatActivity mActivity, JSONObject object)
     {
         this.Str_Url = Str_Url;
-        this.mFragment=mFragment;
+        this.mActivity=mActivity;
         this.object=object;
-        this.mActivity = (AppCompatActivity)mFragment.getActivity();
-        mCallBack = (AddHomeWorkListener) mFragment;
+        mCallBack = (RegistrationListener) mActivity;
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
     }
@@ -54,9 +54,9 @@ public class AddHomeWork
     /**
      * Getting students list json by making http call
      */
-    public void addHomeWork()
+    public void registerDevice()
     {
-        TAG = "addHomeWork";
+        TAG = "registerDevice";
         Log.d(MODULE,TAG);
         // appending offset to url
         String url = Str_Url;
@@ -76,28 +76,25 @@ public class AddHomeWork
                 JSONObject response = (JSONObject) o;
                 Log.d(TAG, response.toString());
 
-                    String Str_Code = response.getString("success");
+                    String Str_Code = response.getString("Success");
                     Log.d(MODULE, TAG + " Str_Code : " + Str_Code);
 
                     if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                     {
-                        editor = mPreferences.edit();
-                        editor.putString(AppUtils.SHARED_ADDHOMEWORK, response.toString());
-                        editor.commit();
-                        Str_Msg = response.getString("message");
-                        mCallBack.onAddHomeWorkReceived(Str_Msg);
+                        Str_Msg = response.getString("Message");
+                        mCallBack.onRegistrationReceived(Str_Msg);
                     }
                     else
                     {
-                        Str_Msg = response.getString("message");
-                        mCallBack.onAddHomeWorkReceivedError(Str_Msg);
+                        Str_Msg = response.getString("Message");
+                        mCallBack.onRegistrationReceivedError(Str_Msg);
                     }
 
             }
             catch (Exception ex)
             {
                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                mCallBack.onAddHomeWorkReceivedError(Str_Msg);
+                mCallBack.onRegistrationReceivedError(Str_Msg);
             }
 
         }
@@ -134,7 +131,7 @@ public class AddHomeWork
             {
                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
             }
-            mCallBack.onAddHomeWorkReceivedError(Str_Msg);
+            mCallBack.onRegistrationReceivedError(Str_Msg);
         }
     };
 

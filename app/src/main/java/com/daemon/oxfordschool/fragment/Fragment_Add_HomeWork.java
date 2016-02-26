@@ -538,13 +538,14 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
     }
 
     @Override
-    public void onAddHomeWorkReceived()
+    public void onAddHomeWorkReceived(String Str_Msg)
     {
         TAG = "onAddHomeWorkReceived";
         Log.d(MODULE, TAG);
         try
         {
             AppUtils.hideProgressDialog();
+            AppUtils.showDialog(mActivity,Str_Msg);
             mManager.popBackStack();
         }
         catch (Exception ex)
