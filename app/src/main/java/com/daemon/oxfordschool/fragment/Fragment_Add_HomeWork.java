@@ -483,6 +483,8 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         }
     };
 
+
+
     @Override
     public void onClassListReceived()
     {
@@ -797,7 +799,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             obj.put("HomeWorkDate",Str_Date);
             obj.put("Assignment_I",mAssignmentI);
             obj.put("Assignment_II",mAssignmentII);
-            obj.put("Mode",mMode);
+            obj.put("Mode",Integer.toString(mMode));
             obj.put("HomeWorkId",mHomeWorkId);
 
         }

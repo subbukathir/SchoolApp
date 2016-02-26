@@ -10,19 +10,22 @@
     <string name="lbl_events">Events</string>
     <string name="lbl_homework">Homework</string>
     <string name="lbl_attendance">Attendance</string>
+    <string name="lbl_add_event">Add Event</string>
+    <string name="lbl_add_marks">Add Marks</string>
     <string name="lbl_exam_schedule">Exam Schedule</string>
     <string name="lbl_exam_result">Exam Result</string>
     <string name="lbl_fees_detail">Fees Detail</string>
     <string name="lbl_time_table">Time Table</string>
     <string name="lbl_reports">CCE Report</string>
-
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/lbl_profile</item>
         <item>@string/lbl_student_profile</item>
         <item>@string/lbl_events</item>
+        <item>@string/lbl_add_event</item>
         <item>@string/lbl_homework</item>
         <item>@string/lbl_attendance</item>
+        <item>@string/lbl_add_marks</item>
         <item>@string/lbl_exam_schedule</item>
         <item>@string/lbl_exam_result</item>
         <item>@string/lbl_fees_detail</item>
@@ -68,6 +71,14 @@
     <string name="lbl_description">Description</string>
     <string name="lbl_no_events">No Events</string>
     <string name="lbl_starts_on">Starts On</string>
+    <string name="lbl_select_start_date">Select Start Date</string>
+    <string name="lbl_select_end_date">Select End Date</string>
+
+    <string name="lbl_msg_blank_event_name">Please fill event name</string>
+    <string name="lbl_msg_blank_description">Please fill description about event</string>
+
+    <string name="lbl_msg_valid_event_name">Event Name should contain atleast 6 characters</string>
+    <string name="lbl_msg_valid_description">Description should contain atleast 6 characters</string>
 
     <!-- HomeWork -->
     <string name="lbl_class_hw">Class </string>
@@ -106,6 +117,14 @@
     <string name="lbl_Result">Result</string>
     <string name="lbl_select_subject">Select Subject</string>
     <string name="lbl_name">Name</string>
+    <string name="lbl_theory_mark">Theory Mark</string>
+    <string name="lbl_practical_mark">Practical Mark</string>
+
+    <string name="lbl_msg_blank_theory_mark">Please fill theory mark</string>
+    <string name="lbl_msg_blank_practical_mark">Please fill practical mark</string>
+
+    <string name="lbl_msg_valid_theory_mark">Theory mark should contain atleast 2 characters</string>
+    <string name="lbl_msg_valid_practical_mark">Practical mark should contain atleast 2 characters</string>
 
     <!-- Fees Details -->
     <string name="lbl_payment_details_not_found">Payment details not found.</string>

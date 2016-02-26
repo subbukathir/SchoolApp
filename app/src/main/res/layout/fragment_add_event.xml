@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/match_wrap_style"
+        android:orientation="vertical">
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_add_event_name"
+            style="@style/match_wrap_style"
+            android:layout_marginTop="@dimen/space_layout_margin">
+
+            <EditText
+                android:id="@+id/et_add_event_name"
+                style="@style/et_login_style"
+                android:drawablePadding="@dimen/space_layout_padding"
+                android:hint="@string/lbl_event_name"
+                android:imeOptions="actionNext"
+                android:inputType="textLongMessage" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+
+            android:id="@+id/til_add_description"
+            style="@style/match_wrap_style">
+
+            <EditText
+                android:id="@+id/et_add_description"
+                style="@style/et_login_style"
+                android:drawablePadding="@dimen/space_layout_padding"
+                android:hint="@string/lbl_description"
+                android:imeOptions="actionDone"
+                android:inputType="textLongMessage" />
+        </android.support.design.widget.TextInputLayout>
+        <!-- Select Date Starts Here -->
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/space_layout_padding"
+            android:paddingRight="@dimen/space_layout_padding">
+
+            <TextView
+                android:id="@+id/tv_lbl_select_start_date"
+                style="@style/text_view_label_teacher"
+                android:text="@string/lbl_select_start_date" />
+
+            <Button
+                android:id="@+id/btn_select_start_date"
+                style="@style/btn_style_select_date"
+                android:layout_marginLeft="@dimen/space_layout_margin"/>
+
+            <TextView
+                android:id="@+id/tv_lbl_select_end_date"
+                style="@style/text_view_label_teacher"
+                android:text="@string/lbl_select_end_date" />
+
+            <Button
+                android:id="@+id/btn_select_end_date"
+                style="@style/btn_style_select_date"
+                android:layout_marginLeft="@dimen/space_layout_margin"/>
+
+        </LinearLayout>
+
+        <!-- Select Date Ends Here -->
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_add_event"
+            style="@style/btn_login_style"
+            android:text="ADD" />
+    </LinearLayout>
+
+</LinearLayout>
+
+</ScrollView>

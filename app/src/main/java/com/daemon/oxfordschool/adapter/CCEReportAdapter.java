@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,12 +21,8 @@ import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.classes.CCEResult;
 import com.daemon.oxfordschool.classes.Result;
 import com.daemon.oxfordschool.listeners.CCEExam_Report_Item_Click_Listener;
-import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class CCEReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>

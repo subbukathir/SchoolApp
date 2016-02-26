@@ -44,6 +44,8 @@ import com.daemon.oxfordschool.fragment.Fragment_Attendance_Student;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule_Student;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Student;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Student;
+import com.daemon.oxfordschool.fragment.Fragment_Add_Event;
+import com.daemon.oxfordschool.fragment.Fragment_Add_Marks;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -136,6 +138,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 3:
                 if(mUser.getUserType().equals(ApiConstants.STAFF))
                 {
+                    fragment = new Fragment_Add_Event();
+                    title = getString(R.string.lbl_add_event);
+                }
+                break;
+
+            case 4:
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
                     fragment = new Fragment_HomeWork_Staff();
                     title = getString(R.string.lbl_homework);
                 }
@@ -150,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     title = getString(R.string.lbl_homework);
                 }
                 break;
-            case 4:
+            case 5:
                 if(mUser.getUserType().equals(ApiConstants.STAFF))
                 {
                     fragment = new Fragment_Attendance_Staff();
@@ -167,7 +177,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     title = getString(R.string.lbl_attendance);
                 }
                 break;
-            case 5:
+            case 6:
+                if(mUser.getUserType().equals(ApiConstants.STAFF))
+                {
+                    fragment = new Fragment_Add_Marks();
+                    title = getString(R.string.lbl_add_marks);
+                }
+                break;
+            case 7:
                 if(mUser.getUserType().equals(ApiConstants.STAFF))
                 {
                     fragment = new Fragment_Exam_Schedule_Staff();
@@ -184,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     title = getString(R.string.lbl_exam_schedule);
                 }
                 break;
-            case 6:
+            case 8:
                 if(mUser.getUserType().equals(ApiConstants.STAFF))
                 {
                     fragment = new Fragment_Exam_Result_Staff();
@@ -201,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     title = getString(R.string.lbl_exam_result);
                 }
                 break;
-            case 7:
+            case 9:
                 if(mUser.getUserType().equals(ApiConstants.STAFF))
                 {
                     fragment = new Fragment_PaymentDetail_Staff();
@@ -218,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     title = getString(R.string.lbl_fees_detail);
                 }
                 break;
-            case 8:
+            case 10:
                 if(mUser.getUserType().equals(ApiConstants.STAFF))
                 {
                     fragment = new Fragment_TimeTable_Staff();
@@ -235,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     title = getString(R.string.lbl_time_table);
                 }
                 break;
-            case 9:
+            case 11:
                 if(mUser.getUserType().equals(ApiConstants.STUDENT) || mUser.getUserType().equals(ApiConstants.PARENT))
                 {
                     fragment = new Fragment_CCE_ExamReport();

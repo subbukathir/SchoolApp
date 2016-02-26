@@ -110,6 +110,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         TAG = "doLogin";
         Log.d(MODULE, TAG);
 
+        AppUtils.showProgressDialog(this);
         if (IsValid())
         {
             AppUtils.showProgressDialog(this);
