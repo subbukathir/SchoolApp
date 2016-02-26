@@ -175,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public void onDrawerItemSelected(View view, int position)
     {
         TAG = "onDrawerItemSelected";
-        Log.d(MODULE,TAG);
-        displayView(titles[position]);
+        Log.d(MODULE, TAG);
+        //displayView(titles[position]);
     }
 
     private void displayView(String navItem) {
@@ -191,158 +191,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         {
             fragment = new Fragment_School_Profile();
             title = getString(R.string.lbl_about_us);
-        switch (position) {
-            case 0:
-                fragment = new Fragment_ProfileView();
-                title = getString(R.string.lbl_profile);
-                break;
-            case 1:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_StudentList();
-                    title = getString(R.string.lbl_students);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_Student_View_Profile();
-                    title = getString(R.string.lbl_students);
-                }
-                else
-                {
-                    fragment = new Fragment_StudentProfile();
-                    title = getString(R.string.lbl_students);
-                }
-                break;
-            case 2:
-                fragment = new Fragment_Events();
-                title = getString(R.string.lbl_events);
-                break;
-            case 3:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_Add_Event();
-                    title = getString(R.string.lbl_add_event);
-                }
-                break;
-
-            case 4:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_HomeWork_Staff();
-                    title = getString(R.string.lbl_homework);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_HomeWork_Student();
-                    title = getString(R.string.lbl_homework);
-                }
-                else
-                {
-                    fragment = new Fragment_HomeWork();
-                    title = getString(R.string.lbl_homework);
-                }
-                break;
-            case 5:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_Attendance_Staff();
-                    title = getString(R.string.lbl_attendance);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_Attendance_Student();
-                    title = getString(R.string.lbl_attendance);
-                }
-                else
-                {
-                    fragment = new Fragment_Attendance();
-                    title = getString(R.string.lbl_attendance);
-                }
-                break;
-            case 6:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_Add_Marks();
-                    title = getString(R.string.lbl_add_marks);
-                }
-                break;
-            case 7:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_Exam_Schedule_Staff();
-                    title = getString(R.string.lbl_exam_schedule);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_ExamSchedule_Student();
-                    title = getString(R.string.lbl_exam_schedule);
-                }
-                else
-                {
-                    fragment = new Fragment_ExamSchedule();
-                    title = getString(R.string.lbl_exam_schedule);
-                }
-                break;
-            case 8:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_Exam_Result_Staff();
-                    title = getString(R.string.lbl_exam_result);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_ExamResult_Student();
-                    title = getString(R.string.lbl_exam_result);
-                }
-                else
-                {
-                    fragment = new Fragment_ExamResult();
-                    title = getString(R.string.lbl_exam_result);
-                }
-                break;
-            case 9:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_PaymentDetail_Staff();
-                    title = getString(R.string.lbl_fees_detail);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_PaymentDetail_Student();
-                    title = getString(R.string.lbl_fees_detail);
-                }
-                else
-                {
-                    fragment = new Fragment_PaymentDetail();
-                    title = getString(R.string.lbl_fees_detail);
-                }
-                break;
-            case 10:
-                if(mUser.getUserType().equals(ApiConstants.STAFF))
-                {
-                    fragment = new Fragment_TimeTable_Staff();
-                    title = getString(R.string.lbl_time_table);
-                }
-                else if(mUser.getUserType().equals(ApiConstants.STUDENT))
-                {
-                    fragment = new Fragment_TimeTable_Student();
-                    title = getString(R.string.lbl_time_table);
-                }
-                else
-                {
-                    fragment = new Fragment_TimeTable();
-                    title = getString(R.string.lbl_time_table);
-                }
-                break;
-            case 11:
-                if(mUser.getUserType().equals(ApiConstants.STUDENT) || mUser.getUserType().equals(ApiConstants.PARENT))
-                {
-                    fragment = new Fragment_CCE_ExamReport();
-                    title = getString(R.string.lbl_reports);
-                }
-                break;
-            default:
-                break;
         }
         else if(getString(R.string.lbl_profile).equals(navItem))
         {
@@ -372,6 +220,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         {
             fragment = new Fragment_Events();
             title = getString(R.string.lbl_events);
+        }
+        else if(getString(R.string.lbl_add_event).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Add_Event();
+                title = getString(R.string.lbl_add_event);
+            }
+        }
+        else if(getString(R.string.lbl_add_marks).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Add_Marks();
+                title = getString(R.string.lbl_add_marks);
+            }
+
         }
         else if(getString(R.string.lbl_homework).equals(navItem))
         {
@@ -501,12 +366,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         TAG="onBackPressed";
         Log.d(MODULE, TAG);
     }
+
+
+
 
     public void getProfile()
     {
