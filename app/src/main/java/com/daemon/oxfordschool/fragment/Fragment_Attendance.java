@@ -219,11 +219,22 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
     {
         TAG="onItemSelected";
         Log.d(MODULE,TAG);
-        mSelectedMonthPosition=pos;
-        mMonth=Integer.toString(pos);
-        mMonth_value= spinner_months.getSelectedItem().toString();
-        Log.d(MODULE, TAG + " position " + pos + " value " + mMonth_value);
-        getAttendanceFromService();
+        try
+        {
+            if(pos>0)
+            {
+                mSelectedMonthPosition=pos;
+                mMonth=Integer.toString(pos);
+                mMonth_value= spinner_months.getSelectedItem().toString();
+                Log.d(MODULE, TAG + " position " + pos + " value " + mMonth_value);
+                getAttendanceFromService();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     @Override

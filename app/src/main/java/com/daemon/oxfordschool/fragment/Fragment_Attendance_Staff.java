@@ -626,6 +626,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                 studentAttendance.setStudentId(mListStudents.get(i).getStudentId());
                 studentAttendance.setFirstName(mListStudents.get(i).getFirstName());
                 studentAttendance.setLastName(mListStudents.get(i).getLastName());
+                studentAttendance.setParentId(mListStudents.get(i).getParentId());
                 studentAttendance.setSelected(true);
                 mListAttendance.add(studentAttendance);
             }
