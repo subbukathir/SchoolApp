@@ -53,6 +53,8 @@ import com.daemon.oxfordschool.fragment.Fragment_Attendance_Student;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule_Student;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Student;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Student;
+import com.daemon.oxfordschool.fragment.Fragment_Add_Event;
+import com.daemon.oxfordschool.fragment.Fragment_Add_Marks;
 
 import com.daemon.oxfordschool.gcm.GcmIntentService;
 import com.daemon.oxfordschool.listeners.RegistrationListener;
@@ -173,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public void onDrawerItemSelected(View view, int position)
     {
         TAG = "onDrawerItemSelected";
-        Log.d(MODULE,TAG);
-        displayView(titles[position]);
+        Log.d(MODULE, TAG);
+        //displayView(titles[position]);
     }
 
     private void displayView(String navItem) {
@@ -218,6 +220,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         {
             fragment = new Fragment_Events();
             title = getString(R.string.lbl_events);
+        }
+        else if(getString(R.string.lbl_add_event).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Add_Event();
+                title = getString(R.string.lbl_add_event);
+            }
+        }
+        else if(getString(R.string.lbl_add_marks).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Add_Marks();
+                title = getString(R.string.lbl_add_marks);
+            }
+
         }
         else if(getString(R.string.lbl_homework).equals(navItem))
         {
@@ -347,12 +366,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         TAG="onBackPressed";
         Log.d(MODULE, TAG);
     }
+
+
+
 
     public void getProfile()
     {

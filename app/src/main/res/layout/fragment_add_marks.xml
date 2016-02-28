@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/view_section_class_selector" />
+            <!-- Select Student Starts Here -->
+
+            <LinearLayout
+                style="@style/match_wrap_style"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_select_student"
+                        style="@style/text_view_label_teacher"
+                        android:gravity="left"
+                        android:paddingLeft="@dimen/space_layout_padding"
+                        android:text="@string/lbl_select_student" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/space_layout_margin"
+                        android:layout_marginRight="@dimen/space_layout_margin">
+
+                        <Spinner
+                            android:id="@+id/spinner_student"
+                            style="@style/spinner_style"></Spinner>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Select Student Ends Here -->
+
+            <!-- Select Exam Type Starts Here -->
+
+            <LinearLayout
+                style="@style/match_wrap_style"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_select_exam_type"
+                        style="@style/text_view_label_teacher"
+                        android:gravity="left"
+                        android:paddingLeft="@dimen/space_layout_padding"
+                        android:text="@string/lbl_select_exam_type" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/space_layout_margin"
+                        android:layout_marginRight="@dimen/space_layout_margin">
+
+                        <Spinner
+                            android:id="@+id/spinner_exam_type"
+                            style="@style/spinner_style"></Spinner>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Select Exam Type Ends Here -->
+
+            <!-- Select Subject Starts Here -->
+
+            <LinearLayout
+                style="@style/match_wrap_style"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_select_subject"
+                        style="@style/text_view_label_teacher"
+                        android:gravity="left"
+                        android:paddingLeft="@dimen/space_layout_padding"
+                        android:text="@string/lbl_select_subject" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/space_layout_margin"
+                        android:layout_marginRight="@dimen/space_layout_margin">
+
+                        <Spinner
+                            android:id="@+id/spinner_subject"
+                            style="@style/spinner_style"></Spinner>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Select Subject Ends Here -->
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_add_theorymark"
+                style="@style/match_wrap_style"
+                android:layout_marginTop="@dimen/space_layout_margin">
+
+                <EditText
+                    android:id="@+id/et_add_theorymark"
+                    style="@style/et_login_style"
+                    android:drawablePadding="@dimen/space_layout_padding"
+                    android:hint="@string/lbl_theory_mark"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+
+                android:id="@+id/til_add_practicalmark"
+                style="@style/match_wrap_style">
+
+                <EditText
+                    android:id="@+id/et_add_practicalmark"
+                    style="@style/et_login_style"
+                    android:drawablePadding="@dimen/space_layout_padding"
+                    android:hint="@string/lbl_practical_mark"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btn_add_marks"
+                    style="@style/btn_login_style"
+                    android:text="ADD" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

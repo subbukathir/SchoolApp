@@ -57,6 +57,8 @@ public class AppUtils extends Dialog
     public static String SHARED_ATTENTANCE = "Shared_Attendance";
     public static String SHARED_TIMETABLE = "Shared_TimeTable";
     public static String SHARED_ADDHOMEWORK = "Shared_Add_HomeWork";
+    public static String SHARED_ADDMARKS = "Shared_Add_Marks";
+    public static String SHARED_ADDEVENT = "Shared_Add_Event";
     public static String SHARED_FEES_DETAIL = "Shared_Fees_Detail";
     public static String SHARED_PAYMENT_DETAIL = "Shared_Payment_Detail";
     public static String SHARED_TERM_LIST= "Shared_Term_List";
