@@ -102,8 +102,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setDrawerListener(this);
         // display the first navigation drawer view on app launch
 
-        titles = this.getResources().getStringArray(R.array.nav_drawer_labels);
-
         mRegistrationBroadcastReceiver = new BroadcastReceiver()
         {
             @Override
@@ -172,11 +170,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     @Override
-    public void onDrawerItemSelected(View view, int position)
+    public void onDrawerItemSelected(View view,String Str_Item)
     {
         TAG = "onDrawerItemSelected";
         Log.d(MODULE, TAG);
-        //displayView(titles[position]);
+        displayView(Str_Item);
     }
 
     private void displayView(String navItem) {
@@ -236,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new Fragment_Add_Marks();
                 title = getString(R.string.lbl_add_marks);
             }
-
         }
         else if(getString(R.string.lbl_homework).equals(navItem))
         {
@@ -366,16 +363,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         TAG="onBackPressed";
         Log.d(MODULE, TAG);
     }
-
-
-
 
     public void getProfile()
     {

@@ -357,8 +357,10 @@ public class Fragment_Attendance_Add extends Fragment implements AttendanceAddLi
         {
             for(int i=0;i<mListAttendance.size();i++)
             {
+                Log.d(MODULE,TAG + " ParentId :  " + mListAttendance.get(i).getParentId());
                 JSONObject obj = new JSONObject();
                 obj.put("StudentId",mListAttendance.get(i).getStudentId());
+                obj.put("ParentId",mListAttendance.get(i).getParentId());
                 if(mListAttendance.get(i).isSelected()) obj.put("IsPresent","0");
                 else obj.put("IsPresent","1");
                 jsonArray.put(obj);

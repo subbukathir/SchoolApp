@@ -370,6 +370,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
                 {
                     Log.d(MODULE, TAG + " Spinner Section : " + position);
                     Str_SectionId=mListSection.get(position-1).getID();
+                    new GetStudentList(Str_StudentList_Url,Payload_Student_List(), Fragment_Add_Marks.this).getStudents();
                 }
 
             }
@@ -774,8 +775,8 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
         JSONObject obj = new JSONObject();
         try {
             obj.put("ParentId", "");
-            obj.put("ClassId", "1");
-            obj.put("SectionId", "1");
+            obj.put("ClassId", Str_ClassId);
+            obj.put("SectionId",Str_SectionId);
         }
         catch (JSONException e) {
             e.printStackTrace();

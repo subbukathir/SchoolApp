@@ -39,7 +39,6 @@ public class CResult implements Parcelable
     private String FirstName;
     private String LastName;
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -106,6 +105,7 @@ public class CResult implements Parcelable
         this.IsAfterNoon=source.readString();
         this.FirstName=source.readString();
         this.LastName=source.readString();
+
 
     }
 
@@ -281,7 +281,7 @@ public class CResult implements Parcelable
         Result = result;
     }
 
-/*------- Attendance Details-------*/
+    /*------- Attendance Details-------*/
 
     public String getAttendanceId() {
         return AttendanceId;

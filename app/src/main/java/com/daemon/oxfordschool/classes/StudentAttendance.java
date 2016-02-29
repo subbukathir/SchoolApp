@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 public class StudentAttendance implements Parcelable
 {
+    private String ParentId;
     private String StudentId;
     private String FirstName;
     private String LastName;
@@ -26,6 +27,7 @@ public class StudentAttendance implements Parcelable
     @Override
     public void writeToParcel(Parcel dest, int flag)
     {
+        dest.writeString(ParentId);
         dest.writeString(StudentId);
         dest.writeString(FirstName);
         dest.writeString(LastName);
@@ -35,6 +37,7 @@ public class StudentAttendance implements Parcelable
     }
 
     public StudentAttendance(Parcel source) {
+        this.ParentId = source.readString();
         this.StudentId = source.readString();
         this.FirstName = source.readString();
         this.LastName = source.readString();
@@ -54,6 +57,14 @@ public class StudentAttendance implements Parcelable
             return new StudentAttendance[size];
         }
     };
+
+    public String getParentId() {
+        return ParentId;
+    }
+
+    public void setParentId(String parentId) {
+        ParentId = parentId;
+    }
 
     public String getStudentId() {
         return StudentId;

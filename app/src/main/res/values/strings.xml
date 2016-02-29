@@ -17,16 +17,31 @@
     <string name="lbl_fees_detail">Fees Detail</string>
     <string name="lbl_time_table">Time Table</string>
     <string name="lbl_reports">CCE Report</string>
+
     <!-- navigation drawer item labels  -->
-    <string-array name="nav_drawer_labels">
+    <string-array name="left_menu_staff">
         <item>@string/lbl_about_us</item>
         <item>@string/lbl_profile</item>
         <item>@string/lbl_student_profile</item>
         <item>@string/lbl_events</item>
-        <item>@string/lbl_add_event</item>
         <item>@string/lbl_homework</item>
         <item>@string/lbl_attendance</item>
         <item>@string/lbl_add_marks</item>
+        <item>@string/lbl_exam_schedule</item>
+        <item>@string/lbl_exam_result</item>
+        <item>@string/lbl_fees_detail</item>
+        <item>@string/lbl_time_table</item>
+        <item>@string/lbl_reports</item>
+    </string-array>
+
+    <!-- navigation drawer item labels  -->
+    <string-array name="left_menu_parent_student">
+        <item>@string/lbl_about_us</item>
+        <item>@string/lbl_profile</item>
+        <item>@string/lbl_student_profile</item>
+        <item>@string/lbl_events</item>
+        <item>@string/lbl_homework</item>
+        <item>@string/lbl_attendance</item>
         <item>@string/lbl_exam_schedule</item>
         <item>@string/lbl_exam_result</item>
         <item>@string/lbl_fees_detail</item>

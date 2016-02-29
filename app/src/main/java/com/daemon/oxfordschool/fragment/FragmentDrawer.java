@@ -59,6 +59,8 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     public static DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
+    private static String[] left_menu_staff = null;
+    private static String[] left_menu_parent_student = null;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
     private ImageLoader imageLoader;
@@ -91,10 +93,13 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     {
         TAG="setDrawerListener";
         Log.d(MODULE,TAG);
-        int itemCount = 0;
-        if(mUser.getUserType().equals(ApiConstants.STAFF)) itemCount=titles.length-1;
-        else itemCount=titles.length;
         List<NavDrawerItem> data = new ArrayList<>();
+        if(mUser.getUserType().equals(ApiConstants.STAFF))
+        {
+            titles=left_menu_staff;
+        }
+        else titles=left_menu_parent_student;
+        int itemCount = titles.length;
         // preparing navigation drawer items
         for (int i = 0; i <itemCount; i++)
         {
@@ -112,7 +117,8 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         TAG="onCreate";
         Log.d(MODULE,TAG);
         // drawer labels
-        titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
+        left_menu_staff= getActivity().getResources().getStringArray(R.array.left_menu_staff);
+        left_menu_parent_student= getActivity().getResources().getStringArray(R.array.left_menu_parent_student);
         mActivity = (AppCompatActivity) getActivity();
         getProfile();
     }
@@ -135,7 +141,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             @Override
             public void onClick(View view, int position)
             {
-                drawerListener.onDrawerItemSelected(view, position);
+                drawerListener.onDrawerItemSelected(view, titles[position]);
                 mDrawerLayout.closeDrawer(containerView);
             }
             @Override
@@ -275,7 +281,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
 
     public interface FragmentDrawerListener
     {
-        public void onDrawerItemSelected(View view, int position);
+        public void onDrawerItemSelected(View view, String Str_Item);
     }
 
     private void StartPicking()
