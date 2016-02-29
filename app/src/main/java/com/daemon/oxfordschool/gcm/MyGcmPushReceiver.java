@@ -53,12 +53,6 @@ public class MyGcmPushReceiver extends GcmListenerService
             Log.e(TAG, "Title: " + title);
             Log.e(TAG, "message: " + message);
 
-
-            Log.e(TAG, "From: " + from);
-            Log.e(TAG, "Title: " + title);
-            Log.e(TAG, "message: " + message);
-
-
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
             {
                 // app is in foreground, broadcast the push message
