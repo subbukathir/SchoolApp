@@ -102,8 +102,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setDrawerListener(this);
         // display the first navigation drawer view on app launch
 
-        titles = this.getResources().getStringArray(R.array.nav_drawer_labels);
-
         mRegistrationBroadcastReceiver = new BroadcastReceiver()
         {
             @Override
@@ -172,11 +170,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     @Override
-    public void onDrawerItemSelected(View view, int position)
+    public void onDrawerItemSelected(View view,String Str_Item)
     {
         TAG = "onDrawerItemSelected";
         Log.d(MODULE, TAG);
-        //displayView(titles[position]);
+        displayView(Str_Item);
     }
 
     private void displayView(String navItem) {
