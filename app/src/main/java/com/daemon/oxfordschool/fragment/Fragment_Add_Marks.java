@@ -114,7 +114,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             getProfile();
             getClassList();
             getSectionList();
-            getStudentList();
+            getExamTypeList();
             getSubjectList();
             new ExamTypeList_Process(mActivity,this).GetExamTypeList();
         }
