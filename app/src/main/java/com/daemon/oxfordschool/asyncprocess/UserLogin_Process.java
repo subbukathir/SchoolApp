@@ -85,7 +85,7 @@ public class UserLogin_Process
                         }
                         else
                         {
-                            String Str_Code = response.getString("Success");
+                            String Str_Code = response.getString("success");
                             Log.d(MODULE, TAG + " Str_Code : " + Str_Code);
 
                             if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
@@ -97,7 +97,7 @@ public class UserLogin_Process
                             }
                             else
                             {
-                                Str_Msg = response.getString("Message");
+                                Str_Msg = response.getString("message");
                                 mCallBack.onLoginFailed(Str_Msg);
                             }
                         }
