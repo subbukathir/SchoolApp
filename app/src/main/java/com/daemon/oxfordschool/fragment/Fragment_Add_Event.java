@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -67,6 +69,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
     TextView tv_lbl_start_date,tv_lbl_end_date;
     String Str_Event_Url = ApiConstants.ADD_EVENT_URL;
     Bundle mSavedInstanceState;
+    FragmentManager mManager;
 
     public Fragment_Add_Event()
     {
@@ -85,6 +88,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             setHasOptionsMenu(true);
             setRetainInstance(false);
             mSavedInstanceState=savedInstanceState;
+            mManager = mActivity.getSupportFragmentManager();
             getProfile();
             Str_Date=GetTodayDate();
             ConvertedDate();
@@ -112,12 +116,10 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         Log.d(MODULE, TAG);
         try
         {
-
             tv_lbl_start_date = (TextView) view.findViewById(R.id.tv_lbl_select_start_date);
             tv_lbl_end_date = (TextView) view.findViewById(R.id.tv_lbl_select_end_date);
             btn_start_date = (Button) view.findViewById(R.id.btn_select_start_date);
             btn_end_date = (Button) view.findViewById(R.id.btn_select_end_date);
-
 
             et_add_event_name = (EditText) view.findViewById(R.id.et_add_event_name);
             et_add_description = (EditText) view.findViewById(R.id.et_add_description);
@@ -186,8 +188,8 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         Log.d(MODULE, TAG);
         try
         {
-            tv_lbl_start_date.setTypeface(font.getHelveticaBold());
-            tv_lbl_end_date.setTypeface(font.getHelveticaBold());
+            tv_lbl_start_date.setTypeface(font.getHelveticaRegular());
+            tv_lbl_end_date.setTypeface(font.getHelveticaRegular());
             et_add_event_name.setTypeface(font.getHelveticaRegular());
             et_add_description.setTypeface(font.getHelveticaRegular());
 
@@ -236,8 +238,17 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
     {
         TAG = "onAddEventReceived";
         Log.d(MODULE, TAG);
-        AppUtils.hideProgressDialog();
-        AppUtils.DialogMessage(mActivity,Str_Msg);
+        try
+        {
+            AppUtils.hideProgressDialog();
+            AppUtils.DialogMessage(mActivity,Str_Msg);
+            goto_EventsFragment();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     @Override
@@ -443,4 +454,15 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
 
         return IsValid;
     }
+
+    public void goto_EventsFragment()
+    {
+        Fragment _fragment = new Fragment_Events();
+        FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_body, _fragment);
+        fragmentTransaction.commit();
+    }
+
+
 }

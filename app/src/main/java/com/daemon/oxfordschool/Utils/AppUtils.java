@@ -81,6 +81,7 @@ public class AppUtils extends Dialog
 
     public static final String FRAGMENT_ADD_ATTENDANCE = "500";
     public static final String FRAGMENT_ADD_HOMEWORK = "501";
+    public static final String FRAGMENT_ADD_EVENT = "502";
 
     public static File root = android.os.Environment.getExternalStorageDirectory();
     public static String RootPath = "/Android/data/com.daemon.oxfordschool";
