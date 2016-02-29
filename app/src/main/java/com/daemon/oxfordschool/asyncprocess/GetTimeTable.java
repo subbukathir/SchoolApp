@@ -86,7 +86,7 @@ public class GetTimeTable
                 }
                 else
                 {
-                    String Str_Code = response.getString("Success");
+                    String Str_Code = response.getString("success");
                     Log.d(MODULE, TAG + " Str_Code : " + Str_Code);
 
                     if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
@@ -98,7 +98,7 @@ public class GetTimeTable
                     }
                     else
                     {
-                        Str_Msg = response.getString("Message");
+                        Str_Msg = response.getString("message");
                         mCallBack.onTimeTableReceivedError(Str_Msg);
                     }
                 }
