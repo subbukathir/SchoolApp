@@ -93,6 +93,19 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="btn_style_select_date_time">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/border</item>
+        <item name="android:textColorHint">@color/material_grey_600</item>
+        <item name="android:textColor">@color/color_app</item>
+        <item name="android:textSize">@dimen/txt_size_btn</item>
+        <item name="android:layout_margin">@dimen/space_layout_margin_small</item>
+        <item name="android:drawableRight">@drawable/ic_action_action_event</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="divider_style">
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>

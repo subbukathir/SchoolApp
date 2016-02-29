@@ -4,9 +4,11 @@ package com.daemon.oxfordschool.fragment;
  * Created by Ravi on 25/02/16.
  */
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
@@ -39,9 +42,11 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Fragment_Add_Event extends Fragment implements DateSetListener, AddEventListener
@@ -53,18 +58,17 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
     SharedPreferences mPreferences;
     Toolbar mToolbar;
     User mUser;
-    Button btn_start_date,btn_end_date,btn_add_event;
+    Button btn_start_date,btn_end_date,btn_add_event, btn_start_time, btn_end_time;
 
     ArrayList<User> mListStudents =new ArrayList<User>();
-    Integer mSuccess;
 
     AppCompatActivity mActivity;
-    String Str_Id="",Str_Start_Date="",Str_End_Date="",Str_Event_Name="",Str_Description="";
+    String Str_Id="",Str_Start_Date="",Str_End_Date="",Str_Start_Time="",Str_End_Time="",Str_Event_Name="",Str_Description="";
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_Date="";
+    String Str_Date="", Str_Time="";
 
     EditText et_add_event_name, et_add_description;
-    public Boolean flag=true;
+    public Boolean flag=true, flag1=true;
     TextInputLayout til_add_event_name,til_add_description;
     TextView tv_lbl_start_date,tv_lbl_end_date;
     String Str_Event_Url = ApiConstants.ADD_EVENT_URL;
@@ -120,6 +124,8 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             tv_lbl_end_date = (TextView) view.findViewById(R.id.tv_lbl_select_end_date);
             btn_start_date = (Button) view.findViewById(R.id.btn_select_start_date);
             btn_end_date = (Button) view.findViewById(R.id.btn_select_end_date);
+            btn_start_time = (Button) view.findViewById(R.id.btn_select_start_time);
+            btn_end_time = (Button) view.findViewById(R.id.btn_select_end_time);
 
             et_add_event_name = (EditText) view.findViewById(R.id.et_add_event_name);
             et_add_description = (EditText) view.findViewById(R.id.et_add_description);
@@ -190,17 +196,24 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         {
             tv_lbl_start_date.setTypeface(font.getHelveticaRegular());
             tv_lbl_end_date.setTypeface(font.getHelveticaRegular());
+
             et_add_event_name.setTypeface(font.getHelveticaRegular());
             et_add_description.setTypeface(font.getHelveticaRegular());
 
             btn_start_date.setTypeface(font.getHelveticaRegular());
             btn_end_date.setTypeface(font.getHelveticaRegular());
+            btn_start_time.setTypeface(font.getHelveticaRegular());
+            btn_end_time.setTypeface(font.getHelveticaRegular());
 
             btn_start_date.setOnClickListener(_OnClickListener);
             btn_end_date.setOnClickListener(_OnClickListener);
+            btn_start_time.setOnClickListener(_OnClickListener);
+            btn_end_time.setOnClickListener(_OnClickListener);
             btn_add_event.setOnClickListener(_OnClickListener);
             btn_start_date.setText(ConvertedDate());
             btn_end_date.setText(ConvertedDate());
+            btn_start_time.setText(Str_Time);
+            btn_end_time.setText(Str_Time);
 
 
             et_add_event_name.addTextChangedListener(new MyTextWatcher(et_add_event_name));
@@ -268,12 +281,22 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             switch (view.getId())
             {
                 case R.id.btn_select_start_date:
-                     selectDate(view);
+                    flag=true;
+                    selectDate(view);
                      break;
                 case R.id.btn_select_end_date:
                      flag=false;
                      selectDate(view);
                      break;
+                case R.id.btn_select_start_time:
+                    flag1=true;
+                    selectTime();
+                    break;
+                case R.id.btn_select_end_time:
+                    flag1=false;
+                    selectTime();
+                    break;
+
                 case R.id.btn_add_event:
                      if(IsValid()) goto_Add_Event();
                      break;
@@ -325,8 +348,8 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         {
             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             Str_TodayDate = date;
-            Str_Start_Date = Str_TodayDate;
-            Str_End_Date = Str_TodayDate;
+            Time today = new Time(System.currentTimeMillis());
+            Str_Time = today.toString();
         }
         catch (Exception ex)
         {
@@ -338,6 +361,39 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
     public void selectDate(View view) {
         DialogFragment newFragment = new SelectDateFragment(Fragment_Add_Event.this);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
+    }
+
+    public void selectTime()
+    {
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(mActivity,
+                new TimePickerDialog.OnTimeSetListener()
+                {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute)
+                    {
+
+                        Str_Time = hourOfDay + ":" + minute;
+                        if(flag1)
+                        {
+                            Str_Start_Time=Str_Time;
+                            btn_start_time.setText(Str_Start_Time);
+                        }
+                        else
+                        {
+                            Str_End_Time=Str_Time;
+                            btn_end_time.setText(Str_End_Time);
+                        }
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+
     }
 
     public void populateSetDate(int year, int month, int day) {
@@ -463,6 +519,8 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         fragmentTransaction.replace(R.id.container_body, _fragment);
         fragmentTransaction.commit();
     }
+
+
 
 
 }
