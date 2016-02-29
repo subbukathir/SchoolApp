@@ -136,6 +136,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         AppUtils.hideProgressDialog();
         et_username.setText("");
         et_password.setText("");
+        et_username.requestFocus();
         Intent intent=new Intent(this,MainActivity.class);
         startActivity(intent);
     }

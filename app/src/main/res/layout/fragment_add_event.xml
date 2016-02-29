@@ -25,7 +25,7 @@
                 android:drawablePadding="@dimen/space_layout_padding"
                 android:hint="@string/lbl_event_name"
                 android:imeOptions="actionNext"
-                android:inputType="textLongMessage" />
+                android:inputType="textCapWords" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -39,9 +39,12 @@
                 android:drawablePadding="@dimen/space_layout_padding"
                 android:hint="@string/lbl_description"
                 android:imeOptions="actionDone"
-                android:inputType="textLongMessage" />
+                android:singleLine="false"
+                android:inputType="textCapSentences" />
         </android.support.design.widget.TextInputLayout>
+
         <!-- Select Date Starts Here -->
+
         <LinearLayout
             style="@style/match_wrap_style"
             android:layout_weight="1"
