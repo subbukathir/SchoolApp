@@ -6,7 +6,10 @@ package com.daemon.oxfordschool.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -59,6 +62,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
     EventsList_Response response;
 
     AppCompatActivity mActivity;
+    FloatingActionButton fab_add_event;
     String Str_Id="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_Url = ApiConstants.EVENTS_LIST_URL;
@@ -106,6 +110,8 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         {
             swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_events);
+            fab_add_event = (FloatingActionButton) view.findViewById(R.id.fab);
+
             setProperties();
         }
         catch (Exception ex)
@@ -140,6 +146,8 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         {
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
+            if(mUser.getUserType().equals(ApiConstants.STAFF)) fab_add_event.setVisibility(View.VISIBLE);
+            fab_add_event.setOnClickListener(_OnClickListener);
         }
         catch (Exception ex)
         {
@@ -271,6 +279,27 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
     }
 
+    View.OnClickListener _OnClickListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            switch (view.getId())
+            {
+                case R.id.fab:
+                    goto_AddEventFragment();
+                    break;
+            }
+        }
+    };
 
+    public void goto_AddEventFragment()
+    {
+        Fragment _fragment = new Fragment_Add_Event();
+        FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_body, _fragment);
+        fragmentTransaction.commit();
+    }
 
 }
