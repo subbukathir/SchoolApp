@@ -236,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new Fragment_Add_Marks();
                 title = getString(R.string.lbl_add_marks);
             }
-
         }
         else if(getString(R.string.lbl_homework).equals(navItem))
         {
@@ -366,16 +365,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         TAG="onBackPressed";
         Log.d(MODULE, TAG);
     }
-
-
-
 
     public void getProfile()
     {
