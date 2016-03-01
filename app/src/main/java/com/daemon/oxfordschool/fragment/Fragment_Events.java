@@ -58,6 +58,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
     SharedPreferences mPreferences;
     User mUser;
+    CEvents mCEvents;
     ArrayList<CEvents> mListEvents =new ArrayList<CEvents>();
     EventsList_Response response;
 
@@ -207,8 +208,12 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
     }
 
     @Override
-    public void onEventListItemClicked(int position) {
+    public void onEventListItemClicked(int position)
+    {
+        TAG = "onEventListItemClicked";
+        Log.d(MODULE, TAG + "position " + position);
 
+        gotoFragmentUpdate(position);
     }
 
     public void getEventsList()
@@ -300,6 +305,36 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_body, _fragment);
         fragmentTransaction.commit();
+    }
+    public void gotoFragmentUpdate(int position)
+    {
+        TAG = "gotoFragmentUpdate";
+        Log.d(MODULE, TAG);
+
+        if(mListEvents.size()>0)
+        {
+            mCEvents = mListEvents.get(position);
+            Log.d(MODULE, TAG + "values of list " + mCEvents.getOrganizer_First_Name() + mCEvents.getStartDate());
+            Log.d(MODULE, TAG + "getSectionId of list " + mCEvents.getOrganizer_First_Name());
+
+            Bundle  mBundle = new Bundle();
+
+            mBundle.putString("UserId", mCEvents.getOrganizerId());
+            mBundle.putString("Name", mCEvents.getName());
+            mBundle.putString("Description", mCEvents.getDescription());
+            mBundle.putString("StartDate", mCEvents.getStartDate());
+            mBundle.putString("EndDate", mCEvents.getEndDate());
+            mBundle.putString("EventId",mCEvents.getID());
+            mBundle.putInt("Mode", AppUtils.MODE_UPDATE);
+
+            Fragment mFragment = new Fragment_Add_Event();
+            FragmentManager mManager = mActivity.getSupportFragmentManager();
+            FragmentTransaction mTransaction = mManager.beginTransaction();
+            mFragment.setArguments(mBundle);
+            mTransaction.replace(R.id.container_body, mFragment,AppUtils.FRAGMENT_ADD_EVENT);
+            mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_EVENT + "");
+            mTransaction.commit();
+        }
     }
 
 }

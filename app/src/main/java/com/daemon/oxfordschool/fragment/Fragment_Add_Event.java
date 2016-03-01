@@ -65,14 +65,15 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
     AppCompatActivity mActivity;
     String Str_Id="",Str_Start_Date="",Str_End_Date="",Str_Start_Time="",Str_End_Time="",Str_Event_Name="",Str_Description="";
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_Date="", Str_Time="";
+    String Str_Date="", Str_Time="", Str_EventId="";
+    Integer mMode;
 
     EditText et_add_event_name, et_add_description;
     public Boolean flag=true, flag1=true;
     TextInputLayout til_add_event_name,til_add_description;
     TextView tv_lbl_start_date,tv_lbl_end_date;
     String Str_Event_Url = ApiConstants.ADD_EVENT_URL;
-    Bundle mSavedInstanceState;
+    Bundle mBundle;
     FragmentManager mManager;
 
     public Fragment_Add_Event()
@@ -91,11 +92,16 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             mActivity = (AppCompatActivity) getActivity();
             setHasOptionsMenu(true);
             setRetainInstance(false);
-            mSavedInstanceState=savedInstanceState;
+            mBundle=savedInstanceState;
             mManager = mActivity.getSupportFragmentManager();
+            mBundle = this.getArguments();
             getProfile();
             Str_Date=GetTodayDate();
             ConvertedDate();
+            if(mBundle!=null)
+            {
+                getBundle();
+            }
         }
         catch (Exception ex)
         {
@@ -210,10 +216,36 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             btn_start_time.setOnClickListener(_OnClickListener);
             btn_end_time.setOnClickListener(_OnClickListener);
             btn_add_event.setOnClickListener(_OnClickListener);
-            btn_start_date.setText(ConvertedDate());
-            btn_end_date.setText(ConvertedDate());
-            btn_start_time.setText(Str_Time);
-            btn_end_time.setText(Str_Time);
+
+
+            if(!Str_EventId.equals(""))
+            {
+                Log.d(MODULE, TAG + "bundle available");
+                btn_add_event.setText("update");
+                et_add_event_name.setText(Str_Event_Name);
+                et_add_description.setText(Str_Description);
+
+                String[] splitStart,splitEnd;
+
+                splitStart=Str_Start_Date.split(" ");
+                splitEnd=Str_End_Date.split(" ");
+                Str_Date = splitStart[0].toString();
+                btn_start_date.setText(ConvertedDate());
+                btn_start_time.setText(splitStart[1].toString());
+
+                Str_Date = splitEnd[0].toString();
+                btn_end_date.setText(ConvertedDate());
+                btn_end_time.setText(splitEnd[1].toString());
+
+            }
+            else
+            {
+                btn_add_event.setText("add");
+                btn_start_date.setText(ConvertedDate());
+                btn_end_date.setText(ConvertedDate());
+                btn_start_time.setText(Str_Time);
+                btn_end_time.setText(Str_Time);
+            }
 
 
             et_add_event_name.addTextChangedListener(new MyTextWatcher(et_add_event_name));
@@ -323,14 +355,28 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         Log.d(MODULE, TAG);
 
         JSONObject obj = new JSONObject();
+        StringBuilder str_startDate=new StringBuilder();
+        StringBuilder str_endDate=new StringBuilder();
+        if(!Str_Start_Date.equals("") && !Str_Start_Time.equals("")) str_startDate.append(Str_Start_Date).append(" ").append(Str_Start_Time);
+        else if(!Str_End_Date.equals("") && !Str_End_Time.equals(""))str_endDate.append(Str_End_Date).append(" ").append(Str_End_Time);
+        else if(!Str_EventId.equals(""))
+        {
+            str_startDate.append(Str_Start_Date);
+            str_endDate.append(Str_End_Date);
+        }
+        else
+        {
+            str_startDate.append(Str_Date).append(" ").append(Str_Time);
+            str_endDate.append(Str_Date).append(" ").append(Str_Time);
+        }
         try {
             obj.put("UserId", Str_Id);
             obj.put("Name", Str_Event_Name);
             obj.put("Description",Str_Description);
-            obj.put("StartDate",Str_Start_Date);
-            obj.put("EndDate",Str_End_Date);
-            obj.put("Mode","0");
-            obj.put("EventId","");
+            obj.put("StartDate",str_startDate.toString());
+            obj.put("EndDate",str_endDate.toString());
+            obj.put("Mode",mMode);
+            obj.put("EventId",Str_EventId);
 
         }
         catch (JSONException e) {
@@ -418,7 +464,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         try
         {
             SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-            DateFormat format1 = new SimpleDateFormat("E, MMM dd yyyy");
+            DateFormat format1 = new SimpleDateFormat("MM/dd/yyyy");
             Date date;
             date = sdf1.parse(Str_Date);
             Str_ReturnValue = format1.format(date);
@@ -520,7 +566,19 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         fragmentTransaction.commit();
     }
 
+    public void getBundle()
+    {
+        TAG = "getBundle";
+        Log.d(MODULE, TAG);
 
+        mMode =  mBundle.getInt("Mode");
+        Str_Start_Date = mBundle.getString("StartDate");
+        Str_End_Date = mBundle.getString("EndDate");
+        Str_Event_Name = mBundle.getString("Name");
+        Str_EventId = mBundle.getString("EventId");
+        Str_Description = mBundle.getString("Description");
+        Str_Id = mBundle.getString("UserId");
+    }
 
 
 }
