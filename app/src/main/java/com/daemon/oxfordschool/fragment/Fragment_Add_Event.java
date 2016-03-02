@@ -357,31 +357,17 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         JSONObject obj = new JSONObject();
         StringBuilder str_startDate=new StringBuilder();
         StringBuilder str_endDate=new StringBuilder();
-        if((!Str_Start_Date.equals("") && !Str_Start_Time.equals("")) && (!Str_End_Date.equals("") && !Str_End_Time.equals("")))
-        {
-            str_startDate.append(Str_Start_Date).append(" ").append(Str_Start_Time);
-            str_endDate.append(Str_End_Date).append(" ").append(Str_End_Time);
-        }
-        else if((Str_Start_Date.equals("") && !Str_Start_Time.equals("")) && (Str_End_Date.equals("") && !Str_End_Time.equals("")))
-        {
-            str_startDate.append(Str_Date).append(" ").append(Str_Start_Time);
-            str_endDate.append(Str_Date).append(" ").append(Str_End_Time);
-        }
-        else if((!Str_Start_Date.equals("") && Str_Start_Time.equals("")) && (!Str_End_Date.equals("") && Str_End_Time.equals("")))
-        {
-            str_startDate.append(Str_Start_Date).append(" ").append(Str_Time);
-            str_endDate.append(Str_End_Date).append(" ").append(Str_Time);
-        }
-        else if(!Str_EventId.equals(""))
-        {
-            str_startDate.append(Str_Start_Date);
-            str_endDate.append(Str_End_Date);
-        }
-        else
-        {
-            str_startDate.append(Str_Date).append(" ").append(Str_Time);
-            str_endDate.append(Str_Date).append(" ").append(Str_Time);
-        }
+
+        String str_start=btn_start_date.getText().toString();
+        String str_end=btn_end_date.getText().toString();
+        String str_startTime=btn_start_time.getText().toString();
+        String str_endTime=btn_end_time.getText().toString();
+
+            str_startDate.append(str_start).append(" ").append(str_startTime);
+            str_endDate.append(str_end).append(" ").append(str_endTime);
+
+        Log.d(MODULE,TAG + "value :"+ str_start +"value of end :"+ str_end);
+
         try {
             obj.put("UserId", Str_Id);
             obj.put("Name", Str_Event_Name);
