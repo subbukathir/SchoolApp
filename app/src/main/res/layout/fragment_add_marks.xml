@@ -13,6 +13,7 @@
             android:orientation="vertical">
 
             <include layout="@layout/view_section_class_selector" />
+
             <!-- Select Student Starts Here -->
 
             <LinearLayout

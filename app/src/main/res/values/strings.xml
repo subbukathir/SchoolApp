@@ -9,6 +9,7 @@
     <string name="lbl_student_profile">Student Profile</string>
     <string name="lbl_events">Events</string>
     <string name="lbl_homework">Homework</string>
+    <string name="lbl_diary">Diary</string>
     <string name="lbl_attendance">Attendance</string>
     <string name="lbl_add_event">Add Event</string>
     <string name="lbl_add_marks">Add Marks</string>
@@ -25,6 +26,7 @@
         <item>@string/lbl_student_profile</item>
         <item>@string/lbl_events</item>
         <item>@string/lbl_homework</item>
+        <item>@string/lbl_diary</item>
         <item>@string/lbl_attendance</item>
         <item>@string/lbl_add_marks</item>
         <item>@string/lbl_exam_schedule</item>
@@ -96,18 +98,28 @@
     <string name="lbl_msg_valid_event_name">Event Name should contain atleast 6 characters</string>
     <string name="lbl_msg_valid_description">Description should contain atleast 6 characters</string>
 
-    <!-- HomeWork -->
+    <!-- HomeWork & diary notes-->
+    <string name="lbl_add">Add </string>
     <string name="lbl_class_hw">Class </string>
     <string name="lbl_update">Update </string>
     <string name="lbl_section_hw">Sec </string>
     <string name="lbl_select_date">Select Date</string>
     <string name="lbl_no_homework">No homework on </string>
+    <string name="lbl_assignment"> Assignment </string>
+    <string name="lbl_comments"> Comments </string>
     <string name="lbl_assignmentI"> Assignment I </string>
     <string name="lbl_assignmentII"> Assignment II </string>
-    <string name="lbl_no_homeworks">No HomeWork found </string>
+    <string name="lbl_no_home_work">No HomeWork found </string>
+    <string name="lbl_no_diary_notes">No diary notes found </string>
     <string name="msg_future_date">Please Select Today date or future date to give Assignment </string>
+    <string name="lbl_msg_blank_assignment">Please fill Assignment for this class</string>
+    <string name="lbl_msg_blank_comments">Please fill Comments for this class</string>
+
     <string name="lbl_msg_blank_assignmentI">Please fill AssignmentI for this class</string>
     <string name="lbl_msg_blank_assignmentII">Please fill AssignmentII for this class</string>
+
+    <string name="lbl_msg_valid_assignment">Assignment should contain atleast 4 characters</string>
+    <string name="lbl_msg_valid_comments">Comments should contain atleast 4 characters</string>
 
     <string name="lbl_msg_valid_assignmentI">AssignmentI should contain atleast 4 characters</string>
     <string name="lbl_msg_valid_assignmentII">AssignmentII should contain atleast 4 characters</string>
@@ -116,6 +128,8 @@
     <string name="lbl_msg_validation">Please give valid input, Some entries are not given </string>
     <string name="lbl_add_homework">Add Homework</string>
     <string name="lbl_update_homework">Update Homework</string>
+    <string name="lbl_add_diary_notes">Add Diary Notes</string>
+    <string name="lbl_update_diary_notes">Update Diary Notes</string>
 
     <!-- Exam Schedule -->
 

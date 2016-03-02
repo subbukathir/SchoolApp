@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,23 +32,26 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.adapter.DiaryListAdapter;
 import com.daemon.oxfordschool.adapter.HomeWorkAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
-import com.daemon.oxfordschool.asyncprocess.GetHomeWorkList;
+import com.daemon.oxfordschool.asyncprocess.GetDiaryNotesList;
+import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
 import com.daemon.oxfordschool.classes.CHomework;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.AddHomeWorkListener;
 import com.daemon.oxfordschool.listeners.ClassListListener;
 import com.daemon.oxfordschool.listeners.DateSetListener;
-import com.daemon.oxfordschool.listeners.HomeWorkListListener;
-import com.daemon.oxfordschool.listeners.Homework_List_Item_Click_Listener;
+import com.daemon.oxfordschool.listeners.DiaryNotesListListener;
+import com.daemon.oxfordschool.listeners.Diary_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.SectionListListener;
+import com.daemon.oxfordschool.listeners.StudentsListListener;
 import com.daemon.oxfordschool.response.CommonList_Response;
 import com.daemon.oxfordschool.response.HomeWorkList_Response;
+import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -60,19 +62,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Fragment_HomeWork_Staff extends Fragment implements ClassListListener,SectionListListener
-        ,HomeWorkListListener,Homework_List_Item_Click_Listener,DateSetListener
+public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListListener,SectionListListener,
+        StudentsListListener,DiaryNotesListListener,Diary_List_Item_Click_Listener,DateSetListener
 {
 
-    public static String MODULE = "Fragment_HomeWork_Staff ";
+    public static String MODULE = "Fragment_Diary_Notes_Staff ";
     public static String TAG = "";
 
-    TextView tv_lbl_class,tv_lbl_section,tv_lbl_select_date,text_view_empty;
+    TextView tv_lbl_class,tv_lbl_section,tv_lbl_select_date,tv_lbl_select_student,text_view_empty;
     Button btn_select_date;
     RelativeLayout layout_empty;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
-    Spinner spinner_class,spinner_section;
+    Spinner spinner_class,spinner_section,spinner_student;
     SharedPreferences mPreferences;
     Toolbar mToolbar;
     User mUser;
@@ -81,8 +83,10 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
     ArrayList<Common_Class> mListSection =new ArrayList<Common_Class>();
     ArrayList<CHomework> mListHomeWork =new ArrayList<CHomework>();
+    ArrayList<User> mListStudent =new ArrayList<User>();
 
     CommonList_Response responseCommon;
+    StudentsList_Response studentListresponse;
     HomeWorkList_Response response;
     CHomework cHomework;
 
@@ -90,14 +94,16 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     Bundle mSavedInstanceState;
     String Str_Id="";
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_ClassId,Str_SectionId="",Str_Date="";
-    String Str_HomeWorkList_Url = ApiConstants.HOMEWORK_LIST_URL;
+    String Str_ClassId,Str_SectionId="",Str_Date="",Str_StudentId="";
+    String Str_Url = ApiConstants.DIARY_NOTES_LIST_STAFF_URL;
+    String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
 
-    int mClassListPosition=0,mSectionListPosition=0;
+    int mClassListPosition=0,mSectionListPosition=0,mStudentListPosition=0;
     final static String ARG_CLASS_LIST_POSITION = "Class_List_Position";
     final static String ARG_SECTION_LIST_POSITION = "Section_List_Position";
+    final static String ARG_STUDENT_LIST_POSITION = "Student_List_Position";
 
-    public Fragment_HomeWork_Staff()
+    public Fragment_Diary_Notes_Staff()
     {
         // Required empty public constructor
     }
@@ -129,7 +135,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_homework_staff, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_diary_staff, container, false);
         TAG = "onCreateView";
         Log.d(MODULE, TAG);
         initView(rootView);
@@ -144,6 +150,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         {
             tv_lbl_class = (TextView) view.findViewById(R.id.tv_lbl_class);
             tv_lbl_section = (TextView) view.findViewById(R.id.tv_lbl_section);
+            tv_lbl_select_student = (TextView) view.findViewById(R.id.tv_lbl_select_student);
 
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
@@ -153,7 +160,9 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
 
             spinner_class = (Spinner) view.findViewById(R.id.spinner_class);
             spinner_section = (Spinner) view.findViewById(R.id.spinner_section);
-            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_homework);
+            spinner_student = (Spinner) view.findViewById(R.id.spinner_student);
+
+            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_diary);
             setProperties();
         }
         catch (Exception ex)
@@ -176,11 +185,14 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             {
                 mClassListPosition=mSavedInstanceState.getInt(ARG_CLASS_LIST_POSITION);
                 mSectionListPosition=mSavedInstanceState.getInt(ARG_SECTION_LIST_POSITION);
+                mStudentListPosition=mSavedInstanceState.getInt(ARG_STUDENT_LIST_POSITION);
                 Log.d(MODULE,TAG + "mClassListPosition" + mClassListPosition);
                 Log.d(MODULE,TAG + "mSectionListPosition" + mSectionListPosition);
+                Log.d(MODULE,TAG + "mStudentListPosition" + mStudentListPosition);
             }
             if(mListClass.size()>0) showClassList();
             if(mListSection.size()>0) showSectionList();
+            if(mListStudent.size()>0) showStudentsList();
         }
         catch (Exception ex)
         {
@@ -197,6 +209,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             tv_lbl_class.setTypeface(font.getHelveticaRegular());
             tv_lbl_section.setTypeface(font.getHelveticaRegular());
             tv_lbl_select_date.setTypeface(font.getHelveticaRegular());
+            tv_lbl_select_student.setTypeface(font.getHelveticaRegular());
             btn_select_date.setTypeface(font.getHelveticaRegular());
             text_view_empty.setTypeface(font.getHelveticaRegular());
 
@@ -207,6 +220,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
 
             spinner_class.setOnItemSelectedListener(_OnClassItemSelectedListener);
             spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
+            spinner_student.setOnItemSelectedListener(_OnStudentItemSelectedListener);
             btn_select_date.setOnClickListener(_OnClickListener);
             btn_select_date.setText(ConvertedDate());
 
@@ -232,7 +246,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             {
                 mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
                 mActivity.setSupportActionBar(mToolbar);
-                mToolbar.setTitle(R.string.lbl_homework);
+                mToolbar.setTitle(R.string.lbl_diary);
                 FragmentDrawer.mDrawerLayout.post(new Runnable() {
                     @Override
                     public void run() {
@@ -270,13 +284,13 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         }
     }
 
-    public void getHomeWorksFromService(String Str_Date)
+    public void getDiaryNotesFromService(String Str_Date)
     {
-        TAG = "getHomeWorksFromService";
+        TAG = "getDiaryNotesFromService";
         Log.d(MODULE, TAG);
         try
         {
-            new GetHomeWorkList(Str_HomeWorkList_Url,Payload_HomeWork(Str_Date),this).getHomeWorks();
+            new GetDiaryNotesList(Str_Url,Payload_DiaryNotes(Str_Date),this).getDiaryNotes();
         }
         catch (Exception ex)
         {
@@ -291,7 +305,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             switch (view.getId())
             {
                 case R.id.fab:
-                    goto_Fragment_AddHomeWork();
+                    goto_Fragment_AddDiaryNotes();
                     break;
                 case R.id.btn_select_date:
                     selectDate(view);
@@ -299,20 +313,19 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
                 default:
                     break;
             }
-
         }
     };
 
-    public void goto_Fragment_AddHomeWork()
+    public void goto_Fragment_AddDiaryNotes()
     {
-        TAG = "goto_Fragment";
+        TAG = "goto_Fragment_AddDiaryNotes";
         Log.d(MODULE, TAG);
 
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
-        Fragment fragment=new Fragment_Add_HomeWork();
+        Fragment fragment=new Fragment_Add_DiaryNotes();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_body, fragment,AppUtils.FRAGMENT_ADD_HOMEWORK);
-        fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_HOMEWORK);
+        fragmentTransaction.replace(R.id.container_body, fragment,AppUtils.FRAGMENT_ADD_DIARY_NOTES);
+        fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_DIARY_NOTES);
         fragmentTransaction.commit();
     }
 
@@ -350,6 +363,37 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
                 {
                     Log.d(MODULE, TAG + " Spinner Section : " + position);
                     Str_SectionId=mListSection.get(position-1).getID();
+                    new GetStudentList(Str_StudentList_Url,Payload_Student_List(),Fragment_Diary_Notes_Staff.this).getStudents();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView)
+        {
+
+        }
+    };
+
+    AdapterView.OnItemSelectedListener _OnStudentItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+        {
+            TAG = "_OnStudentItem";
+            Log.d(MODULE, TAG);
+            try
+            {
+                if(position>0)
+                {
+                    Log.d(MODULE, TAG + " Spinner Student : " + position);
+                    Str_StudentId=mListStudent.get(position-1).getUserId();
+                    Log.d(MODULE, TAG + " Str_StudentId : " + Str_StudentId);
+
                 }
 
             }
@@ -408,13 +452,30 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     }
 
     @Override
-    public void onHomeWorkListReceived() {
-        TAG = "onHomeWorkListReceived";
+    public void onStudentsReceived()
+    {
+        TAG = "onStudentsReceived";
+        Log.d(MODULE, TAG);
+        getStudentList();
+        showStudentsList();
+    }
+
+    @Override
+    public void onStudentsReceivedError(String Str_Msg)
+    {
+        TAG = "onStudentsReceivedError";
+        Log.d(MODULE, TAG);
+        AppUtils.hideProgressDialog();
+    }
+
+    @Override
+    public void onDiaryNotesListReceived() {
+        TAG = "onDiaryNotesListReceived";
         Log.d(MODULE, TAG);
         try
         {
-            getHomeWorksList();
-            showHomeWorkList();
+            getDiaryNotesList();
+            showDiaryNotesList();
         }
         catch (Exception ex)
         {
@@ -423,8 +484,8 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     }
 
     @Override
-    public void onHomeWorkListReceivedError(String Str_Msg) {
-        TAG = "onHomeWorkListReceivedError";
+    public void onDiaryNotesListReceivedError(String Str_Msg) {
+        TAG = "onDiaryNotesListReceivedError";
         Log.d(MODULE, TAG);
         try
         {
@@ -438,7 +499,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     }
 
     @Override
-    public void onHomeWorkListItemClicked(int position)
+    public void onDiaryListItemClicked(int position)
     {
         TAG = "onHomeWorkListItemClicked";
         Log.d(MODULE, TAG);
@@ -498,14 +559,40 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         }
     }
 
-    public void getHomeWorksList()
+    public void getStudentList()
     {
-        TAG = "getHomeWorksList";
+        TAG = "getStudentList";
         Log.d(MODULE, TAG);
         try
         {
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_HOMEWORK_LIST,"");
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_STUDENT_LIST, "");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if (Str_Json.length() > 0)
+            {
+                studentListresponse = (StudentsList_Response) AppUtils.fromJson(Str_Json, new TypeToken<StudentsList_Response>() { }.getType());
+                mListStudent = studentListresponse.getCstudents();
+                Log.d(MODULE, TAG + " mListStudent : " + mListStudent.size());
+            }
+            else
+            {
+                new GetStudentList(Str_StudentList_Url,Payload_Student_List(), this).getStudents();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getDiaryNotesList()
+    {
+        TAG = "getDiaryNotesList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_DIARY_NOTES_LIST,"");
             Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
             if(Str_Json.length()>0)
             {
@@ -549,7 +636,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_section.setAdapter(adapter);
             spinner_section.setSelection(mSectionListPosition);
-            if(mSavedInstanceState!=null) getHomeWorksFromService(Str_Date);
+            if(mSavedInstanceState!=null) getDiaryNotesFromService(Str_Date);
         }
         catch (Exception ex)
         {
@@ -557,22 +644,43 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         }
     }
 
-    public void showHomeWorkList()
+    public void showStudentsList()
     {
-        TAG = "showHomeWorkList";
+        TAG = "showStudentsList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if(mListStudent.size()>0)
+            {
+                String[] items = AppUtils.getStudentArray(mListStudent, getString(R.string.lbl_select_student));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_student.setAdapter(adapter);
+                spinner_class.setSelection(mStudentListPosition);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showDiaryNotesList()
+    {
+        TAG = "showDiaryNotesList";
         Log.d(MODULE, TAG);
         try
         {
             if(mListHomeWork.size()>0)
             {
-                HomeWorkAdapter adapter = new HomeWorkAdapter(mListHomeWork,this);
+                DiaryListAdapter adapter = new DiaryListAdapter(mListHomeWork,this);
                 recycler_view.setAdapter(adapter);
                 layout_empty.setVisibility(View.GONE);
                 recycler_view.setVisibility(View.VISIBLE);
             }
             else
             {
-                text_view_empty.setText(getString(R.string.lbl_no_home_work));
+                text_view_empty.setText(getString(R.string.lbl_no_diary_notes));
                 showEmptyView();
             }
 
@@ -600,16 +708,38 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
 
     }
 
-    public JSONObject Payload_HomeWork(String Str_Date)
+    public JSONObject Payload_DiaryNotes(String Str_Date)
     {
-        TAG = "Payload";
+        TAG = "Payload_DiaryNotes";
         Log.d(MODULE, TAG);
 
         JSONObject obj = new JSONObject();
         try {
+            obj.put("UserId", Str_Id);
             obj.put("ClassId", Str_ClassId);
             obj.put("SectionId",Str_SectionId);
+            obj.put("StudentId",Str_StudentId);
             obj.put("HomeWorkDate", Str_Date);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
+    }
+
+    public JSONObject Payload_Student_List()
+    {
+        TAG = "Payload_Student_List";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("ParentId", "");
+            obj.put("ClassId", Str_ClassId);
+            obj.put("SectionId",Str_SectionId);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -635,7 +765,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     }
 
     public void selectDate(View view) {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_HomeWork_Staff.this);
+        DialogFragment newFragment = new SelectDateFragment(Fragment_Diary_Notes_Staff.this);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 
@@ -644,7 +774,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         {
             Str_Date = year + "-" + month + "-"+day;
             btn_select_date.setText(ConvertedDate());
-            getHomeWorksFromService(Str_Date);
+            getDiaryNotesFromService(Str_Date);
         }
         catch (Exception ex)
         {
@@ -669,22 +799,15 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
 
             Bundle  mBundle = new Bundle();
 
-            mBundle.putString("ClassId", cHomework.getClassId());
-            mBundle.putString("SectionId", cHomework.getSectionId());
-            mBundle.putString("HomeWorkDate", cHomework.getHomeWorkDate());
-            mBundle.putString("Assignment_I", cHomework.getAssignment_I());
-            mBundle.putString("Assignment_II", cHomework.getAssignment_II());
-            mBundle.putString("HomeWorkId", cHomework.getHomeWorkId());
-            mBundle.putString("SubjectId", cHomework.getSubjectId());
-            mBundle.putString("SubjectName", cHomework.getSubjectName());
-            mBundle.putInt("Mode", AppUtils.MODE_UPDATE);
+            mBundle.putParcelable(AppUtils.B_DIARY,cHomework);
+            mBundle.putInt(AppUtils.B_MODE, AppUtils.MODE_UPDATE);
 
-            Fragment mFragment = new Fragment_Add_HomeWork();
+            Fragment mFragment = new Fragment_Add_DiaryNotes();
             FragmentManager mManager = mActivity.getSupportFragmentManager();
             FragmentTransaction mTransaction = mManager.beginTransaction();
             mFragment.setArguments(mBundle);
-            mTransaction.replace(R.id.container_body, mFragment,AppUtils.FRAGMENT_ADD_HOMEWORK);
-            mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_HOMEWORK + "");
+            mTransaction.replace(R.id.container_body, mFragment,AppUtils.FRAGMENT_ADD_DIARY_NOTES);
+            mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_DIARY_NOTES + "");
             mTransaction.commit();
         }
     }
@@ -747,6 +870,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         {
             outState.putInt(ARG_CLASS_LIST_POSITION,spinner_class.getSelectedItemPosition());
             outState.putInt(ARG_SECTION_LIST_POSITION,spinner_section.getSelectedItemPosition());
+            outState.putInt(ARG_STUDENT_LIST_POSITION,spinner_student.getSelectedItemPosition());
         }
         catch (Exception ex)
         {
