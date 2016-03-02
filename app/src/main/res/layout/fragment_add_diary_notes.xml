@@ -8,11 +8,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <include layout="@layout/view_section_class_selector" />
 
     <LinearLayout
         style="@style/match_wrap_style"
         android:orientation="vertical">
+
+        <!-- Select Student Starts Here -->
+
+        <LinearLayout
+            style="@style/match_wrap_style"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_lbl_select_student"
+                    style="@style/text_view_label_teacher"
+                    android:gravity="left"
+                    android:paddingLeft="@dimen/space_layout_padding"
+                    android:text="@string/lbl_select_student" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_layout_margin"
+                    android:layout_marginRight="@dimen/space_layout_margin">
+
+                    <Spinner
+                        android:id="@+id/spinner_student"
+                        style="@style/spinner_style"></Spinner>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Select Student Ends Here -->
 
         <!-- Select Date Starts Here -->
 
@@ -37,6 +73,8 @@
 
         <!-- Select Date Ends Here -->
 
+
+
         <LinearLayout
             style="@style/match_wrap_style"
             android:layout_weight="1"
@@ -60,29 +98,28 @@
     </LinearLayout>
 
     <com.daemon.oxfordschool.components.CustomTextInputLayout
-        android:id="@+id/til_add_assignment_I"
+        android:id="@+id/til_add_assignment"
         style="@style/match_wrap_style"
         android:layout_marginTop="@dimen/space_layout_margin">
 
         <EditText
-            android:id="@+id/et_add_assignment_I"
+            android:id="@+id/et_add_assignment"
             style="@style/et_login_style"
             android:drawablePadding="@dimen/space_layout_padding"
-            android:hint="@string/lbl_assignmentI"
+            android:hint="@string/lbl_assignment"
             android:imeOptions="actionNext"
             android:inputType="textLongMessage" />
     </com.daemon.oxfordschool.components.CustomTextInputLayout>
 
     <com.daemon.oxfordschool.components.CustomTextInputLayout
-
-        android:id="@+id/til_add_assignment_II"
+        android:id="@+id/til_add_comments"
         style="@style/match_wrap_style">
 
         <EditText
-            android:id="@+id/et_add_assignment_II"
+            android:id="@+id/et_add_comments"
             style="@style/et_login_style"
             android:drawablePadding="@dimen/space_layout_padding"
-            android:hint="@string/lbl_assignmentII"
+            android:hint="@string/lbl_comments"
             android:imeOptions="actionDone"
             android:inputType="textLongMessage" />
     </com.daemon.oxfordschool.components.CustomTextInputLayout>
@@ -94,9 +131,9 @@
         android:layout_weight="1">
 
         <Button
-            android:id="@+id/btn_add_homework"
+            android:id="@+id/btn_add_diary_notes"
             style="@style/btn_login_style"
-            android:text="ADD" />
+            android:text="@string/lbl_add" />
     </LinearLayout>
 
 </LinearLayout>

@@ -54,6 +54,7 @@ public class AppUtils extends Dialog
     public static String SHARED_EXAM_RESULT = "Shared_Exam_Result";
     public static String SHARED_EVENTS_LIST = "Shared_Events_List";
     public static String SHARED_HOMEWORK_LIST = "Shared_HomeWork_List";
+    public static String SHARED_DIARY_NOTES_LIST = "Shared_Diary_Notes_List";
     public static String SHARED_ATTENTANCE = "Shared_Attendance";
     public static String SHARED_TIMETABLE = "Shared_TimeTable";
     public static String SHARED_ADDHOMEWORK = "Shared_Add_HomeWork";
@@ -75,6 +76,8 @@ public class AppUtils extends Dialog
     public static String B_ATTENDANCE_LIST="Bundle_List";
     public static String B_DATE="Bundle_Date";
 
+    public static String B_DIARY="Bundle_Diary";
+
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
     public static String SHARED_DIALOG_PICKER = "Shared_Dialog_Picker";
@@ -82,6 +85,8 @@ public class AppUtils extends Dialog
     public static final String FRAGMENT_ADD_ATTENDANCE = "500";
     public static final String FRAGMENT_ADD_HOMEWORK = "501";
     public static final String FRAGMENT_ADD_EVENT = "502";
+    public static final String FRAGMENT_ADD_DIARY_NOTES = "503";
+
 
     public static File root = android.os.Environment.getExternalStorageDirectory();
     public static String RootPath = "/Android/data/com.daemon.oxfordschool";
@@ -325,4 +330,18 @@ public class AppUtils extends Dialog
         alert.show();
     }
 
+    public static int getPosition(ArrayList<Common_Class> mList,String Str_Id)
+    {
+        for(int i=0; i<mList.size(); i++)
+        {
+            String Str_Value=mList.get(i).getID();
+
+            if(Str_Value.equals(Str_Id))
+            {
+                return i;
+            }
+        }
+
+        return 0;
+    }
 }

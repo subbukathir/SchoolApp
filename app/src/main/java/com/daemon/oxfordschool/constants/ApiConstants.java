@@ -24,6 +24,9 @@ public class ApiConstants
     public static String TIME_TABLE_URL=SERVER_URL + "TimeTable.php";
     public static String ADD_ATTENDANCE=SERVER_URL + "UpdateAttendance.php";
     public static String ADD_HOMEWORK_URL=SERVER_URL + "AddHomeWork.php";
+    public static String ADD_DIARY_NOTES_URL=SERVER_URL + "AddDiaryNotes.php";
+    public static String DIARY_NOTES_LIST_URL=SERVER_URL + "DiaryNotesList.php";
+    public static String DIARY_NOTES_LIST_STAFF_URL=SERVER_URL + "DiaryNotesList_Staff.php";
     public static String ADD_MARKS_URL=SERVER_URL + "AddMarks.php";
     public static String ADD_EVENT_URL=SERVER_URL + "AddEvent.php";
     public static String TERM_LIST_URL=SERVER_URL + "FeesTypeList.php";

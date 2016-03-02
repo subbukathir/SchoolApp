@@ -28,8 +28,10 @@ import com.daemon.oxfordschool.asyncprocess.RegisterDevice;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
+import com.daemon.oxfordschool.fragment.Fragment_Add_DiaryNotes;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
+import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule;
@@ -251,6 +253,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             {
                 fragment = new Fragment_HomeWork();
                 title = getString(R.string.lbl_homework);
+            }
+        }
+        else if(getString(R.string.lbl_diary).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Diary_Notes_Staff();
+                title = getString(R.string.lbl_diary);
             }
         }
         else if(getString(R.string.lbl_attendance).equals(navItem))

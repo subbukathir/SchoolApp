@@ -12,6 +12,9 @@ public class CHomework implements Parcelable
     private String ClassId;
     private String SectionId;
     private String SubjectId;
+    private String StudentId;
+    private String Assignment;
+    private String Comments;
     private String Assignment_I;
     private String Assignment_II;
     private String HomeWorkDate;
@@ -30,7 +33,10 @@ public class CHomework implements Parcelable
         dest.writeString(HomeWorkId);
         dest.writeString(ClassId);
         dest.writeString(SectionId);
+        dest.writeString(StudentId);
         dest.writeString(SubjectId);
+        dest.writeString(Assignment);
+        dest.writeString(Comments);
         dest.writeString(Assignment_I);
         dest.writeString(Assignment_II);
         dest.writeString(HomeWorkDate);
@@ -43,7 +49,10 @@ public class CHomework implements Parcelable
         this.HomeWorkId = source.readString();
         this.ClassId = source.readString();
         this.SectionId = source.readString();
+        this.StudentId = source.readString();
         this.SubjectId = source.readString();
+        this.Assignment  = source.readString();
+        this.Comments = source.readString();
         this.Assignment_I = source.readString();
         this.Assignment_II = source.readString();
         this.HomeWorkDate = source.readString();
@@ -84,6 +93,14 @@ public class CHomework implements Parcelable
         return SectionId;
     }
 
+    public String getStudentId() {
+        return StudentId;
+    }
+
+    public void setStudentId(String studentId) {
+        StudentId = studentId;
+    }
+
     public void setSectionId(String sectionId) {
         SectionId = sectionId;
     }
@@ -94,6 +111,22 @@ public class CHomework implements Parcelable
 
     public void setSubjectId(String subjectId) {
         SubjectId = subjectId;
+    }
+
+    public String getAssignment() {
+        return Assignment;
+    }
+
+    public void setAssignment(String assignment) {
+        Assignment = assignment;
+    }
+
+    public String getComments() {
+        return Comments;
+    }
+
+    public void setComments(String comments) {
+        Comments = comments;
     }
 
     public String getAssignment_I() {
