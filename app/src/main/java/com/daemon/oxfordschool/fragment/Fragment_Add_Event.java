@@ -357,8 +357,21 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         JSONObject obj = new JSONObject();
         StringBuilder str_startDate=new StringBuilder();
         StringBuilder str_endDate=new StringBuilder();
-        if(!Str_Start_Date.equals("") && !Str_Start_Time.equals("")) str_startDate.append(Str_Start_Date).append(" ").append(Str_Start_Time);
-        else if(!Str_End_Date.equals("") && !Str_End_Time.equals(""))str_endDate.append(Str_End_Date).append(" ").append(Str_End_Time);
+        if((!Str_Start_Date.equals("") && !Str_Start_Time.equals("")) && (!Str_End_Date.equals("") && !Str_End_Time.equals("")))
+        {
+            str_startDate.append(Str_Start_Date).append(" ").append(Str_Start_Time);
+            str_endDate.append(Str_End_Date).append(" ").append(Str_End_Time);
+        }
+        else if((Str_Start_Date.equals("") && !Str_Start_Time.equals("")) && (Str_End_Date.equals("") && !Str_End_Time.equals("")))
+        {
+            str_startDate.append(Str_Date).append(" ").append(Str_Start_Time);
+            str_endDate.append(Str_Date).append(" ").append(Str_End_Time);
+        }
+        else if((!Str_Start_Date.equals("") && Str_Start_Time.equals("")) && (!Str_End_Date.equals("") && Str_End_Time.equals("")))
+        {
+            str_startDate.append(Str_Start_Date).append(" ").append(Str_Time);
+            str_endDate.append(Str_End_Date).append(" ").append(Str_Time);
+        }
         else if(!Str_EventId.equals(""))
         {
             str_startDate.append(Str_Start_Date);
@@ -373,8 +386,8 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             obj.put("UserId", Str_Id);
             obj.put("Name", Str_Event_Name);
             obj.put("Description",Str_Description);
-            obj.put("StartDate",str_startDate.toString());
-            obj.put("EndDate",str_endDate.toString());
+            obj.put("StartDate",ConvertedDateTime(str_startDate.toString()));
+            obj.put("EndDate",ConvertedDateTime(str_endDate.toString()));
             obj.put("Mode",mMode);
             obj.put("EventId",Str_EventId);
 
@@ -467,6 +480,26 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             DateFormat format1 = new SimpleDateFormat("MM/dd/yyyy");
             Date date;
             date = sdf1.parse(Str_Date);
+            Str_ReturnValue = format1.format(date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return Str_ReturnValue;
+    }
+
+    public String ConvertedDateTime(String StrDateTime)
+    {
+        TAG = "ConvertedDateTime";
+        Log.d(MODULE,TAG);
+        String Str_ReturnValue="";
+        try
+        {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+            DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date;
+            date = sdf1.parse(StrDateTime);
             Str_ReturnValue = format1.format(date);
         }
         catch (Exception e)
