@@ -66,7 +66,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
     String Str_Id="",Str_Start_Date="",Str_End_Date="",Str_Start_Time="",Str_End_Time="",Str_Event_Name="",Str_Description="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_Date="", Str_Time="", Str_EventId="";
-    Integer mMode;
+    Integer mMode=0;
 
     EditText et_add_event_name, et_add_description;
     public Boolean flag=true, flag1=true;
@@ -374,7 +374,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             obj.put("Description",Str_Description);
             obj.put("StartDate",ConvertedDateTime(str_startDate.toString()));
             obj.put("EndDate",ConvertedDateTime(str_endDate.toString()));
-            obj.put("Mode",mMode);
+            obj.put("Mode",mMode.toString());
             obj.put("EventId",Str_EventId);
 
         }
