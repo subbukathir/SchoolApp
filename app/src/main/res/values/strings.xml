@@ -89,8 +89,8 @@
     <string name="lbl_description">Description</string>
     <string name="lbl_no_events">No Events</string>
     <string name="lbl_starts_on">Starts On</string>
-    <string name="lbl_select_start_date">Select Start Date</string>
-    <string name="lbl_select_end_date">Select End Date</string>
+    <string name="lbl_select_start_date">Select Start Date &amp; Time</string>
+    <string name="lbl_select_end_date">Select End Date &amp; Time</string>
 
     <string name="lbl_msg_blank_event_name">Please fill event name</string>
     <string name="lbl_msg_blank_description">Please fill description about event</string>
