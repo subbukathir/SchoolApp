@@ -656,7 +656,7 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_student.setAdapter(adapter);
-                spinner_class.setSelection(mStudentListPosition);
+                spinner_student.setSelection(mStudentListPosition);
             }
         }
         catch (Exception ex)
@@ -792,6 +792,7 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
         {
             mSavedInstanceState=getSavedState();
             cHomework = mListHomeWork.get(position);
+            cHomework.setStudentId(Str_StudentId);
             Log.d(MODULE, TAG + "values of list " + cHomework.getClassId() + cHomework.getClassName());
             Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getSectionId());
             Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getHomeWorkDate());

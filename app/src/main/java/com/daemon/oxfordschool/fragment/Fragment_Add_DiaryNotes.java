@@ -266,7 +266,7 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
                 Date hw_date;
                 try
                 {
-                    hw_date = sdf.parse(mBundle.getString("HomeWorkDate"));
+                    hw_date = sdf.parse(Str_Date);
                     Str_Date = format.format(hw_date);
                 }
                 catch (Exception ex)
@@ -412,8 +412,7 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
             {
                 if(mMode==AppUtils.MODE_UPDATE && position==0)
                 {
-                    int pos=Integer.parseInt(mBundle.getString("ClassId"));
-                    spinner_class.setSelection(Integer.parseInt(mListClass.get(pos-1).getID()));
+                     spinner_class.setSelection(0);
                 }
                 if (position > 0) Str_ClassId = mListClass.get(position - 1).getID();
             }
@@ -439,8 +438,7 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
             {
                 if(mMode==AppUtils.MODE_UPDATE && position==0)
                 {
-                    int pos=Integer.parseInt(mBundle.getString("SectionId"));
-                    spinner_section.setSelection(Integer.parseInt(mListSection.get(pos-1).getID()));
+                    spinner_section.setSelection(0);
                 }
                 if(position>0)
                 {
@@ -650,6 +648,11 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
         Str_ClassId=cHomework.getClassId();
         Str_SectionId=cHomework.getSectionId();
         Str_Date=cHomework.getHomeWorkDate();
+
+        Log.d(MODULE, TAG + " Str_ClassId : " + Str_ClassId);
+        Log.d(MODULE, TAG + " Str_SectionId : " + Str_SectionId);
+        Log.d(MODULE, TAG + " Str_StudentId : " + Str_StudentId);
+        Log.d(MODULE, TAG + " Str_SubjectId : " + Str_SubjectId);
     }
 
     public void getClassList()
@@ -790,7 +793,7 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
             spinner_section.setSelection(mSectionListPosition);
             if(mMode==AppUtils.MODE_UPDATE)
             {
-                spinner_subject.setSelection(AppUtils.getPosition(mListSection,Str_SectionId));
+                spinner_section.setSelection(AppUtils.getPosition(mListSection,Str_SectionId));
             }
         }
         catch (Exception ex)
