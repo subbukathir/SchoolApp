@@ -374,7 +374,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             obj.put("Description",Str_Description);
             obj.put("StartDate",ConvertedDateTime(str_startDate.toString()));
             obj.put("EndDate",ConvertedDateTime(str_endDate.toString()));
-            obj.put("Mode",mMode);
+            obj.put("Mode",mMode.toString());
             obj.put("EventId",Str_EventId);
 
         }
