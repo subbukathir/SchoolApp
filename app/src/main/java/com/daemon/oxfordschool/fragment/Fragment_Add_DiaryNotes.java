@@ -820,7 +820,7 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
                 {
                     for(int i=0; i<mListStudent.size(); i++)
                     {
-                        String Str_Value=mListStudent.get(i).getID();
+                        String Str_Value=mListStudent.get(i).getStudentId();
 
                         if(Str_Value.equals(Str_StudentId))
                         {
