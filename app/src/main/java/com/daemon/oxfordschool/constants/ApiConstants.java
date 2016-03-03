@@ -19,6 +19,7 @@ public class ApiConstants
     public static String EXAM_RESULT_URL=SERVER_URL + "ExamResultByStudentId.php";
     public static String EXAM_RESULT_URL_STAFF=SERVER_URL + "ExamResult.php";
     public static String HOMEWORK_LIST_URL=SERVER_URL + "HomeWorkList.php";
+    public static String HOMEWORK_LIST_STAFF_URL=SERVER_URL + "HomeWorkListStaff.php";
     public static String ATTENDANCE_URL=SERVER_URL + "Attendance.php";
     public static String ATTENDANCE_BY_STUDENT_URL=SERVER_URL + "AttendanceByStudentId.php";
     public static String TIME_TABLE_URL=SERVER_URL + "TimeTable.php";

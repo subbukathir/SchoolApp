@@ -130,7 +130,7 @@
     <string name="lbl_update_homework">Update Homework</string>
     <string name="lbl_add_diary_notes">Add Diary Notes</string>
     <string name="lbl_update_diary_notes">Update Diary Notes</string>
-
+    <string name="lbl_no_records">No Records</string>
     <!-- Exam Schedule -->
 
     <string name="lbl_select_exam_type">Select Exam Type</string>

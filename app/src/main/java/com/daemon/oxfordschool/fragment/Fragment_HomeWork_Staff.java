@@ -91,7 +91,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     String Str_Id="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_ClassId,Str_SectionId="",Str_Date="";
-    String Str_HomeWorkList_Url = ApiConstants.HOMEWORK_LIST_URL;
+    String Str_HomeWorkList_Url = ApiConstants.HOMEWORK_LIST_STAFF_URL;
 
     int mClassListPosition=0,mSectionListPosition=0;
     final static String ARG_CLASS_LIST_POSITION = "Class_List_Position";
@@ -442,7 +442,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     {
         TAG = "onHomeWorkListItemClicked";
         Log.d(MODULE, TAG);
-
+        Log.d(MODULE, TAG + " Position : " + position);
         gotoFragmentUpdate(position);
     }
 
@@ -610,6 +610,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             obj.put("ClassId", Str_ClassId);
             obj.put("SectionId",Str_SectionId);
             obj.put("HomeWorkDate", Str_Date);
+            obj.put("UserId", Str_Id);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -664,20 +665,12 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             cHomework = mListHomeWork.get(position);
             Log.d(MODULE, TAG + "values of list " + cHomework.getClassId() + cHomework.getClassName());
             Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getSectionId());
-            Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getHomeWorkDate());
-            Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getAssignment_I());
+            Log.d(MODULE, TAG + "getHomeWorkDate of list " + cHomework.getHomeWorkDate());
+            Log.d(MODULE, TAG + "getAssignment_I of list " + cHomework.getAssignment_I());
 
             Bundle  mBundle = new Bundle();
-
-            mBundle.putString("ClassId", cHomework.getClassId());
-            mBundle.putString("SectionId", cHomework.getSectionId());
-            mBundle.putString("HomeWorkDate", cHomework.getHomeWorkDate());
-            mBundle.putString("Assignment_I", cHomework.getAssignment_I());
-            mBundle.putString("Assignment_II", cHomework.getAssignment_II());
-            mBundle.putString("HomeWorkId", cHomework.getHomeWorkId());
-            mBundle.putString("SubjectId", cHomework.getSubjectId());
-            mBundle.putString("SubjectName", cHomework.getSubjectName());
-            mBundle.putInt("Mode", AppUtils.MODE_UPDATE);
+            mBundle.putParcelable(AppUtils.B_HOMEWORK,cHomework);
+            mBundle.putInt(AppUtils.B_MODE,AppUtils.MODE_UPDATE);
 
             Fragment mFragment = new Fragment_Add_HomeWork();
             FragmentManager mManager = mActivity.getSupportFragmentManager();
