@@ -8,5 +8,4 @@
 
     <include layout="@layout/view_homework_details" />
 
-
 </LinearLayout>
