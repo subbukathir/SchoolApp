@@ -31,7 +31,9 @@ import com.daemon.oxfordschool.fragment.FragmentDrawer;
 import com.daemon.oxfordschool.fragment.Fragment_Add_DiaryNotes;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
+import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Staff;
+import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule;
@@ -260,6 +262,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if(mUser.getUserType().equals(ApiConstants.STAFF))
             {
                 fragment = new Fragment_Diary_Notes_Staff();
+                title = getString(R.string.lbl_diary);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_Diary_Notes_Student();
+                title = getString(R.string.lbl_diary);
+            }
+            else
+            {
+                fragment = new Fragment_Diary_Notes();
                 title = getString(R.string.lbl_diary);
             }
         }
