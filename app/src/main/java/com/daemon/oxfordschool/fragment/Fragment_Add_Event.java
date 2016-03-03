@@ -13,12 +13,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -169,28 +172,24 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
     {
         TAG = "SetActionBar";
         Log.d(MODULE, TAG);
+
         try
         {
             if (mActivity != null)
             {
                 mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
                 mActivity.setSupportActionBar(mToolbar);
-                mToolbar.setTitle(R.string.lbl_add_event);
-                mToolbar.setSubtitle("");
-                FragmentDrawer.mDrawerLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        FragmentDrawer.mDrawerToggle.syncState();
-                    }
-                });
-                mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                if(mMode==AppUtils.MODE_ADD) mToolbar.setTitle(R.string.lbl_add_event);
+                else mToolbar.setTitle(R.string.lbl_update_event);
+                final ActionBar ab = mActivity.getSupportActionBar();
+                ab.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+                ab.setDisplayHomeAsUpEnabled(true);
             }
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
-
     }
 
     public void setProperties()
@@ -219,7 +218,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
 
             if(!Str_EventId.equals(""))
             {
-                mToolbar.setTitle(R.string.lbl_update_event);
+
                 Log.d(MODULE, TAG + "bundle available");
                 btn_add_event.setText("update");
                 et_add_event_name.setText(Str_Event_Name);
@@ -599,6 +598,26 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         Str_Description = mBundle.getString("Description");
         Str_Id = mBundle.getString("UserId");
     }
+
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        TAG = "onOptionsItemSelected";
+        Log.d(MODULE, TAG);
+
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                mManager = mActivity.getSupportFragmentManager();
+                mManager.popBackStack();
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
 }

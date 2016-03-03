@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,8 +54,10 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
     CEvents mCEvents;
     ArrayList<CEvents> mListEvents =new ArrayList<CEvents>();
     EventsList_Response response;
+    Toolbar mToolbar;
 
     AppCompatActivity mActivity;
+    Bundle mSavedInstanceState;
     FloatingActionButton fab_add_event;
     String Str_Id="";
     private Font font= MyApplication.getInstance().getFontInstance();
@@ -74,6 +77,9 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         try
         {
             mActivity = (AppCompatActivity) getActivity();
+            setHasOptionsMenu(true);
+            setRetainInstance(false);
+            mSavedInstanceState=savedInstanceState;
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
             new GetEventsList(Str_Url,this).getEvents();
@@ -123,7 +129,11 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
         try
         {
-
+            if(mSavedInstanceState!=null)
+            {
+                getEventsList();
+                showEventsList();
+            }
         }
         catch (Exception ex)
         {
@@ -141,11 +151,40 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
             recycler_view.setLayoutManager(mLayoutManager);
             if(mUser.getUserType().equals(ApiConstants.STAFF)) fab_add_event.setVisibility(View.VISIBLE);
             fab_add_event.setOnClickListener(_OnClickListener);
+            SetActionBar();
         }
         catch (Exception ex)
         {
 
         }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_events);
+                mToolbar.setSubtitle("");
+                FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        FragmentDrawer.mDrawerToggle.syncState();
+                    }
+                });
+                mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     public void getProfile()
@@ -292,10 +331,12 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
     public void goto_AddEventFragment()
     {
+        mSavedInstanceState=getSavedState();
         Fragment _fragment = new Fragment_Add_Event();
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_body, _fragment);
+        fragmentTransaction.replace(R.id.container_body, _fragment,AppUtils.FRAGMENT_ADD_EVENT);
+        fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_EVENT + "");
         fragmentTransaction.commit();
     }
     public void gotoFragmentUpdate(int position)
@@ -305,6 +346,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
         if(mListEvents.size()>0)
         {
+            mSavedInstanceState=getSavedState();
             mCEvents = mListEvents.get(position);
             Log.d(MODULE, TAG + "values of list " + mCEvents.getOrganizer_First_Name() + mCEvents.getStartDate());
             Log.d(MODULE, TAG + "getSectionId of list " + mCEvents.getOrganizer_First_Name());
@@ -327,6 +369,35 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
             mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_EVENT + "");
             mTransaction.commit();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        TAG = "onSaveInstanceState";
+        Log.d(MODULE, TAG);
+        mSavedInstanceState=getSavedState();
+    }
+
+    public Bundle getSavedState()
+    {
+        TAG = "getSavedState";
+        Log.d(MODULE, TAG);
+
+        Bundle outState = new Bundle();
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+
+        Log.d(MODULE, TAG);
+        return outState;
     }
 
 }
