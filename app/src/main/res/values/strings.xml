@@ -44,6 +44,7 @@
         <item>@string/lbl_student_profile</item>
         <item>@string/lbl_events</item>
         <item>@string/lbl_homework</item>
+        <item>@string/lbl_diary</item>
         <item>@string/lbl_attendance</item>
         <item>@string/lbl_exam_schedule</item>
         <item>@string/lbl_exam_result</item>
