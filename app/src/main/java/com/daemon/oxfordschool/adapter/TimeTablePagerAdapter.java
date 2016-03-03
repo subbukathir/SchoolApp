@@ -8,9 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -18,17 +15,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
-import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
 import com.daemon.oxfordschool.classes.Common_Class;
-import com.daemon.oxfordschool.classes.User;
-import com.daemon.oxfordschool.listeners.SectionListListener;
-import com.daemon.oxfordschool.listeners.SubjectListListener;
-import com.daemon.oxfordschool.response.CommonList_Response;
-import com.google.gson.reflect.TypeToken;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 /**
@@ -49,7 +36,6 @@ public class TimeTablePagerAdapter extends PagerAdapter
     String Str_Sub1,Str_Sub2,Str_Sub3,Str_Sub4,Str_Sub5,Str_Sub6,Str_Sub7,Str_Sub8="";
     String[] day=null;
     int mDaysCount=0,mSubjectListCount=0;
-
 
     TextView tv_lbl_hour1 ,tv_lbl_hour2, tv_lbl_hour3 ,tv_lbl_hour4,tv_lbl_hour5,tv_lbl_hour6,tv_lbl_hour7,tv_lbl_hour8;
     TextView tv_hour1, tv_hour2, tv_hour3, tv_hour4, tv_hour5, tv_hour6,tv_hour7, tv_hour8,tv_day;
@@ -160,9 +146,6 @@ public class TimeTablePagerAdapter extends PagerAdapter
         }
         return 1f;
     }*/
-
-
-
     public String getSubjectName(String Str_SubjectId)
     {
         TAG = "getSubjectName";

@@ -33,7 +33,6 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.DiaryListAdapter;
-import com.daemon.oxfordschool.adapter.HomeWorkAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetDiaryNotesList;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;

@@ -20,7 +20,6 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.ExamResultListener;
 import com.daemon.oxfordschool.listeners.TimeTableListener;
 
 import org.json.JSONObject;

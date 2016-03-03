@@ -1,8 +1,7 @@
 package com.daemon.oxfordschool.response;
 
-import com.daemon.oxfordschool.classes.CEvents;
-import com.daemon.oxfordschool.classes.CExam;
 
+import com.daemon.oxfordschool.classes.CExam;
 import java.util.ArrayList;
 
 /**

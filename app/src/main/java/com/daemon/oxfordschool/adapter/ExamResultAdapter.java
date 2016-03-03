@@ -19,13 +19,8 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.classes.CEvents;
 import com.daemon.oxfordschool.classes.CResult;
-import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
-import com.daemon.oxfordschool.listeners.Exam_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.Exam_Result_List_Item_Click_Listener;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -39,8 +34,6 @@ public class ExamResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     Fragment mFragment;
     FragmentManager mManager;
     static FragmentActivity mActivity;
-    private ImageLoader imageLoader;
-    private DisplayImageOptions options;
     static SharedPreferences mPreferences;
     static RecyclerView recycler_view;
     Font font= MyApplication.getInstance().getFontInstance();

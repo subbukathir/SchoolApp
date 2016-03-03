@@ -4,7 +4,6 @@ package com.daemon.oxfordschool.gcm;
  * Created by daemonsoft on 23/2/16.
  */
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -14,15 +13,11 @@ import android.widget.Toast;
 
 import com.daemon.oxfordschool.Config;
 import com.daemon.oxfordschool.R;
-import com.daemon.oxfordschool.Utils.AppUtils;
-import com.daemon.oxfordschool.classes.User;
+
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 

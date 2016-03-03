@@ -49,7 +49,7 @@ public class HomeWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     int mMargin=0;float mDensity=0;
     Homework_List_Item_Click_Listener mItemCallBack;
 
-    private static String MODULE = "Stations_Adapter";
+    private static String MODULE = "HomeWorkAdapter";
     private static String TAG="";
     LinearLayout.LayoutParams params;
 

@@ -1,7 +1,7 @@
 package com.daemon.oxfordschool.response;
 
 import com.daemon.oxfordschool.classes.CCEResult;
-import com.daemon.oxfordschool.classes.CResult;
+
 
 import java.util.ArrayList;
 

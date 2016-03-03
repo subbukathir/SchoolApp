@@ -5,9 +5,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.widget.DatePicker;
-import com.daemon.oxfordschool.constants.ApiConstants;
+
 
 import com.daemon.oxfordschool.listeners.DateSetListener;
 
@@ -26,6 +25,7 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         this._fragment=_fragment;
         mCallBack = (DateSetListener) _fragment;
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
@@ -36,8 +36,10 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
 
         return new DatePickerDialog(getActivity(), this, yy, mm, dd);
     }
+
     public void onDateSet(DatePicker view, int yy, int mm, int dd)
     {
         mCallBack.populateSetDate(yy, mm+1, dd);
     }
+
 }

@@ -33,7 +33,6 @@
         <item>@string/lbl_exam_result</item>
         <item>@string/lbl_fees_detail</item>
         <item>@string/lbl_time_table</item>
-        <item>@string/lbl_reports</item>
     </string-array>
 
     <!-- navigation drawer item labels  -->

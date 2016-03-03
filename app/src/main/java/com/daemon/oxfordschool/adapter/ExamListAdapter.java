@@ -19,9 +19,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.classes.CEvents;
 import com.daemon.oxfordschool.classes.CExam;
-import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.Exam_List_Item_Click_Listener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -53,13 +51,13 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     DateFormat mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-    private static String MODULE = "Stations_Adapter";
+    private static String MODULE = "ExamListAdapter";
     private static String TAG="";
     LinearLayout.LayoutParams params;
 
     public ExamListAdapter(ArrayList<CExam> mListExams, Fragment mFragment)
     {
-        TAG = "EventsAdapter";
+        TAG = "ExamListAdapter";
         Log.d(MODULE, TAG);
         Log.d(MODULE, TAG + " mListExams Size : " + mListExams.size());
         this.mListExams = mListExams;

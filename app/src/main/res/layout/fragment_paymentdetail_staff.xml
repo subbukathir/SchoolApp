@@ -47,6 +47,7 @@
             <TextView
                 android:id="@+id/tv_lbl_name"
                 style="@style/text_view_event_list_item"
+                android:layout_marginTop="@dimen/space_layout_margin"
                 android:gravity="center"
                 android:text="@string/lbl_name"
                 android:layout_weight="0.6"
@@ -55,6 +56,7 @@
             <TextView
                 android:id="@+id/tv_lbl_status"
                 style="@style/text_view_event_list_item"
+                android:layout_marginTop="@dimen/space_layout_margin"
                 android:gravity="center"
                 android:text="@string/lbl_status"
                 android:textColor="@color/color_white" />

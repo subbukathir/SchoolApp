@@ -21,7 +21,6 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.CCE_ExamReport_Listener;
-import com.daemon.oxfordschool.listeners.ExamResultListener;
 
 import org.json.JSONObject;
 

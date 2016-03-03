@@ -14,20 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.classes.CEvents;
 import com.daemon.oxfordschool.classes.User;
-import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.Student_List_Item_Click_Listener;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+
 
 
 public class StudentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>

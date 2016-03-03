@@ -35,7 +35,6 @@ import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.AttendanceAddListener;
-import com.daemon.oxfordschool.listeners.Attendance_List_Item_Click_Listener;
 
 import org.json.JSONArray;
 import org.json.JSONException;

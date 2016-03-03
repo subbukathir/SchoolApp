@@ -13,33 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
-
-import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
-import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.SchoolProfileAdapter;
-import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
-import com.daemon.oxfordschool.adapter.TimeTablePagerAdapter;
-import com.daemon.oxfordschool.asyncprocess.GetStudentList;
-import com.daemon.oxfordschool.asyncprocess.GetTimeTable;
-import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
-import com.daemon.oxfordschool.classes.Common_Class;
-import com.daemon.oxfordschool.classes.TimeTable;
-import com.daemon.oxfordschool.classes.User;
-import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.StudentsListListener;
-import com.daemon.oxfordschool.listeners.SubjectListListener;
-import com.daemon.oxfordschool.listeners.TimeTableListener;
-import com.daemon.oxfordschool.response.CommonList_Response;
-import com.daemon.oxfordschool.response.StudentsList_Response;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class Fragment_School_Profile extends Fragment
 {

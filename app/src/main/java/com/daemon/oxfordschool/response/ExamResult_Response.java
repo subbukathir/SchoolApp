@@ -1,8 +1,6 @@
 package com.daemon.oxfordschool.response;
 
 import com.daemon.oxfordschool.classes.CResult;
-import com.daemon.oxfordschool.classes.Common_Class;
-
 import java.util.ArrayList;
 
 /**

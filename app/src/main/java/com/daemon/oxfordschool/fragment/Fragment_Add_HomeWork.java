@@ -3,16 +3,14 @@ package com.daemon.oxfordschool.fragment;
 /**
  * Created by Ravi on 29/07/15.
  */
-import android.app.AlertDialog;
+
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +34,6 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
 import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
@@ -61,7 +58,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.zip.DataFormatException;
 
 public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListener,DateSetListener,SubjectListListener,ClassListListener,SectionListListener
 {

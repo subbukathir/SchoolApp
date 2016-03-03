@@ -34,8 +34,6 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
 {
     public static String MODULE = "Activity_Login";
     public static String TAG = "";
-
-    boolean isAllEnteryFilled = true;
     Font font= MyApplication.getInstance().getFontInstance();
     TextView tv_welcome;
     String username, password;

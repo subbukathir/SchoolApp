@@ -44,12 +44,14 @@
         <TextView
             android:id="@+id/tv_lbl_subject_name"
             style="@style/text_view_event_list_item"
+            android:layout_marginTop="@dimen/space_layout_margin"
             android:gravity="center"
             android:text="@string/lbl_subject"
             android:textColor="@color/color_white" />
 
         <TextView
             android:id="@+id/tv_lbl_exam_date"
+            android:layout_marginTop="@dimen/space_layout_margin"
             style="@style/text_view_event_list_item"
             android:gravity="center"
             android:text="@string/lbl_date"

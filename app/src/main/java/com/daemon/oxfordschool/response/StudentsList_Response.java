@@ -1,7 +1,5 @@
 package com.daemon.oxfordschool.response;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.daemon.oxfordschool.classes.User;
 
