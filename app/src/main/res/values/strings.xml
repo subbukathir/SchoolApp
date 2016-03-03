@@ -12,6 +12,7 @@
     <string name="lbl_diary">Diary</string>
     <string name="lbl_attendance">Attendance</string>
     <string name="lbl_add_event">Add Event</string>
+    <string name="lbl_update_event">Update Event</string>
     <string name="lbl_add_marks">Add Marks</string>
     <string name="lbl_exam_schedule">Exam Schedule</string>
     <string name="lbl_exam_result">Exam Result</string>

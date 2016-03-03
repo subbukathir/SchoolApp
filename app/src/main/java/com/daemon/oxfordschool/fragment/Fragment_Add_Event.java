@@ -220,6 +220,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
 
             if(!Str_EventId.equals(""))
             {
+                mToolbar.setTitle(R.string.lbl_update_event);
                 Log.d(MODULE, TAG + "bundle available");
                 btn_add_event.setText("update");
                 et_add_event_name.setText(Str_Event_Name);
@@ -241,6 +242,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             else
             {
                 btn_add_event.setText("add");
+
                 btn_start_date.setText(ConvertedDate());
                 btn_end_date.setText(ConvertedDate());
                 btn_start_time.setText(Str_Time);
