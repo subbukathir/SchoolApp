@@ -258,6 +258,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             ex.printStackTrace();
         }
     }
+
     public void getProfile()
     {
         TAG = "getProfile";
@@ -621,7 +622,5 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }
