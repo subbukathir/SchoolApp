@@ -353,13 +353,8 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
             Bundle  mBundle = new Bundle();
 
-            mBundle.putString("UserId", mCEvents.getOrganizerId());
-            mBundle.putString("Name", mCEvents.getName());
-            mBundle.putString("Description", mCEvents.getDescription());
-            mBundle.putString("StartDate", mCEvents.getStartDate());
-            mBundle.putString("EndDate", mCEvents.getEndDate());
-            mBundle.putString("EventId",mCEvents.getID());
-            mBundle.putInt("Mode", AppUtils.MODE_UPDATE);
+            mBundle.putParcelable(AppUtils.B_EVENTS, mCEvents);
+            mBundle.putInt(AppUtils.B_MODE,AppUtils.MODE_UPDATE);
 
             Fragment mFragment = new Fragment_Add_Event();
             FragmentManager mManager = mActivity.getSupportFragmentManager();

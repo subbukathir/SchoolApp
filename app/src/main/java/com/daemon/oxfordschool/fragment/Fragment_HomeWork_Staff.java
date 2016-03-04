@@ -662,9 +662,6 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
             mSavedInstanceState=getSavedState();
             cHomework = mListHomeWork.get(position);
             Log.d(MODULE, TAG + "values of list " + cHomework.getClassId() + cHomework.getClassName());
-            Log.d(MODULE, TAG + "getSectionId of list " + cHomework.getSectionId());
-            Log.d(MODULE, TAG + "getHomeWorkDate of list " + cHomework.getHomeWorkDate());
-            Log.d(MODULE, TAG + "getAssignment_I of list " + cHomework.getAssignment_I());
 
             Bundle  mBundle = new Bundle();
             mBundle.putParcelable(AppUtils.B_HOMEWORK,cHomework);

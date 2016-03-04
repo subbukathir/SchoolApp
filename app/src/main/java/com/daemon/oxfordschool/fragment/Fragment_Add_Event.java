@@ -36,6 +36,7 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.asyncprocess.AddEvent;
 import com.daemon.oxfordschool.classes.User;
+import com.daemon.oxfordschool.classes.CEvents;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.AddEventListener;
 import com.daemon.oxfordschool.listeners.DateSetListener;
@@ -60,6 +61,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
     SharedPreferences mPreferences;
     Toolbar mToolbar;
     User mUser;
+    CEvents mCEvent;
     Button btn_start_date,btn_end_date,btn_add_event, btn_start_time, btn_end_time;
 
     ArrayList<User> mListStudents =new ArrayList<User>();
@@ -590,13 +592,15 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         TAG = "getBundle";
         Log.d(MODULE, TAG);
 
-        mMode =  mBundle.getInt("Mode");
-        Str_Start_Date = mBundle.getString("StartDate");
-        Str_End_Date = mBundle.getString("EndDate");
-        Str_Event_Name = mBundle.getString("Name");
-        Str_EventId = mBundle.getString("EventId");
-        Str_Description = mBundle.getString("Description");
-        Str_Id = mBundle.getString("UserId");
+        mMode = mBundle.getInt(AppUtils.B_MODE);
+        mCEvent= mBundle.getParcelable(AppUtils.B_EVENTS);
+
+        Str_Start_Date = mCEvent.getStartDate();
+        Str_End_Date = mCEvent.getEndDate();
+        Str_Event_Name = mCEvent.getName();
+        Str_EventId = mCEvent.getID();
+        Str_Description = mCEvent.getDescription();
+        Str_Id = mCEvent.getOrganizerId();
     }
 
     public boolean onOptionsItemSelected(MenuItem item)
