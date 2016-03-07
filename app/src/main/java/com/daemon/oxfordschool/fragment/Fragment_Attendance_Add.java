@@ -15,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,6 +42,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -167,6 +170,7 @@ public class Fragment_Attendance_Add extends Fragment implements AttendanceAddLi
                 btn_save.setEnabled(true);
                 btn_save.setClickable(true);
             }
+            setActionBarFont();
             SetActionBar();
         }
         catch (Exception ex)
@@ -198,6 +202,21 @@ public class Fragment_Attendance_Add extends Fragment implements AttendanceAddLi
         {
             ex.printStackTrace();
         }
+    }
+
+    private void setActionBarFont()
+    {
+        TextView titleTextView = null;
+        try
+        {
+            TextView subTitleView = (TextView) mToolbar.getChildAt(1);
+            subTitleView.setTypeface(font.getHelveticaRegular());
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     View.OnClickListener _OnClickListener = new View.OnClickListener() {

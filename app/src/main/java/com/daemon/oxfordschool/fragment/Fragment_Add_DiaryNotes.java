@@ -227,7 +227,7 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
         Log.d(MODULE, TAG);
         try
         {
-
+            setActionBarFont();
             SetActionBar();
             tv_lbl_class.setTypeface(font.getHelveticaRegular());
             tv_lbl_section.setTypeface(font.getHelveticaRegular());
@@ -398,6 +398,21 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
         {
             ex.printStackTrace();
         }
+    }
+
+    private void setActionBarFont()
+    {
+        TextView titleTextView = null;
+        try
+        {
+            TextView subTitleView = (TextView) mToolbar.getChildAt(1);
+            subTitleView.setTypeface(font.getHelveticaRegular());
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     AdapterView.OnItemSelectedListener _OnClassItemSelectedListener =  new AdapterView.OnItemSelectedListener() {

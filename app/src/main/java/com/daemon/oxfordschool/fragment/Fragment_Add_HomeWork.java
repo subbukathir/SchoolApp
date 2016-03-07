@@ -54,6 +54,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -201,7 +202,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         Log.d(MODULE, TAG);
         try
         {
-
+            setActionBarFont();
             SetActionBar();
             tv_lbl_class.setTypeface(font.getHelveticaRegular());
             tv_lbl_section.setTypeface(font.getHelveticaRegular());
@@ -264,6 +265,21 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         {
             ex.printStackTrace();
         }
+    }
+
+    private void setActionBarFont()
+    {
+        TextView titleTextView = null;
+        try
+        {
+            TextView subTitleView = (TextView) mToolbar.getChildAt(1);
+            subTitleView.setTypeface(font.getHelveticaRegular());
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     private void requestFocus(View view) {

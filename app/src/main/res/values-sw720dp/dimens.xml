@@ -29,11 +29,11 @@
     <dimen name="ex_rates_moneygram_txt_padding">-35dp</dimen>
     <!-- Login Screens and Layouts -->
 
-    <dimen name="space_layout_margin">20dp</dimen>
-    <dimen name="space_layout_padding">20dp</dimen>
+    <dimen name="space_layout_margin">10dp</dimen>
+    <dimen name="space_layout_padding">10dp</dimen>
 
-    <dimen name="space_layout_margin_small">10dp</dimen>
-    <dimen name="space_layout_padding_small">10dp</dimen>
+    <dimen name="space_layout_margin_small">5dp</dimen>
+    <dimen name="space_layout_padding_small">5dp</dimen>
 
     <dimen name="vertical_gap_heading">30dp</dimen>
     <dimen name="vertical_gap_controls">20dp</dimen>

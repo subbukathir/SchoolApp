@@ -27,6 +27,8 @@ import com.daemon.oxfordschool.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by daemonsoft on 28/1/16.
  */
@@ -78,6 +80,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setTitle("Login");
+            setActionBarFont();
 
             et_username.setText("");
             et_password.setText("daemon");
@@ -85,6 +88,26 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         catch (Exception ex)
         {
 
+        }
+    }
+
+    private void setActionBarFont()
+    {
+        TextView titleTextView = null;
+        try
+        {
+            Field f = mToolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(mToolbar);
+            titleTextView.setTypeface(font.getHelveticaRegular());
+        }
+        catch (NoSuchFieldException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
         }
     }
 

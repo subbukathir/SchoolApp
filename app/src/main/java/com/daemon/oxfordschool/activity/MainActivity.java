@@ -19,11 +19,14 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daemon.oxfordschool.Config;
+import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
+import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.asyncprocess.RegisterDevice;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
@@ -68,6 +71,8 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
+
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener,
         RegistrationListener
 {
@@ -75,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private static final String MODULE ="MainActivity" ;
     private static String TAG = "";
 
+    Font font= MyApplication.getInstance().getFontInstance();
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     User mUser;
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
         // display the first navigation drawer view on app launch
-
+        setActionBarFont();
         mRegistrationBroadcastReceiver = new BroadcastReceiver()
         {
             @Override
@@ -148,6 +154,26 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             registerGCM();
         }
 
+    }
+
+    private void setActionBarFont()
+    {
+        TextView titleTextView = null;
+        try
+        {
+            Field f = mToolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(mToolbar);
+            titleTextView.setTypeface(font.getHelveticaRegular());
+        }
+        catch (NoSuchFieldException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override

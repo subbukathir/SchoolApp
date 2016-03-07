@@ -56,6 +56,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -227,6 +228,7 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
             fab_add_homework.setOnClickListener(_OnClickListener);
             fab_add_homework.setVisibility(View.VISIBLE);
             SetActionBar();
+
         }
         catch (Exception ex)
         {

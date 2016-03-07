@@ -45,6 +45,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -217,6 +218,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             btn_end_time.setOnClickListener(_OnClickListener);
             btn_add_event.setOnClickListener(_OnClickListener);
 
+            setActionBarFont();
 
             if(!Str_EventId.equals(""))
             {
@@ -257,6 +259,21 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         {
             ex.printStackTrace();
         }
+    }
+
+    private void setActionBarFont()
+    {
+        TextView titleTextView = null;
+        try
+        {
+            TextView subTitleView = (TextView) mToolbar.getChildAt(1);
+            subTitleView.setTypeface(font.getHelveticaRegular());
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     public void getProfile()
