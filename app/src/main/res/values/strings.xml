@@ -72,7 +72,7 @@
     <string name="lbl_Email">Email</string>
     <string name="lbl_Mobile">Mobile</string>
     <string name="lbl_address">Address</string>
-
+    <string name="msg_upload_image">Please wait...Uploading image...</string>
 
     <!-- Student Profile View -->
 

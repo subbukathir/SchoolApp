@@ -33,6 +33,7 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.activity.DialogGallery;
+import com.daemon.oxfordschool.asyncprocess.UploadImageData;
 import com.daemon.oxfordschool.classes.Action;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
@@ -50,6 +51,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.HashMap;
 
 
 public class Fragment_ProfileView extends Fragment implements ImagePickListener,ImageSavingListener,ImageUploadListener
@@ -338,7 +340,6 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             {
                 if(file.exists())
                 {
-                    uploadImage(Str_ImagePath);
                     Uri uri = Uri.fromFile(new File(Str_ImagePath));
                     if(uri!=null) image_view_profile.setImageURI(uri);
                     else image_view_profile.setImageResource(R.drawable.ic_profile);
@@ -367,8 +368,6 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             Uri uri = Uri.fromFile(new File(Str_ImagePath));
             Log.d(MODULE, TAG + " Uri - " + uri);
             beginCrop(uri);
-
-
             //new ImageSaving(mActivity,this,Str_ImagePath,mUser.getMobile_Number()).execute();
         }
         catch (Exception ex)
@@ -377,25 +376,16 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         }
     }
 
-    public JSONObject payloadUploadImage()
+    public HashMap<String,String> payloadUploadImage()
     {
         TAG = "payloadUploadImage";
         Log.d(MODULE, TAG);
-
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("UserId", Str_Id);
-            obj.put("ImageData", encodedImage);
-            obj.put("ImageId","");
-            obj.put("Mode","0");
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.d(MODULE, TAG + " obj : " + obj.toString());
-
-        return obj;
+        HashMap<String,String> data = new HashMap<>();
+        data.put("UserId", Str_Id);
+        data.put("ImageData", encodedImage);
+        data.put("ImageId", "");
+        data.put("Mode", "0");
+        return data;
     }
 
     @Override
@@ -426,6 +416,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     {
         TAG = "onImageUploadError";
         Log.d(MODULE, TAG);
+        Log.d(MODULE, TAG + " Str_Msg:::" + Str_Msg);
     }
 
     private void beginCrop(Uri source)
@@ -438,38 +429,56 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
 
     private void handleCrop(int resultCode, Intent result)
     {
-        if (resultCode == getActivity().RESULT_OK) {
-            try {
+        if (resultCode == getActivity().RESULT_OK)
+        {
+            try
+            {
                 image_view_profile.setImageDrawable(null);
-
                 SetProfileImage();
-            } catch (Exception e) {
+                uploadImage();
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
 
-        } else if (resultCode == Crop.RESULT_ERROR) {
+        }
+        else if (resultCode == Crop.RESULT_ERROR)
+        {
             Log.d(TAG,MODULE + ":::" + Crop.getError(result).getMessage());
         }
     }
 
-    public void uploadImage( String Str_ImagePath)
+    public void uploadImage()
     {
         TAG = "uploadImage";
         Log.d(MODULE, TAG);
         try
         {
-            mBitmap = BitmapFactory.decodeFile(Str_ImagePath);
-            mByteArray = new ByteArrayOutputStream();
-            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, mByteArray); //mBitmap is the bitmap object
-            byte[] b = mByteArray.toByteArray();
-            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
-            Log.d(MODULE, TAG + "****** Encoded Image *******" + encodedImage.toString());
-            new UploadImage(Str_UploadImage_Url,payloadUploadImage(),this).putImageDetail();
+            String Str_ImagePath = AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
+            File file = new File(Str_ImagePath);
+            if(file==null) image_view_profile.setImageResource(R.drawable.ic_profile);
+            else
+            {
+                if(file.exists())
+                {
+                    mBitmap = BitmapFactory.decodeFile(Str_ImagePath);
+                    mByteArray = new ByteArrayOutputStream();
+                    mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, mByteArray); //mBitmap is the bitmap object
+                    byte[] b = mByteArray.toByteArray();
+                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                    Log.d(MODULE, TAG + "****** Encoded Image *******" + encodedImage.toString());
+                    //new UploadImage(Str_UploadImage_Url,payloadUploadImage(),this).putImageDetail();
+                    new UploadImageData(Fragment_ProfileView.this,payloadUploadImage()).uploadImageToServer();
+                }
+            }
         }
         catch (Exception ex)
         {
-
+            Log.d(MODULE, TAG + " Exception : " + ex.getMessage());
+            ex.printStackTrace();
         }
 
     }
+
 }
