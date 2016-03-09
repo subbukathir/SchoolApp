@@ -9,6 +9,7 @@ public class ApiConstants
     //public static String SERVER_URL = "http://192.168.2.103/OxfordSchool/";
     public static String LOGIN_URL = SERVER_URL + "User.php";
     public static String STUDENT_LIST= SERVER_URL + "StudentList.php";
+    public static String UPLOADIMAGE_URL= SERVER_URL + "SaveProfileImage.php";
 
     public static String CLASSLIST_URL=SERVER_URL + "ClassList.php";
     public static String SECTIONLIST_URL=SERVER_URL +"SectionList.php";

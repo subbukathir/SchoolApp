@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,10 +18,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,17 +35,24 @@ import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.activity.DialogGallery;
 import com.daemon.oxfordschool.classes.Action;
 import com.daemon.oxfordschool.classes.User;
+import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.ImagePickListener;
 import com.daemon.oxfordschool.listeners.ImageSavingListener;
+import com.daemon.oxfordschool.listeners.ImageUploadListener;
+import com.daemon.oxfordschool.asyncprocess.UploadImage;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.soundcloud.android.crop.Crop;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 
-public class Fragment_ProfileView extends Fragment implements ImagePickListener,ImageSavingListener
+public class Fragment_ProfileView extends Fragment implements ImagePickListener,ImageSavingListener,ImageUploadListener
 {
 
     public static String MODULE = "Fragment_ProfileView ";
@@ -52,6 +63,8 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     RelativeLayout profile_header;
     SharedPreferences mPreferences;
     private ImageLoader imageLoader;
+    Bitmap mBitmap;
+    ByteArrayOutputStream mByteArray;
     private DisplayImageOptions options;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     User mUser;
@@ -59,7 +72,9 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     FragmentManager mManager;
     AppCompatActivity mActivity;
     ImagePickListener mCallBack;
+    String encodedImage;
     String Str_Id="";
+    String Str_UploadImage_Url = ApiConstants.UPLOADIMAGE_URL;
     private Font font= MyApplication.getInstance().getFontInstance();
 
     public Fragment_ProfileView()
@@ -323,6 +338,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             {
                 if(file.exists())
                 {
+                    uploadImage(Str_ImagePath);
                     Uri uri = Uri.fromFile(new File(Str_ImagePath));
                     if(uri!=null) image_view_profile.setImageURI(uri);
                     else image_view_profile.setImageResource(R.drawable.ic_profile);
@@ -351,12 +367,35 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             Uri uri = Uri.fromFile(new File(Str_ImagePath));
             Log.d(MODULE, TAG + " Uri - " + uri);
             beginCrop(uri);
+
+
             //new ImageSaving(mActivity,this,Str_ImagePath,mUser.getMobile_Number()).execute();
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
+    }
+
+    public JSONObject payloadUploadImage()
+    {
+        TAG = "payloadUploadImage";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("UserId", Str_Id);
+            obj.put("ImageData", encodedImage);
+            obj.put("ImageId","");
+            obj.put("Mode","0");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
     }
 
     @Override
@@ -372,7 +411,21 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
 
     @Override
     public void onImageSavedError() {
-        AppUtils.DialogMessage(mActivity,"Cannot Save");
+        AppUtils.DialogMessage(mActivity, "Cannot Save");
+    }
+
+    @Override
+    public void onImageUpload()
+    {
+        TAG = "onImageUpload";
+        Log.d(MODULE, TAG);
+    }
+
+    @Override
+    public void onImageUploadError(String Str_Msg)
+    {
+        TAG = "onImageUploadError";
+        Log.d(MODULE, TAG);
     }
 
     private void beginCrop(Uri source)
@@ -388,6 +441,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         if (resultCode == getActivity().RESULT_OK) {
             try {
                 image_view_profile.setImageDrawable(null);
+
                 SetProfileImage();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -396,5 +450,26 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         } else if (resultCode == Crop.RESULT_ERROR) {
             Log.d(TAG,MODULE + ":::" + Crop.getError(result).getMessage());
         }
+    }
+
+    public void uploadImage( String Str_ImagePath)
+    {
+        TAG = "uploadImage";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mBitmap = BitmapFactory.decodeFile(Str_ImagePath);
+            mByteArray = new ByteArrayOutputStream();
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, mByteArray); //mBitmap is the bitmap object
+            byte[] b = mByteArray.toByteArray();
+            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+            Log.d(MODULE, TAG + "****** Encoded Image *******" + encodedImage.toString());
+            new UploadImage(Str_UploadImage_Url,payloadUploadImage(),this).putImageDetail();
+        }
+        catch (Exception ex)
+        {
+
+        }
+
     }
 }
