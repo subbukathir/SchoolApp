@@ -14,36 +14,25 @@
 
         <!-- Exam Selection For Result Starts Here -->
 
-            <LinearLayout
-                style="@style/match_wrap_style"
-                android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/space_layout_padding"
+            android:paddingRight="@dimen/space_layout_padding"
+            android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_select_exam_type"
+                style="@style/text_view_label_teacher"
+                android:text="@string/lbl_select_exam_type" />
 
-                    <TextView
-                        android:id="@+id/tv_select_exam_type"
-                        style="@style/text_view_label"
-                        android:gravity="left"
-                        android:text="@string/lbl_select_exam_type" />
+            <Spinner
+                android:id="@+id/spinner_exam_type"
+                style="@style/spinner_style"></Spinner>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/space_layout_margin"
-                        android:layout_marginRight="@dimen/space_layout_margin">
+        </LinearLayout>
 
-                        <Spinner
-                            android:id="@+id/spinner_exam_type"
-                            style="@style/spinner_style"></Spinner>
-                    </LinearLayout>
-                </LinearLayout>
-
-            </LinearLayout>
-
+        <!-- Exam Selection For Result Ends Here -->
         <!-- Exam Selection For Result Ends Here -->
 
        <include layout="@layout/view_exam_result_details" />
