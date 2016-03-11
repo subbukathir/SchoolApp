@@ -33,7 +33,7 @@
         </LinearLayout>
 
         <!-- Exam Selection For Result Ends Here -->
-        <!-- Exam Selection For Result Ends Here -->
+
 
        <include layout="@layout/view_exam_result_details" />
 
