@@ -46,10 +46,10 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
     SharedPreferences mPreferences;
     User mUser,mStudent;
     ImageView mProfileImage;
-    Bitmap mDecodedImage;
     ArrayList<User> mListStudents =new ArrayList<User>();
     AppCompatActivity mActivity;
-    String Str_Id="", Str_ImageData="";
+    Bitmap mDecodedImage;
+    String Str_Id="", Str_ImageData="",Str_EncodeImage="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_Url = ApiConstants.STUDENT_PROFILE_URL;
     UserLogin response;
@@ -250,6 +250,18 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
             Str_Address.append(mStudent.getAddress2()).append(" ");
             Str_Address.append(mStudent.getAddress3()).append(" ");
             tv_profile_address.setText(Str_Address);
+
+            Str_EncodeImage = mStudent.getImageData();
+
+            if(Str_EncodeImage.equals("")) mProfileImage.setImageResource(R.drawable.ic_profile);
+            else
+            {
+                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
+                byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                mProfileImage.setImageBitmap(mDecodedImage);
+
+            }
         }
         catch(Exception ex)
         {

@@ -5,6 +5,8 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +77,8 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
 
     AppCompatActivity mActivity;
     Bundle mSavedInstanceState;
-    String Str_Id="",Str_Date="",Str_StudentId="",Str_ClassId="",Str_SectionId="";
+    Bitmap mDecodedImage;
+    String Str_Id="",Str_Date="",Str_StudentId="",Str_ClassId="",Str_SectionId="",Str_EncodeImage="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_Url = ApiConstants.DIARY_NOTES_LIST_URL;
     String Str_Student_Profile_Url = ApiConstants.STUDENT_PROFILE_URL;
@@ -405,6 +409,20 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
             tv_name.setText(Str_Name.toString());
             tv_class.setText(Str_ClassName);
             tv_section.setText(Str_SectionName.toString());
+
+            Str_EncodeImage = mStudent.getImageData();
+
+
+            if(Str_EncodeImage.equals("")) imageView.setImageResource(R.drawable.ic_profile);
+            else
+            {
+                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
+                byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imageView.setImageBitmap(mDecodedImage);
+
+            }
+
         }
         catch(Exception ex)
         {

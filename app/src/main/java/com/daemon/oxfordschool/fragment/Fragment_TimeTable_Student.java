@@ -5,10 +5,13 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +63,8 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
     CommonList_Response response;
 
     AppCompatActivity mActivity;
-    String Str_Id="",Str_ClassId="",Str_SectionId="";
+    Bitmap mDecodedImage;
+    String Str_Id="",Str_ClassId="",Str_SectionId="",Str_EncodeImage="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_Url = ApiConstants.STUDENT_PROFILE_URL;
     String Str_TimeTable_Url = ApiConstants.TIME_TABLE_URL;
@@ -122,6 +126,7 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
             imageView = (ImageView) view.findViewById(R.id.iv_profile);
             tv_name  = (TextView) view.findViewById(R.id.tv_header_name);
             tv_class  = (TextView) view.findViewById(R.id.tv_class_name);
+            tv_section = (TextView) view.findViewById(R.id.tv_section_name);
             setProperties();
         }
         catch (Exception ex)
@@ -429,7 +434,17 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
             Str_SectionName.append(mStudent.getSectionName());
             tv_name.setText(Str_Name.toString());
             tv_class.setText(Str_ClassName);
-            tv_section.setText(Str_SectionName.toString());
+            tv_section.setText(Str_SectionName);
+            Str_EncodeImage = mUser.getImageData();
+
+            if(Str_EncodeImage.equals("")) imageView.setImageResource(R.drawable.ic_profile);
+            else
+            {
+                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
+                byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imageView.setImageBitmap(mDecodedImage);
+            }
         }
         catch(Exception ex)
         {
