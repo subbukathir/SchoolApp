@@ -94,15 +94,18 @@ public class StudentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 holder.tv_phone_no.setText(mUser.getMobile_Number());
                 holder.tv_email.setText(mUser.getEmail());
 
-                Str_EncodeImage=mUser.getImageData();
+                Str_EncodeImage = mUser.getImageData();
 
-                if(!Str_EncodeImage.equals(""))
+
+                if(Str_EncodeImage.equals("")) holder.iv_profile.setImageResource(R.drawable.ic_profile);
+                else
                 {
+                    Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
                     byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
                     mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     holder.iv_profile.setImageBitmap(mDecodedImage);
-                }
 
+                }
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

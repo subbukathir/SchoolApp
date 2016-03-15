@@ -25,12 +25,13 @@ import java.util.ArrayList;
  */
 public class StudentPagerAdapter extends PagerAdapter
 {
+    private static String MODULE = "StudentPagerAdapter";
+    private static String TAG="";
 
     AppCompatActivity mActivity;
     ArrayList<User> mListStudents;
     LayoutInflater mLayoutInflater;
     Font font = MyApplication.getInstance().getFontInstance();
-    String Str_EncodeImage="";
     Bitmap mDecodedImage;
 
     public StudentPagerAdapter(AppCompatActivity mActivity,ArrayList<User> mListStudents) {
@@ -50,10 +51,15 @@ public class StudentPagerAdapter extends PagerAdapter
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, int position)
+    {
+        TAG = "instantiateItem";
+        Log.d(MODULE, TAG + "checking data !!!");
+
         View itemView=null;
         try
         {
+
             itemView = mLayoutInflater.inflate(R.layout.view_student_pager_item, container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.iv_profile);
             TextView tv_name = (TextView) itemView.findViewById(R.id.tv_header_name);
@@ -69,16 +75,20 @@ public class StudentPagerAdapter extends PagerAdapter
             StringBuilder Str_SectionName = new StringBuilder();
             Str_SectionName.append(mActivity.getString(R.string.lbl_section)).append(" ");
             Str_SectionName.append(mStudent.getSectionName());
-            Str_EncodeImage=mStudent.getImageData();
 
-            if(!Str_EncodeImage.equals(""))
+            String Str_EncodeImage = mStudent.getImageData();
+
+            if(Str_EncodeImage.equals("")) imageView.setImageResource(R.drawable.ic_profile);
+            else
             {
+                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
                 byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
                 mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 imageView.setImageBitmap(mDecodedImage);
             }
 
-            if(tv_name!=null)
+
+            if (tv_name != null)
             {
                 tv_name.setTypeface(font.getHelveticaRegular());
                 tv_name.setText(Str_Name.toString());
