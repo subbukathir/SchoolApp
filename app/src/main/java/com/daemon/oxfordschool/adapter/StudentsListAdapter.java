@@ -2,11 +2,14 @@ package com.daemon.oxfordschool.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +42,8 @@ public class StudentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     static Typeface mTypeFace;
     private boolean isFooterEnabled = false;
     int mMargin=0;float mDensity=0;
+    String Str_EncodeImage="";
+    Bitmap mDecodedImage;
     Student_List_Item_Click_Listener mItemCallBack;
 
     private static String MODULE = "SchoolListAdapter";
@@ -89,17 +94,23 @@ public class StudentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 holder.tv_phone_no.setText(mUser.getMobile_Number());
                 holder.tv_email.setText(mUser.getEmail());
 
+                Str_EncodeImage=mUser.getImageData();
+
+                if(!Str_EncodeImage.equals(""))
+                {
+                    byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                    mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    holder.iv_profile.setImageBitmap(mDecodedImage);
+                }
+
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        try
-                        {
+                        try {
                             mItemCallBack.onStudentListItemClicked(position);
 
-                        }
-                        catch (Exception ex)
-                        {
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     }

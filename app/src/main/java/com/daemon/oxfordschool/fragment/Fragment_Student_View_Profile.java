@@ -5,9 +5,12 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,12 +42,14 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
 
     TextView tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address,
             tv_name,tv_class,tv_section;
-    ImageView imageView;
+
     SharedPreferences mPreferences;
     User mUser,mStudent;
+    ImageView mProfileImage;
+    Bitmap mDecodedImage;
     ArrayList<User> mListStudents =new ArrayList<User>();
     AppCompatActivity mActivity;
-    String Str_Id="";
+    String Str_Id="", Str_ImageData="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_Url = ApiConstants.STUDENT_PROFILE_URL;
     UserLogin response;
@@ -90,7 +95,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         Log.d(MODULE, TAG);
         try
         {
-            imageView = (ImageView) view.findViewById(R.id.iv_profile);
+            mProfileImage = (ImageView) view.findViewById(R.id.iv_profile);
             tv_name  = (TextView) view.findViewById(R.id.tv_header_name);
             tv_class  = (TextView) view.findViewById(R.id.tv_class_name);
             tv_section  = (TextView) view.findViewById(R.id.tv_section_name);
@@ -116,7 +121,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
 
         try
         {
-
+            //SetProfileImage(Str_ImageData);
         }
         catch (Exception ex)
         {
@@ -158,6 +163,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
             {
                 mUser = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
                 Str_Id = mUser.getID();
+
                 Log.d(MODULE, TAG + " Str_Id : " + Str_Id);
             }
         }
@@ -209,6 +215,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
             {
                 mStudent = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
                 Log.d(MODULE, TAG + " mStudent : " + mStudent.getClassName());
+                Str_ImageData = mStudent.getImageData();
             }
         }
         catch (Exception ex)
@@ -246,6 +253,30 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         }
         catch(Exception ex)
         {
+            ex.printStackTrace();
+        }
+    }
+
+
+    public void SetProfileImage(String Str_EncodeImage)
+    {
+        TAG = "SetProfileImage";
+        Log.d(MODULE, TAG);
+
+        try
+        {
+            if(Str_EncodeImage.equals("")) mProfileImage.setImageResource(R.drawable.ic_profile);
+            else
+            {
+                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
+                byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                mProfileImage.setImageBitmap(mDecodedImage);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.d(MODULE, TAG + " Exception : " + ex.getMessage());
             ex.printStackTrace();
         }
     }

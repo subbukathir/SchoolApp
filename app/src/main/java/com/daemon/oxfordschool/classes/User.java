@@ -11,6 +11,7 @@ public class User implements Parcelable
     private String ID;
     private String UserId;
     private String UserType;
+    private String ImageData;
     private String FirstName;
     private String LastName;
     private String Email;
@@ -181,6 +182,13 @@ public class User implements Parcelable
         SectionName = sectionName;
     }
 
+    public String getImageData() {
+        return ImageData;
+    }
+
+    public void setImageData(String imageData) {
+        ImageData = imageData;
+    }
 
     @Override
     public int describeContents() {
@@ -208,6 +216,7 @@ public class User implements Parcelable
         dest.writeString(SectionId);
         dest.writeString(ClassName);
         dest.writeString(SectionName);
+        dest.writeString(ImageData);
 
     }
 
@@ -230,6 +239,7 @@ public class User implements Parcelable
         this.SectionId = source.readString();
         this.ClassName = source.readString();
         this.SectionName = source.readString();
+        this.ImageData = source.readString();
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>()

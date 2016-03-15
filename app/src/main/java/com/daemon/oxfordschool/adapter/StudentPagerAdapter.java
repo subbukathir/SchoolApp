@@ -1,7 +1,11 @@
 package com.daemon.oxfordschool.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +30,8 @@ public class StudentPagerAdapter extends PagerAdapter
     ArrayList<User> mListStudents;
     LayoutInflater mLayoutInflater;
     Font font = MyApplication.getInstance().getFontInstance();
+    String Str_EncodeImage="";
+    Bitmap mDecodedImage;
 
     public StudentPagerAdapter(AppCompatActivity mActivity,ArrayList<User> mListStudents) {
         this.mActivity = mActivity;
@@ -63,6 +69,14 @@ public class StudentPagerAdapter extends PagerAdapter
             StringBuilder Str_SectionName = new StringBuilder();
             Str_SectionName.append(mActivity.getString(R.string.lbl_section)).append(" ");
             Str_SectionName.append(mStudent.getSectionName());
+            Str_EncodeImage=mStudent.getImageData();
+
+            if(!Str_EncodeImage.equals(""))
+            {
+                byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imageView.setImageBitmap(mDecodedImage);
+            }
 
             if(tv_name!=null)
             {

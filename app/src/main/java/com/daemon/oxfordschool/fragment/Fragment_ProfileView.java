@@ -40,13 +40,13 @@ import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.ImagePickListener;
 import com.daemon.oxfordschool.listeners.ImageSavingListener;
 import com.daemon.oxfordschool.listeners.ImageUploadListener;
-import com.daemon.oxfordschool.asyncprocess.UploadImage;
+import com.daemon.oxfordschool.listeners.ViewProfileListener;
+import com.daemon.oxfordschool.asyncprocess.AfterImageUpdate_Process;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.soundcloud.android.crop.Crop;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -54,7 +54,7 @@ import java.io.File;
 import java.util.HashMap;
 
 
-public class Fragment_ProfileView extends Fragment implements ImagePickListener,ImageSavingListener,ImageUploadListener
+public class Fragment_ProfileView extends Fragment implements ImagePickListener,ImageSavingListener,ImageUploadListener,ViewProfileListener
 {
 
     public static String MODULE = "Fragment_ProfileView ";
@@ -66,6 +66,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     SharedPreferences mPreferences;
     private ImageLoader imageLoader;
     Bitmap mBitmap;
+    Bitmap mDecodedImage;
     ByteArrayOutputStream mByteArray;
     private DisplayImageOptions options;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -75,8 +76,8 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     AppCompatActivity mActivity;
     ImagePickListener mCallBack;
     String encodedImage;
-    String Str_Id="";
-    String Str_UploadImage_Url = ApiConstants.UPLOADIMAGE_URL;
+    String Str_Id="",Str_ImageData="";
+    String Str_UpdateProfile_Url = ApiConstants.VIEWPROFILE_URL;
     private Font font= MyApplication.getInstance().getFontInstance();
 
     public Fragment_ProfileView()
@@ -147,7 +148,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         try
         {
             setProfile();
-            SetProfileImage();
+            SetProfileImage(Str_ImageData);
         }
         catch (Exception ex)
         {
@@ -186,6 +187,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             {
                 mUser = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
                 Str_Id = mUser.getID();
+                Str_ImageData = mUser.getImageData();
                 Log.d(MODULE, TAG + " Str_Id : " + Str_Id);
             }
         }
@@ -322,29 +324,20 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         }
     }
 
-    public void SetProfileImage()
+    public void SetProfileImage(String Str_EncodeImage)
     {
         TAG = "SetProfileImage";
         Log.d(MODULE, TAG);
 
         try
         {
-            /*String Str_ImagePath ="file://" + AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
-            MemoryCacheUtils.removeFromCache(Str_ImagePath, ImageLoader.getInstance().getMemoryCache());
-            DiskCacheUtils.removeFromCache(Str_ImagePath, ImageLoader.getInstance().getDiskCache());
-            imageLoader.displayImage(Str_ImagePath, image_view_profile, options);*/
-            String Str_ImagePath = AppUtils.getProfilePicturePath(mActivity) + "/" + mUser.getMobile_Number() + ".png";
-            File file = new File(Str_ImagePath);
-            if(file==null) image_view_profile.setImageResource(R.drawable.ic_profile);
+            if(Str_EncodeImage.equals("")) image_view_profile.setImageResource(R.drawable.ic_profile);
             else
             {
-                if(file.exists())
-                {
-                    Uri uri = Uri.fromFile(new File(Str_ImagePath));
-                    if(uri!=null) image_view_profile.setImageURI(uri);
-                    else image_view_profile.setImageResource(R.drawable.ic_profile);
-                }
-                else image_view_profile.setImageResource(R.drawable.ic_profile);
+                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
+                byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                image_view_profile.setImageBitmap(mDecodedImage);
             }
         }
         catch (Exception ex)
@@ -360,7 +353,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         TAG = "onSingleImagePicked";
         Log.d(MODULE, TAG);
 
-        Log.d(MODULE,TAG + " Single Path : " + Str_Path);
+        Log.d(MODULE, TAG + " Single Path : " + Str_Path);
         try
         {
             //String Str_ImagePath = "file://" + Str_Path;
@@ -383,8 +376,6 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
         HashMap<String,String> data = new HashMap<>();
         data.put("UserId", Str_Id);
         data.put("ImageData", encodedImage);
-        data.put("ImageId", "");
-        data.put("Mode", "0");
         return data;
     }
 
@@ -396,7 +387,7 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
 
     @Override
     public void onImageSaved() {
-        SetProfileImage();
+        //SetProfileImage(encodedImage);
     }
 
     @Override
@@ -409,6 +400,49 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
     {
         TAG = "onImageUpload";
         Log.d(MODULE, TAG);
+
+        new AfterImageUpdate_Process(Str_UpdateProfile_Url,this,payloadUpdateProfile()).UpdateProfile();
+    }
+
+    @Override
+    public void onViewProfileReceived()
+    {
+        TAG = "payloadUpdateProfile";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getProfile();
+            setProfile();
+            SetProfileImage(Str_ImageData);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onViewProfileReceivedError(String Str_Msg)
+    {
+        TAG = "payloadUpdateProfile";
+        Log.d(MODULE, TAG);
+        AppUtils.showDialog(mActivity,Str_Msg);
+    }
+
+    public JSONObject payloadUpdateProfile()
+    {
+        TAG = "payloadUpdateProfile";
+        Log.d(MODULE, TAG);
+        JSONObject obj=new JSONObject();
+        try
+        {
+            obj.put("UserId",Str_Id);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return obj;
     }
 
     @Override
@@ -434,8 +468,8 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             try
             {
                 image_view_profile.setImageDrawable(null);
-                SetProfileImage();
                 uploadImage();
+                SetProfileImage(encodedImage);
             }
             catch (Exception e)
             {
@@ -478,7 +512,6 @@ public class Fragment_ProfileView extends Fragment implements ImagePickListener,
             Log.d(MODULE, TAG + " Exception : " + ex.getMessage());
             ex.printStackTrace();
         }
-
     }
 
 }
