@@ -16,20 +16,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/space_layout_margin">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/space_layout_padding"
+            android:paddingRight="@dimen/space_layout_padding">
 
             <TextView
                 android:id="@+id/tv_lbl_select_month"
-                style="@style/text_view_label"
-                android:gravity="right"
+                style="@style/text_view_label_teacher"
                 android:text="@string/lbl_month" />
 
             <Spinner
                 android:id="@+id/spinner_month"
                 style="@style/spinner_style"
-                android:layout_margin="@dimen/space_layout_margin"
-                android:layout_weight="0.8" />
+                android:layout_margin="@dimen/space_layout_margin_small" />
         </LinearLayout>
 
         <!-- Select Month Ends -->
