@@ -243,8 +243,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
     {
         TAG = "onEventListItemClicked";
         Log.d(MODULE, TAG + "position " + position);
-
-        gotoFragmentUpdate(position);
+        if(mUser.getUserType().equals(ApiConstants.STAFF))gotoFragmentUpdate(position);
     }
 
     public void getEventsList()

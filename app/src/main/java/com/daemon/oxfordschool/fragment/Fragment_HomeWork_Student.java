@@ -173,15 +173,20 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
             recycler_view.setLayoutManager(mLayoutManager);
             btn_select_date.setOnClickListener(_OnClickListener);
             btn_select_date.setText(ConvertedDate());
-            StringBuilder Str_EmptyMessage = new StringBuilder();
-            Str_EmptyMessage.append(getString(R.string.lbl_no_homework)).append(" ");
-            Str_EmptyMessage.append(Str_Date);
-            text_view_empty.setText(Str_EmptyMessage.toString());
+            setEmptyText();
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
+    }
+
+    public void setEmptyText()
+    {
+        StringBuilder Str_EmptyMessage = new StringBuilder();
+        Str_EmptyMessage.append(getString(R.string.lbl_no_homework)).append(" ");
+        Str_EmptyMessage.append(Str_Date);
+        text_view_empty.setText(Str_EmptyMessage.toString());
     }
 
     public void getProfile()
@@ -263,6 +268,7 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
         Log.d(MODULE, TAG);
         try
         {
+            setEmptyText();
             showEmptyView();
         }
         catch (Exception ex)
@@ -313,6 +319,7 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
             }
             else
             {
+                setEmptyText();
                 showEmptyView();
             }
 
@@ -395,6 +402,7 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
 
     public void populateSetDate(int year, int month, int day) {
         Str_Date = year + "-" + month + "-"+day;
+        btn_select_date.setText(ConvertedDate());
         getHomeWorks(Str_Date);
     }
 
