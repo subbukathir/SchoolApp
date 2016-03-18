@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -107,6 +108,11 @@ public class Fragment_Diary_Notes extends Fragment implements StudentsListListen
             getProfile();
             getStudentList();
             Str_Date=GetTodayDate();
+            if (mActivity.getCurrentFocus() != null)
+            {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
+            }
         }
         catch (Exception ex)
         {

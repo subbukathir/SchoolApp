@@ -14,7 +14,7 @@
             android:id="@+id/tv_subject_name"
             style="@style/text_view_label"
             android:layout_weight="0.9"
-            android:text="@string/lbl_subject" />
+            android:text="@string/lbl_subjects" />
 
         <TextView
             android:id="@+id/tv_average"

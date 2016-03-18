@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +19,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -103,6 +106,11 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
             getProfile();
             new GetStudentProfile(Str_Student_Profile_Url,Payload(),this).getStudentProfile();
             Str_Date=GetTodayDate();
+            if (mActivity.getCurrentFocus() != null)
+            {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
+            }
         }
         catch (Exception ex)
         {
@@ -565,4 +573,20 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
         return Str_ReturnValue;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

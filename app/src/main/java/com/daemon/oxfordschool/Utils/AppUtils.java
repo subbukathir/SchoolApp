@@ -58,6 +58,7 @@ public class AppUtils extends Dialog
     public static String SHARED_ADDHOMEWORK = "Shared_Add_HomeWork";
     public static String SHARED_ADDMARKS = "Shared_Add_Marks";
     public static String SHARED_ADDEVENT = "Shared_Add_Event";
+    public static String SHARED_ADDSUBJECT = "Shared_Add_Subject";
     public static String SHARED_FEES_DETAIL = "Shared_Fees_Detail";
     public static String SHARED_PAYMENT_DETAIL = "Shared_Payment_Detail";
     public static String SHARED_TERM_LIST= "Shared_Term_List";
@@ -78,6 +79,7 @@ public class AppUtils extends Dialog
     public static String B_HOMEWORK="Bundle_Homework";
     public static String B_DIARY="Bundle_Diary";
     public static String B_EVENTS="Bundle_Events";
+    public static String B_SUBJECTS="Bundle_Subjects";
 
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
@@ -87,6 +89,7 @@ public class AppUtils extends Dialog
     public static final String FRAGMENT_ADD_HOMEWORK = "501";
     public static final String FRAGMENT_ADD_EVENT = "502";
     public static final String FRAGMENT_ADD_DIARY_NOTES = "503";
+    public static final String FRAGMENT_ADD_SUBJECT = "504";
 
 
     public static File root = android.os.Environment.getExternalStorageDirectory();

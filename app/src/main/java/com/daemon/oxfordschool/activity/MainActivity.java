@@ -19,6 +19,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +63,7 @@ import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Student;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Add_Event;
 import com.daemon.oxfordschool.fragment.Fragment_Add_Marks;
+import com.daemon.oxfordschool.fragment.Fragment_Subjects;
 
 import com.daemon.oxfordschool.gcm.GcmIntentService;
 import com.daemon.oxfordschool.listeners.RegistrationListener;
@@ -105,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         getProfile();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
@@ -182,6 +187,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         super.onResume();
         TAG="onResume";
         Log.d(MODULE, TAG);
+
+        if (getCurrentFocus() != null)
+        {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
         // register GCM registration complete receiver
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(Config.REGISTRATION_COMPLETE));
         // register new push message receiver
@@ -396,6 +407,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             {
                 fragment = new Fragment_CCE_ExamReport();
                 title = getString(R.string.lbl_reports);
+            }
+        }
+        else if(getString(R.string.lbl_subjects).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            {
+                fragment = new Fragment_Subjects();
+                title = getString(R.string.lbl_subjects);
             }
         }
 

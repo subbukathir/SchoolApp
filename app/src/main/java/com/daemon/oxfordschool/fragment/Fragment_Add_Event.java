@@ -531,10 +531,10 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
 
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
-                case R.id.et_add_assignment_I:
+                case R.id.et_add_event_name:
                     validateEventName();
                     break;
-                case R.id.et_add_assignment_II:
+                case R.id.et_add_description:
                     validateDescription();
                     break;
                 default:
@@ -639,5 +639,6 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 }

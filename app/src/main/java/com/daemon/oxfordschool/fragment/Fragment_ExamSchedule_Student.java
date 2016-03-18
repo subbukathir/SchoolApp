@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +18,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -102,6 +105,11 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
             getProfile();
             new GetStudentProfile(Str_Url,Payload(),this).getStudentProfile();
             new ExamTypeList_Process(mActivity,this).GetExamTypeList();
+            if (mActivity.getCurrentFocus() != null)
+            {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
+            }
         }
         catch (Exception ex)
         {
@@ -532,5 +540,21 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
         return obj;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

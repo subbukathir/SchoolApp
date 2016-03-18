@@ -9,11 +9,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -470,4 +472,20 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
         return obj;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

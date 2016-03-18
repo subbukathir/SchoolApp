@@ -1,13 +1,18 @@
 package com.daemon.oxfordschool.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.daemon.oxfordschool.MyApplication;
@@ -37,6 +42,11 @@ public class Fragment_About_Us extends Fragment
         try
         {
             mActivity = (AppCompatActivity) getActivity();
+            if (mActivity.getCurrentFocus() != null)
+            {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
+            }
         }
         catch (Exception ex)
         {
@@ -82,7 +92,11 @@ public class Fragment_About_Us extends Fragment
 
         try
         {
-
+            if (mActivity.getCurrentFocus() != null)
+            {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
+            }
         }
         catch (Exception ex)
         {
@@ -104,6 +118,23 @@ public class Fragment_About_Us extends Fragment
         {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

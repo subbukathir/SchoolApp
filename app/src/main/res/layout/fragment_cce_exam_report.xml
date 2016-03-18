@@ -25,7 +25,7 @@
                 style="@style/text_view_label_teacher"
                 android:layout_weight="0.9"
                 android:textColor="@color/color_white"
-                android:text="@string/lbl_subject" />
+                android:text="@string/lbl_subjects" />
 
             <TextView
                 android:id="@+id/tv_lbl_average"

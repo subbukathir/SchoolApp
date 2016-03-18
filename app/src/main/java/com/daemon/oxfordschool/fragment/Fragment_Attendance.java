@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -95,6 +98,11 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
             getProfile();
             getStudentsList();
+            if (mActivity.getCurrentFocus() != null)
+            {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
+            }
             //Str_Date=GetTodayDate();
         }
         catch (Exception ex)
@@ -509,4 +517,20 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         return obj;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

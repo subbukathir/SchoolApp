@@ -40,7 +40,7 @@
             style="@style/text_view_event_list_item"
             android:layout_marginTop="@dimen/space_layout_margin"
             android:gravity="center"
-            android:text="@string/lbl_subject"
+            android:text="@string/lbl_subjects"
             android:textColor="@color/color_white" />
 
         <TextView

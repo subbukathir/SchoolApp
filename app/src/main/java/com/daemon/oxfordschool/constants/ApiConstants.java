@@ -32,6 +32,7 @@ public class ApiConstants
     public static String DIARY_NOTES_LIST_STAFF_URL=SERVER_URL + "DiaryNotesList_Staff.php";
     public static String ADD_MARKS_URL=SERVER_URL + "AddMarks.php";
     public static String ADD_EVENT_URL=SERVER_URL + "AddEvent.php";
+    public static String ADD_SUBJECT_URL=SERVER_URL + "AddSubject.php";
     public static String TERM_LIST_URL=SERVER_URL + "FeesTypeList.php";
     public static String PAYMENT_DETAIL_URL=SERVER_URL + "GetPaymentDetail.php";
     public static String PAYMENT_DETAIL_STUDENT_URL=SERVER_URL + "GetPaymentDetailByStudentId.php";

@@ -29,23 +29,23 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.adapter.EventsAdapter;
-import com.daemon.oxfordschool.asyncprocess.GetEventsList;
-import com.daemon.oxfordschool.classes.CEvents;
+import com.daemon.oxfordschool.adapter.SubjectsAdapter;
+import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
+import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.Event_List_Item_Click_Listener;
-import com.daemon.oxfordschool.listeners.EventsListListener;
-import com.daemon.oxfordschool.response.EventsList_Response;
+import com.daemon.oxfordschool.listeners.Subject_List_Item_Click_Listener;
+import com.daemon.oxfordschool.listeners.SubjectListListener;
+import com.daemon.oxfordschool.response.CommonList_Response;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
-public class Fragment_Events extends Fragment implements EventsListListener,Event_List_Item_Click_Listener
+public class Fragment_Subjects extends Fragment implements SubjectListListener,Subject_List_Item_Click_Listener
 {
 
-    public static String MODULE = "Fragment_Events ";
+    public static String MODULE = "Fragment_Subjects ";
     public static String TAG = "";
 
     SwipeRefreshLayout swipeRefreshLayout;
@@ -54,19 +54,19 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
     SharedPreferences mPreferences;
     User mUser;
-    CEvents mCEvents;
-    ArrayList<CEvents> mListEvents =new ArrayList<CEvents>();
-    EventsList_Response response;
+    Common_Class mSubjects;
+    ArrayList<Common_Class> mListSubjects =new ArrayList<Common_Class>();
+    CommonList_Response response;
     Toolbar mToolbar;
 
     AppCompatActivity mActivity;
     Bundle mSavedInstanceState;
-    FloatingActionButton fab_add_event;
+    FloatingActionButton fab_add_subject;
     String Str_Id="";
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_Url = ApiConstants.EVENTS_LIST_URL;
+    String Str_Url = ApiConstants.SUBJECTLIST_URL;
 
-    public Fragment_Events()
+    public Fragment_Subjects()
     {
         // Required empty public constructor
     }
@@ -85,7 +85,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
             mSavedInstanceState=savedInstanceState;
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
-            new GetEventsList(Str_Url,this).getEvents();
+            new SubjectList_Process(mActivity,this).GetSubjectList();
             if (mActivity.getCurrentFocus() != null)
             {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -102,7 +102,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_events, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_subjects, container, false);
         TAG = "onCreateView";
         Log.d(MODULE, TAG);
         initView(rootView);
@@ -116,8 +116,8 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         try
         {
             swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_events);
-            fab_add_event = (FloatingActionButton) view.findViewById(R.id.fab);
+            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_subjects);
+            fab_add_subject = (FloatingActionButton) view.findViewById(R.id.fab);
 
             setProperties();
         }
@@ -139,14 +139,31 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         {
             if(mSavedInstanceState!=null)
             {
-                getEventsList();
-                showEventsList();
+                getSubjectList();
+                showSubjectList();
             }
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void setProperties()
@@ -157,8 +174,8 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         {
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
-            if(mUser.getUserType().equals(ApiConstants.STAFF)) fab_add_event.setVisibility(View.VISIBLE);
-            fab_add_event.setOnClickListener(_OnClickListener);
+            if(mUser.getUserType().equals(ApiConstants.STAFF)) fab_add_subject.setVisibility(View.VISIBLE);
+            fab_add_subject.setOnClickListener(_OnClickListener);
             SetActionBar();
         }
         catch (Exception ex)
@@ -177,7 +194,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
             {
                 mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
                 mActivity.setSupportActionBar(mToolbar);
-                mToolbar.setTitle(R.string.lbl_events);
+                mToolbar.setTitle(R.string.lbl_subjects);
                 mToolbar.setSubtitle("");
                 FragmentDrawer.mDrawerLayout.post(new Runnable() {
                     @Override
@@ -218,56 +235,44 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
     }
 
     @Override
-    public void onEventsReceived() {
-        TAG = "onEventsReceived";
-        Log.d(MODULE, TAG);
-        try
-        {
-            getEventsList();
-            showEventsList();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onEventsReceivedError(String Str_Msg) {
-        TAG = "onEventsReceivedError";
-        Log.d(MODULE, TAG);
-        try
-        {
-
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onEventListItemClicked(int position)
+    public void onSubjectListReceived()
     {
-        TAG = "onEventListItemClicked";
+        TAG = "onSubjectListReceived";
+        Log.d(MODULE, TAG);
+        getSubjectList();
+        showSubjectList();
+    }
+
+    @Override
+    public void onSubjectListReceivedError(String Str_Msg)
+    {
+        TAG = "onSubjectListReceivedError";
+        Log.d(MODULE, TAG);
+    }
+
+    @Override
+    public void onSubjectListItemClicked(int position)
+    {
+        TAG = "onSubjectListItemClicked";
         Log.d(MODULE, TAG + "position " + position);
-        if(mUser.getUserType().equals(ApiConstants.STAFF))gotoFragmentUpdate(position);
+        gotoFragmentUpdate(position);
     }
 
-    public void getEventsList()
+
+    public void getSubjectList()
     {
-        TAG = "getEventsList";
+        TAG = "getSubjectList";
         Log.d(MODULE, TAG);
         try
         {
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_EVENTS_LIST,"");
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_SUBJECT_LIST,"");
             Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
             if(Str_Json.length()>0)
             {
-                response = (EventsList_Response) AppUtils.fromJson(Str_Json, new TypeToken<EventsList_Response>(){}.getType());
-                mListEvents = response.getCevents();
-                Log.d(MODULE, TAG + " mListStudents : " + mListEvents.size());
+                response = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>(){}.getType());
+                mListSubjects = response.getCclass();
+                Log.d(MODULE, TAG + " mListSubjects : " + mListSubjects.size());
             }
         }
         catch (Exception ex)
@@ -276,15 +281,15 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         }
     }
 
-    public void showEventsList()
+    public void showSubjectList()
     {
-        TAG = "showEventsList";
+        TAG = "showSubjectList";
         Log.d(MODULE, TAG);
         try
         {
-            if(mListEvents.size()>0)
+            if(mListSubjects.size()>0)
             {
-                EventsAdapter adapter = new EventsAdapter(mListEvents,this);
+                SubjectsAdapter adapter = new SubjectsAdapter(mListSubjects,this);
                 recycler_view.setAdapter(adapter);
             }
             else
@@ -310,7 +315,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
             LinearLayout.LayoutParams params = AppUtils.getMatchParentParams();
             emptyView.setLayoutParams(params);
             TextView textView = (TextView) emptyView.findViewById(R.id.text_view_empty);
-            textView.setText(R.string.lbl_no_events);
+            textView.setText(R.string.lbl_no_subjects);
             textView.setTypeface(font.getHelveticaRegular());
             ((ViewGroup)recycler_view.getParent().getParent()).addView(emptyView);
             recycler_view.setEmptyView(emptyView);
@@ -330,20 +335,20 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
             switch (view.getId())
             {
                 case R.id.fab:
-                    goto_AddEventFragment();
+                    goto_AddSubjectFragment();
                     break;
             }
         }
     };
 
-    public void goto_AddEventFragment()
+    public void goto_AddSubjectFragment()
     {
         mSavedInstanceState=getSavedState();
-        Fragment _fragment = new Fragment_Add_Event();
+        Fragment _fragment = new Fragment_Add_Subject();
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_body, _fragment,AppUtils.FRAGMENT_ADD_EVENT);
-        fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_EVENT + "");
+        fragmentTransaction.replace(R.id.container_body, _fragment,AppUtils.FRAGMENT_ADD_SUBJECT);
+        fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_SUBJECT + "");
         fragmentTransaction.commit();
     }
     public void gotoFragmentUpdate(int position)
@@ -351,24 +356,24 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         TAG = "gotoFragmentUpdate";
         Log.d(MODULE, TAG);
 
-        if(mListEvents.size()>0)
+        if(mListSubjects.size()>0)
         {
             mSavedInstanceState=getSavedState();
-            mCEvents = mListEvents.get(position);
-            Log.d(MODULE, TAG + "values of list " + mCEvents.getOrganizer_First_Name() + mCEvents.getStartDate());
-            Log.d(MODULE, TAG + "getSectionId of list " + mCEvents.getOrganizer_First_Name());
+            mSubjects = mListSubjects.get(position);
+            Log.d(MODULE, TAG + "values of list " + mSubjects.getName());
+            Log.d(MODULE, TAG + "getSectionId of list " + mSubjects.getID());
 
             Bundle  mBundle = new Bundle();
 
-            mBundle.putParcelable(AppUtils.B_EVENTS, mCEvents);
+            mBundle.putParcelable(AppUtils.B_SUBJECTS, mSubjects);
             mBundle.putInt(AppUtils.B_MODE,AppUtils.MODE_UPDATE);
 
-            Fragment mFragment = new Fragment_Add_Event();
+            Fragment mFragment = new Fragment_Add_Subject();
             FragmentManager mManager = mActivity.getSupportFragmentManager();
             FragmentTransaction mTransaction = mManager.beginTransaction();
             mFragment.setArguments(mBundle);
-            mTransaction.replace(R.id.container_body, mFragment,AppUtils.FRAGMENT_ADD_EVENT);
-            mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_EVENT + "");
+            mTransaction.replace(R.id.container_body, mFragment,AppUtils.FRAGMENT_ADD_SUBJECT);
+            mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_SUBJECT + "");
             mTransaction.commit();
         }
     }
@@ -402,20 +407,4 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         return outState;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            default:
-                break;
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

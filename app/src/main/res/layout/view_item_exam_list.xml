@@ -11,7 +11,7 @@
         <TextView
             android:id="@+id/tv_subject_name"
             style="@style/text_view_event_list_item"
-            android:text="@string/lbl_subject"
+            android:text="@string/lbl_subjects"
             android:gravity="center"
             android:textColor="@color/color_black" />
 
