@@ -179,7 +179,7 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
         {
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
-            if(mUser.getUserType().equals(ApiConstants.STAFF)) fab_add_subject.setVisibility(View.VISIBLE);
+            if(mUser.getUserType().equals(ApiConstants.ADMIN)) fab_add_subject.setVisibility(View.VISIBLE);
             fab_add_subject.setOnClickListener(_OnClickListener);
             SetActionBar();
         }
