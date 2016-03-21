@@ -96,24 +96,25 @@ public class StudentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 Str_EncodeImage = mUser.getImageData();
 
-
-                if(Str_EncodeImage.equals("")) holder.iv_profile.setImageResource(R.drawable.ic_profile);
-                else
+                if(!Str_EncodeImage.equals(""))
                 {
-                    Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
+                    Log.d(MODULE, TAG + "if else encoded string ***" + Str_EncodeImage);
                     byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
                     mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     holder.iv_profile.setImageBitmap(mDecodedImage);
-
                 }
 
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                holder.itemView.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
-                    public void onClick(View view) {
-                        try {
+                    public void onClick(View view)
+                    {
+                        try
+                        {
                             mItemCallBack.onStudentListItemClicked(position);
-
-                        } catch (Exception ex) {
+                        }
+                        catch (Exception ex)
+                        {
                             ex.printStackTrace();
                         }
                     }
@@ -196,6 +197,7 @@ public class StudentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 tv_student_name = (TextView) itemView.findViewById(R.id.tv_student_name);
                 tv_phone_no = (TextView) itemView.findViewById(R.id.tv_phone_no);
                 tv_email = (TextView) itemView.findViewById(R.id.tv_email);
+                iv_profile = (ImageView) itemView.findViewById(R.id.iv_profile);
                 //Setting properties
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
