@@ -141,6 +141,11 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
             {
                 getSubjectList();
                 showSubjectList();
+                if (mActivity.getCurrentFocus() != null)
+                {
+                    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
+                }
             }
         }
         catch (Exception ex)
@@ -255,7 +260,7 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
     {
         TAG = "onSubjectListItemClicked";
         Log.d(MODULE, TAG + "position " + position);
-        gotoFragmentUpdate(position);
+        if(mUser.getUserType().equals(ApiConstants.ADMIN))gotoFragmentUpdate(position);
     }
 
 

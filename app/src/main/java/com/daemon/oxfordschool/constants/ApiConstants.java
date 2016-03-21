@@ -45,6 +45,7 @@ public class ApiConstants
     public static String STUDENT="1";
     public static String STAFF="2";
     public static String PARENT="3";
+    public static String ADMIN="4";
 
     public static int PAID=1;
     public static int UNPAID=0;
