@@ -107,7 +107,6 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             mFragment = this;
             getProfile();
             getClassList();
-            getSectionList();
             getExamTypeList();
             getSubjectList();
             new ExamTypeList_Process(mActivity,this).GetExamTypeList();
@@ -245,7 +244,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
 
             et_add_theorymark.addTextChangedListener(new MyTextWatcher(et_add_theorymark));
             et_add_practicalmark.addTextChangedListener(new MyTextWatcher(et_add_practicalmark));
-
+            showSectionList();
         }
         catch (Exception ex)
         {
@@ -338,6 +337,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
                 if (position > 0)
                 {
                     Str_ClassId = mListClass.get(position - 1).getID();
+                    getSectionListFromService();
                 }
             }
             catch (Exception ex)
@@ -439,6 +439,20 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
 
         }
     };
+
+    public void getSectionListFromService()
+    {
+        TAG = "getSectionListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     public void onClassListReceived() {
@@ -606,10 +620,6 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
                 mListSection = responseCommon.getCclass();
                 Log.d(MODULE, TAG + " mListSection : " + mListSection.size());
             }
-            else
-            {
-                new SectionList_Process(mActivity, this).GetSectionList();
-            }
         }
         catch (Exception ex)
         {
@@ -661,10 +671,23 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
         Log.d(MODULE, TAG);
         try
         {
-            String[] items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_section.setAdapter(adapter);
+            String[] items=null;
+            if(mListSection.size()>0)
+            {
+                items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_section);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+            }
+
         }
         catch (Exception ex)
         {
@@ -730,6 +753,26 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
         {
             ex.printStackTrace();
         }
+    }
+
+    public JSONObject PayloadSection()
+    {
+        TAG = "Payload";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("ClassId", Str_ClassId);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
     }
 
     public JSONObject Payload_AddMarks()
@@ -807,6 +850,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
 
         return IsValid;
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
            // mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -875,4 +919,5 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             }
         }
     }
+
 }

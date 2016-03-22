@@ -2,6 +2,7 @@ package com.daemon.oxfordschool.asyncprocess;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -20,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.constants.ApiConstants;
@@ -41,125 +43,115 @@ public class SectionList_Process
     Object Obj;
     String Str_Url=ApiConstants.SECTIONLIST_URL;
     AppCompatActivity mActivity;
+    Fragment mFragment;
+    JSONObject Payload;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;
 
-    public SectionList_Process(AppCompatActivity mActivity,Object Obj)
+    public SectionList_Process(Fragment mFragment,JSONObject Payload)
     {
-        this.mActivity = mActivity;
-        this.Obj = Obj;
-        mCallBack = (SectionListListener) Obj;
+        TAG = " SectionList_Process";
+        Log.d(MODULE,TAG);
+
+        this.mFragment = mFragment;
+        this.Payload = Payload;
+        this.mActivity = (AppCompatActivity) mFragment.getActivity();
+        mCallBack = (SectionListListener) mFragment;
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
     }
 
     public void GetSectionList()
     {
-
         TAG = " GetSectionList";
+        Log.d(MODULE,TAG);
+        // appending offset to url
+        String url = Str_Url;
+        // Volley's json array request object
+        JsonObjectRequest req = new JsonObjectRequest(url,Payload,responseListener,responseErrorListener);
+        MyApplication.getInstance().addToRequestQueue(req);
+    }
 
-        try
+    Response.Listener responseListener = new Response.Listener()
+    {
+        @Override
+        public void onResponse(Object o)
         {
-            RequestQueue rq = Volley.newRequestQueue(mActivity);
-
-            JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,Str_Url,new Response.Listener<JSONObject>()
+            try
             {
-                @Override
-                public void onResponse(JSONObject response)
+                TAG = "responseListener";
+                Log.d(MODULE, TAG);
+
+                JSONObject response = (JSONObject) o;
+                Log.d(MODULE, TAG + response.toString());
+                if (response.toString().length()==0)
                 {
-                    TAG="onResponse";
-                    try
-                    {
-                        Log.d(MODULE, TAG + response.toString());
-
-                        if (response.length() == 0)
-                        {
-                            editor = mPreferences.edit();
-                            editor.putString(AppUtils.SHARED_SECTION_LIST, "");
-                            editor.commit();
-                            Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                            mCallBack.onSectionListReceivedError(Str_Msg);
-                        }
-                        else
-                        {
-                            String Str_Code = response.getString("success");
-                            Log.d(MODULE, TAG + " Str_Code : " + Str_Code);
-
-                            if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
-                            {
-                                editor = mPreferences.edit();
-                                editor.putString(AppUtils.SHARED_SECTION_LIST, response.toString());
-                                editor.commit();
-                                mCallBack.onSectionListReceived();
-                            }
-                            else
-                            {
-                                Str_Msg = response.getString("message");
-                                mCallBack.onSectionListReceivedError(Str_Msg);
-                            }
-
-                        }
-
-                    }
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                        Log.e(MODULE, TAG + " UnknownResponse");
-                        Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                        mCallBack.onSectionListReceivedError(Str_Msg);
-
-                    }
-
+                    editor = mPreferences.edit();
+                    editor.putString(AppUtils.SHARED_SECTION_LIST, "");
+                    editor.commit();
+                    Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                    mCallBack.onSectionListReceivedError(Str_Msg);
                 }
+                else
+                {
+                    String Str_Code = response.getString("success");
+                    Log.d(MODULE, TAG + " Str_Code : " + Str_Code);
 
-            },
-                    new Response.ErrorListener()
+                    if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                     {
-                        @Override
-                        public void onErrorResponse(VolleyError error)
-                        {
-                            VolleyLog.e("Error: ", error.getMessage());
-                            Log.e(MODULE, TAG + " UnknownResponse");
-                            if (error instanceof NetworkError)
-                            {
-                                Str_Msg = mActivity.getResources().getString(R.string.msg_no_internet);
-                            }
-                            else if (error instanceof ServerError)
-                            {
-                                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                            }
-                            else if (error instanceof AuthFailureError)
-                            {
-                                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                            }
-                            else if (error instanceof ParseError)
-                            {
-                                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                            }
-                            else if (error instanceof NoConnectionError)
-                            {
-                                Str_Msg = mActivity.getResources().getString(R.string.msg_no_internet);
-                            }
-                            else if (error instanceof TimeoutError)
-                            {
-                                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                            }
-                            Log.d(MODULE,TAG + Str_Msg);
-                            mCallBack.onSectionListReceivedError(Str_Msg);
-                        }
-                    });
-
-            int socketTimeout = 60000;// 30 seconds - change to what you want
-            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            req.setRetryPolicy(policy);
-            rq.add(req);
+                        editor = mPreferences.edit();
+                        editor.putString(AppUtils.SHARED_SECTION_LIST, response.toString());
+                        editor.commit();
+                        mCallBack.onSectionListReceived();
+                    }
+                    else
+                    {
+                        Str_Msg = response.getString("message");
+                        mCallBack.onSectionListReceivedError(Str_Msg);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                mCallBack.onSectionListReceivedError(Str_Msg);
+            }
         }
-        catch (Exception e)
+    };
+
+    Response.ErrorListener responseErrorListener = new Response.ErrorListener()
+    {
+        @Override
+        public void onErrorResponse(VolleyError error)
         {
-            Log.e(MODULE, TAG + " Exception Occurs - " + e);
-            Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+            VolleyLog.e("Error: ", error.getMessage());
+            Log.e(MODULE, TAG + " UnknownResponse");
+            if (error instanceof NetworkError)
+            {
+                Str_Msg = mActivity.getResources().getString(R.string.msg_no_internet);
+            }
+            else if (error instanceof ServerError)
+            {
+                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+            }
+            else if (error instanceof AuthFailureError)
+            {
+                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+            }
+            else if (error instanceof ParseError)
+            {
+                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+            }
+            else if (error instanceof NoConnectionError)
+            {
+                Str_Msg = mActivity.getResources().getString(R.string.msg_no_internet);
+            }
+            else if (error instanceof TimeoutError)
+            {
+                Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+            }
             mCallBack.onSectionListReceivedError(Str_Msg);
         }
-    }
+    };
 
 }

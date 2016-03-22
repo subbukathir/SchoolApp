@@ -13,7 +13,7 @@ public class ApiConstants
     public static String VIEWPROFILE_URL= SERVER_URL + "ViewProfile.php";
 
     public static String CLASSLIST_URL=SERVER_URL + "ClassList.php";
-    public static String SECTIONLIST_URL=SERVER_URL +"SectionList.php";
+    public static String SECTIONLIST_URL=SERVER_URL +"GetSectionList.php";
     public static String SUBJECTLIST_URL=SERVER_URL + "SubjectsList.php";
     public static String EVENTS_LIST_URL=SERVER_URL + "EventsList.php";
     public static String EXAM_TYPE_LIST_URL=SERVER_URL + "ExamTypeList.php";
