@@ -118,6 +118,7 @@ public class Fragment_School_Profile extends Fragment
             tab_layout.addTab(tab_layout.newTab().setText(getString(R.string.lbl_about_us)));
             tab_layout.addTab(tab_layout.newTab().setText(getString(R.string.lbl_our_aims)));
             tab_layout.addTab(tab_layout.newTab().setText(getString(R.string.lbl_facilities)));
+            tab_layout.setOnTabSelectedListener(_OnTabSelectedListener);
             vp_school_profile.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
         }
         catch (Exception ex)

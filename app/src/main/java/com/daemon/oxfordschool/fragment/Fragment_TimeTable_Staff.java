@@ -104,7 +104,6 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
             getClassList();
-            getSectionList();
             getSubjects();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -227,7 +226,11 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
     AdapterView.OnItemSelectedListener _OnClassItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            if(position > 0) Str_ClassId=mListClass.get(position-1).getID();
+            if(position>0)
+            {
+                Str_ClassId=mListClass.get(position-1).getID();
+                getSectionListFromService();
+            }
 
         }
 
@@ -253,6 +256,20 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
 
         }
     };
+
+    public void getSectionListFromService()
+    {
+        TAG = "getSectionListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     public void onClassListReceived() {
@@ -358,7 +375,7 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
 
     public void getSectionList()
     {
-        TAG = "getSectionList";
+        TAG = "getSectionListFromService";
         Log.d(MODULE, TAG);
         try
         {
@@ -370,10 +387,6 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
                 responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
                 mListSection = responseCommon.getCclass();
                 Log.d(MODULE, TAG + " mListSection : " + mListSection.size());
-            }
-            else
-            {
-                new SectionList_Process(mActivity, this).GetSectionList();
             }
         }
         catch (Exception ex)
@@ -448,10 +461,22 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
         Log.d(MODULE, TAG);
         try
         {
-            String[] items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_section.setAdapter(adapter);
+            String[] items =null;
+            if(mListSection.size()>0)
+            {
+                items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_section);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+            }
         }
         catch (Exception ex)
         {
@@ -474,6 +499,26 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
         {
             ex.printStackTrace();
         }
+    }
+
+    public JSONObject PayloadSection()
+    {
+        TAG = "Payload";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("ClassId", Str_ClassId);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
     }
 
     public JSONObject Payload_TimeTable()

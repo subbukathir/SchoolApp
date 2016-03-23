@@ -108,7 +108,6 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
             mFragment = this;
             getProfile();
             getClassList();
-            getSectionList();
             new GetFeesTermList(this).getFeesTermList();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -242,7 +241,11 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
                 if (position > 0)
                 {
                     Str_ClassId = mListClass.get(position - 1).getID();
-                    new ExamTypeList_Process(mActivity,Fragment_PaymentDetail_Staff.this).GetExamTypeList();
+                    {
+                        getSectionListFromService();
+                        new ExamTypeList_Process(mActivity,Fragment_PaymentDetail_Staff.this).GetExamTypeList();
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -301,6 +304,20 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
 
         }
     };
+
+    public void getSectionListFromService()
+    {
+        TAG = "getSectionListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
     public void getPaymentDetailFromService()
     {
@@ -443,7 +460,7 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
 
     public void getSectionList()
     {
-        TAG = "getSectionList";
+        TAG = "getSectionListFromService";
         Log.d(MODULE, TAG);
         try
         {
@@ -455,10 +472,6 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
                 responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
                 mListSection = responseCommon.getCclass();
                 Log.d(MODULE, TAG + " mListSection : " + mListSection.size());
-            }
-            else
-            {
-                new SectionList_Process(mActivity, this).GetSectionList();
             }
         }
         catch (Exception ex)
@@ -516,11 +529,23 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
         Log.d(MODULE, TAG);
         try
         {
-            String[] items = AppUtils.getArray(mListClass,getString(R.string.lbl_select_class));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_class.setAdapter(adapter);
-            spinner_class.setSelection(mClassListPosition);
+            String[] items=null;
+            if(mListSection.size()>0)
+            {
+                items = AppUtils.getArray(mListClass,getString(R.string.lbl_select_class));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_class.setAdapter(adapter);
+                spinner_class.setSelection(mClassListPosition);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_section);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+            }
         }
         catch (Exception ex)
         {
@@ -534,11 +559,23 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
         Log.d(MODULE, TAG);
         try
         {
-            String[] items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_section.setAdapter(adapter);
-            spinner_section.setSelection(mSectionListPosition);
+            String[] items =null;
+            if(mListSection.size()>0)
+            {
+                items=AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+                spinner_section.setSelection(mSectionListPosition);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_section);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+            }
         }
         catch (Exception ex)
         {
@@ -616,6 +653,26 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
 
     }
 
+    public JSONObject PayloadSection()
+    {
+        TAG = "Payload";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("ClassId", Str_ClassId);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
+    }
+
     public JSONObject Payload_PaymentDetail()
     {
         TAG = "Payload_PaymentDetail";
@@ -652,4 +709,5 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

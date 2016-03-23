@@ -123,7 +123,6 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
             mSavedInstanceState=savedInstanceState;
             getProfile();
             getClassList();
-            getSectionList();
             Str_Date=GetTodayDate();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -234,6 +233,7 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
             fab_add_homework.setOnClickListener(_OnClickListener);
             fab_add_homework.setVisibility(View.VISIBLE);
             SetActionBar();
+            showSectionList();
 
         }
         catch (Exception ex)
@@ -312,13 +312,13 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
             switch (view.getId())
             {
                 case R.id.fab:
-                    goto_Fragment_AddDiaryNotes();
-                    break;
+                     goto_Fragment_AddDiaryNotes();
+                     break;
                 case R.id.btn_select_date:
-                    selectDate(view);
-                    break;
+                     selectDate(view);
+                     break;
                 default:
-                    break;
+                     break;
             }
         }
     };
@@ -344,7 +344,11 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
             Log.d(MODULE, TAG);
             try
             {
-                if (position > 0) Str_ClassId = mListClass.get(position - 1).getID();
+                if (position > 0)
+                {
+                    Str_ClassId = mListClass.get(position - 1).getID();
+                    getSectionListFromService();
+                }
             }
             catch (Exception ex)
             {
@@ -514,6 +518,20 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
         gotoFragmentUpdate(position);
     }
 
+    public void getSectionListFromService()
+    {
+        TAG = "getSectionListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     public void getClassList()
     {
         TAG = "getClassList";
@@ -554,10 +572,6 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
                 responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
                 mListSection = responseCommon.getCclass();
                 Log.d(MODULE, TAG + " mListSection : " + mListSection.size());
-            }
-            else
-            {
-                new SectionList_Process(mActivity, this).GetSectionList();
             }
         }
         catch (Exception ex)
@@ -638,12 +652,24 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
         Log.d(MODULE, TAG);
         try
         {
-            String[] items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_section.setAdapter(adapter);
-            spinner_section.setSelection(mSectionListPosition);
-            if(mSavedInstanceState!=null) getDiaryNotesFromService(Str_Date);
+            String[] items=null;
+            if(mListSection.size()>0)
+            {
+                items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+                spinner_section.setSelection(mSectionListPosition);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_section);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+            }
+
         }
         catch (Exception ex)
         {
@@ -664,6 +690,14 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_student.setAdapter(adapter);
                 spinner_student.setSelection(mStudentListPosition);
+            }
+            else
+            {
+                String[] items = new String[1];
+                items[0] = getString(R.string.lbl_select_student);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_student.setAdapter(adapter);
             }
         }
         catch (Exception ex)
@@ -713,6 +747,26 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
             ex.printStackTrace();
         }
 
+    }
+
+    public JSONObject PayloadSection()
+    {
+        TAG = "Payload";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("ClassId", Str_ClassId);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
     }
 
     public JSONObject Payload_DiaryNotes(String Str_Date)
