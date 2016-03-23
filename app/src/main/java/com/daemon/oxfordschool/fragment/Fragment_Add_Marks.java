@@ -245,6 +245,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             et_add_theorymark.addTextChangedListener(new MyTextWatcher(et_add_theorymark));
             et_add_practicalmark.addTextChangedListener(new MyTextWatcher(et_add_practicalmark));
             showSectionList();
+            showStudentsList();
         }
         catch (Exception ex)
         {
@@ -744,6 +745,14 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             if(mListStudent.size()>0)
             {
                 String[] items = AppUtils.getStudentArray(mListStudent, getString(R.string.lbl_select_student));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_student.setAdapter(adapter);
+            }
+            else
+            {
+                String[] items = new String[1];
+                items[0] = getString(R.string.lbl_select_student);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_student.setAdapter(adapter);
