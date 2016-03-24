@@ -123,8 +123,6 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             }
             getProfile();
             getClassList();
-            getSectionList();
-            getSubjectList();
         }
         catch (Exception ex)
         {
@@ -386,6 +384,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
                 {
                     Str_ClassId = mListClass.get(position - 1).getID();
                     getSectionListFromService();
+                    getSubjectsListFromService();
                 }
             }
             catch (Exception ex)
@@ -485,6 +484,20 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         try
         {
             new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSubjectsListFromService()
+    {
+        TAG = "getSubjectsListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SubjectList_Process(this, PayloadSection()).GetSubjectsList();
         }
         catch (Exception ex)
         {
@@ -659,10 +672,6 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
                 responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
                 mListSubject = responseCommon.getCclass();
                 Log.d(MODULE, TAG + " mListSubject : " + mListSubject.size());
-            }
-            else
-            {
-                new SubjectList_Process(mActivity, this).GetSubjectList();
             }
         }
         catch (Exception ex)

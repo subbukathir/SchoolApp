@@ -30,6 +30,7 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.SubjectsAdapter;
+import com.daemon.oxfordschool.asyncprocess.AllSubjectList_Process;
 import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
@@ -85,7 +86,7 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
             mSavedInstanceState=savedInstanceState;
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
-            new SubjectList_Process(mActivity,this).GetSubjectList();
+            new AllSubjectList_Process(this).GetSubjectsList();
             if (mActivity.getCurrentFocus() != null)
             {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -263,7 +264,6 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
         if(mUser.getUserType().equals(ApiConstants.ADMIN))gotoFragmentUpdate(position);
     }
 
-
     public void getSubjectList()
     {
         TAG = "getSubjectList";
@@ -356,6 +356,7 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
         fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_SUBJECT + "");
         fragmentTransaction.commit();
     }
+
     public void gotoFragmentUpdate(int position)
     {
         TAG = "gotoFragmentUpdate";

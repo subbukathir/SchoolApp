@@ -112,7 +112,6 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             mFragment = this;
             getProfile();
             getClassList();
-            getSubjectList();
             new ExamTypeList_Process(mActivity,this).GetExamTypeList();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -267,10 +266,6 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
                 mListSubjects = subjectListResponse.getCclass();
                 Log.d(MODULE, TAG + " mListSubjects : " + mListSubjects.size());
             }
-            else
-            {
-                new SubjectList_Process(mActivity, this).GetSubjectList();
-            }
         }
         catch (Exception ex)
         {
@@ -371,6 +366,20 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
         try
         {
             new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSubjectsListFromService()
+    {
+        TAG = "getSubjectsListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SubjectList_Process(this, PayloadSection()).GetSubjectsList();
         }
         catch (Exception ex)
         {

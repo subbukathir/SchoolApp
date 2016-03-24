@@ -14,7 +14,8 @@ public class ApiConstants
 
     public static String CLASSLIST_URL=SERVER_URL + "ClassList.php";
     public static String SECTIONLIST_URL=SERVER_URL +"GetSectionList.php";
-    public static String SUBJECTLIST_URL=SERVER_URL + "SubjectsList.php";
+    public static String ALLSUBJECTLIST_URL=SERVER_URL + "SubjectsList.php";
+    public static String SUBJECTLIST_URL=SERVER_URL + "GetSubjectsList.php";
     public static String EVENTS_LIST_URL=SERVER_URL + "EventsList.php";
     public static String EXAM_TYPE_LIST_URL=SERVER_URL + "ExamTypeList.php";
     public static String EXAM_LIST_URL=SERVER_URL + "ExamList.php";
