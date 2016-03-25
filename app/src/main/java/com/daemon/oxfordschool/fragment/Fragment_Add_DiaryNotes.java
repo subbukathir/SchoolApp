@@ -56,6 +56,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -225,8 +226,8 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
         Log.d(MODULE, TAG);
         try
         {
-            setActionBarFont();
-            SetActionBar();
+
+
             tv_lbl_class.setTypeface(font.getHelveticaRegular());
             tv_lbl_section.setTypeface(font.getHelveticaRegular());
             tv_lbl_select_date.setTypeface(font.getHelveticaRegular());
@@ -275,6 +276,10 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
             }
             else btn_select_date.setText(Str_Date);
             showSectionList();
+            showStudentsList();
+            showSubjectList();
+            SetActionBar();
+            setActionBarFont();
         }
         catch (Exception ex)
         {
@@ -403,14 +408,19 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
         TextView titleTextView = null;
         try
         {
-            TextView subTitleView = (TextView) mToolbar.getChildAt(1);
-            subTitleView.setTypeface(font.getHelveticaRegular());
+            Field f = mToolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(mToolbar);
+            titleTextView.setTypeface(font.getHelveticaRegular());
         }
-        catch (Exception ex)
+        catch (NoSuchFieldException e)
         {
-            ex.printStackTrace();
+            e.printStackTrace();
         }
-
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     AdapterView.OnItemSelectedListener _OnClassItemSelectedListener =  new AdapterView.OnItemSelectedListener() {

@@ -235,6 +235,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             }
             else btn_select_date.setText(ConvertedDate());
             showSectionList();
+            showSubjectList();
         }
         catch (Exception ex)
         {
@@ -740,13 +741,25 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         Log.d(MODULE, TAG);
         try
         {
-            String[] items = AppUtils.getArray(mListSubject,getString(R.string.lbl_select_subject));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_subject.setAdapter(adapter);
-            if(mMode==AppUtils.MODE_UPDATE)
+            String[] items;
+            if(mListSubject.size()>0)
             {
-                spinner_subject.setSelection(AppUtils.getPosition(mListSubject,Str_SubjectId));
+                items = AppUtils.getArray(mListSubject,getString(R.string.lbl_select_subject));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_subject.setAdapter(adapter);
+                if(mMode==AppUtils.MODE_UPDATE)
+                {
+                    spinner_subject.setSelection(AppUtils.getPosition(mListSubject,Str_SubjectId));
+                }
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_subject);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_subject.setAdapter(adapter);
             }
         }
         catch (Exception ex)

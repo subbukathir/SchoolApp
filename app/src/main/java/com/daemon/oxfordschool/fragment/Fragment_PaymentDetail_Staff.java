@@ -201,6 +201,8 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
             spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
             spinner_term_fees.setOnItemSelectedListener(_OnItemSelectedListener);
             text_view_empty.setText(getString(R.string.lbl_no_result));
+
+            showSectionList();
         }
         catch (Exception ex)
         {
@@ -530,7 +532,7 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
         try
         {
             String[] items=null;
-            if(mListSection.size()>0)
+            if(mListClass.size()>0)
             {
                 items = AppUtils.getArray(mListClass,getString(R.string.lbl_select_class));
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
@@ -541,10 +543,10 @@ public class Fragment_PaymentDetail_Staff extends Fragment implements ClassListL
             else
             {
                 items = new String[1];
-                items[0] = getString(R.string.lbl_select_section);
+                items[0] = getString(R.string.lbl_select_class);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_section.setAdapter(adapter);
+                spinner_class.setAdapter(adapter);
             }
         }
         catch (Exception ex)

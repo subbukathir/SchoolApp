@@ -160,6 +160,7 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
             spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
             layout_empty.setVisibility(View.VISIBLE);
             vp_time_table.setVisibility(View.GONE);
+            showSectionList();
         }
         catch (Exception ex)
         {
