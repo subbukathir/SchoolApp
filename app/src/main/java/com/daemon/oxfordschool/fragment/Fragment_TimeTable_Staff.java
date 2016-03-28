@@ -104,7 +104,6 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
             getClassList();
-            getSubjects();
             if (mActivity.getCurrentFocus() != null)
             {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -161,6 +160,7 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
             spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
             layout_empty.setVisibility(View.VISIBLE);
             vp_time_table.setVisibility(View.GONE);
+            showSectionList();
         }
         catch (Exception ex)
         {
@@ -230,8 +230,8 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
             {
                 Str_ClassId=mListClass.get(position-1).getID();
                 getSectionListFromService();
+                getSubjectsListFromService();
             }
-
         }
 
         @Override
@@ -264,6 +264,20 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
         try
         {
             new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSubjectsListFromService()
+    {
+        TAG = "getSubjectsListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SubjectList_Process(this, PayloadSection()).GetSubjectsList();
         }
         catch (Exception ex)
         {
@@ -574,10 +588,6 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
                 response = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() { }.getType());
                 mSubjectList = response.getCclass();
                 Log.d(MODULE, TAG + " mSubjectList : " + mSubjectList.size());
-            }
-            else
-            {
-                new SubjectList_Process(mActivity, this).GetSubjectList();
             }
         }
         catch (Exception ex)

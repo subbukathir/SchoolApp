@@ -112,7 +112,6 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             mFragment = this;
             getProfile();
             getClassList();
-            getSubjectList();
             new ExamTypeList_Process(mActivity,this).GetExamTypeList();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -222,7 +221,7 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             text_view_empty.setText(getString(R.string.lbl_no_result));
             tv_lbl_exam_subject.setText(getString(R.string.lbl_name));
             showSectionList();
-
+            showSubjectsList();
         }
         catch (Exception ex)
         {
@@ -267,10 +266,6 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
                 mListSubjects = subjectListResponse.getCclass();
                 Log.d(MODULE, TAG + " mListSubjects : " + mListSubjects.size());
             }
-            else
-            {
-                new SubjectList_Process(mActivity, this).GetSubjectList();
-            }
         }
         catch (Exception ex)
         {
@@ -290,6 +285,7 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
                 {
                     Str_ClassId = mListClass.get(position - 1).getID();
                     getSectionListFromService();
+                    getSubjectsListFromService();
                     new ExamTypeList_Process(mActivity,Fragment_Exam_Result_Staff.this).GetExamTypeList();
                 }
             }
@@ -371,6 +367,20 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
         try
         {
             new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSubjectsListFromService()
+    {
+        TAG = "getSubjectsListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SubjectList_Process(this, PayloadSection()).GetSubjectsList();
         }
         catch (Exception ex)
         {
@@ -671,6 +681,14 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             if(mListSubjects.size()>0)
             {
                 String[] items = AppUtils.getArray(mListSubjects,getString(R.string.lbl_select_subject));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_subject.setAdapter(adapter);
+            }
+            else
+            {
+                String[] items = new String[1];
+                items[0] = getString(R.string.lbl_select_subject);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_subject.setAdapter(adapter);

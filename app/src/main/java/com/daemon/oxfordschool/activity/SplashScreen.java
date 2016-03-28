@@ -103,7 +103,7 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
         TAG = "onSectionListReceived";
         Log.d(MODULE, TAG);
 
-        new SubjectList_Process(this,this).GetSubjectList();
+        //new SubjectList_Process(this,this).GetSubjectList();
     }
 
     @Override

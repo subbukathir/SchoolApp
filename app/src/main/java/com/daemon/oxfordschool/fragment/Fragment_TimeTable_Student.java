@@ -97,7 +97,7 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
             mActivity = (AppCompatActivity) getActivity();
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
-            getSubjects();
+            getSubjectsListFromService();
             new GetStudentProfile(Str_Url,Payload(),this).getStudentProfile();
         }
         catch (Exception ex)
@@ -193,6 +193,19 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
         }
     }
 
+    public void getSubjectsListFromService()
+    {
+        TAG = "getSubjectsListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SubjectList_Process(this, PayloadSection()).GetSubjectsList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
 
     public void getTimeTableFromService()
     {
@@ -239,6 +252,7 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
             ex.printStackTrace();
         }
     }
+
     @Override
     public void onTimeTableReceived() {
         TAG = "onTimeTableReceived";
@@ -387,16 +401,13 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
                 mSubjectList = response.getCclass();
                 Log.d(MODULE, TAG + " mSubjectList : " + mSubjectList.size());
             }
-            else
-            {
-                new SubjectList_Process(mActivity, this).GetSubjectList();
-            }
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
     }
+
     public void getStudentProfile()
     {
         TAG = "getStudentsList";
@@ -472,6 +483,26 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
         return obj;
     }
 
+    public JSONObject PayloadSection()
+    {
+        TAG = "Payload";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("ClassId", Str_ClassId);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
@@ -488,4 +519,5 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

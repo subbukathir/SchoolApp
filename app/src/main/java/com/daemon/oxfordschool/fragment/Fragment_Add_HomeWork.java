@@ -123,8 +123,6 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             }
             getProfile();
             getClassList();
-            getSectionList();
-            getSubjectList();
         }
         catch (Exception ex)
         {
@@ -237,6 +235,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             }
             else btn_select_date.setText(ConvertedDate());
             showSectionList();
+            showSubjectList();
         }
         catch (Exception ex)
         {
@@ -386,6 +385,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
                 {
                     Str_ClassId = mListClass.get(position - 1).getID();
                     getSectionListFromService();
+                    getSubjectsListFromService();
                 }
             }
             catch (Exception ex)
@@ -485,6 +485,20 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         try
         {
             new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSubjectsListFromService()
+    {
+        TAG = "getSubjectsListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SubjectList_Process(this, PayloadSection()).GetSubjectsList();
         }
         catch (Exception ex)
         {
@@ -660,10 +674,6 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
                 mListSubject = responseCommon.getCclass();
                 Log.d(MODULE, TAG + " mListSubject : " + mListSubject.size());
             }
-            else
-            {
-                new SubjectList_Process(mActivity, this).GetSubjectList();
-            }
         }
         catch (Exception ex)
         {
@@ -731,13 +741,25 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         Log.d(MODULE, TAG);
         try
         {
-            String[] items = AppUtils.getArray(mListSubject,getString(R.string.lbl_select_subject));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner_subject.setAdapter(adapter);
-            if(mMode==AppUtils.MODE_UPDATE)
+            String[] items;
+            if(mListSubject.size()>0)
             {
-                spinner_subject.setSelection(AppUtils.getPosition(mListSubject,Str_SubjectId));
+                items = AppUtils.getArray(mListSubject,getString(R.string.lbl_select_subject));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_subject.setAdapter(adapter);
+                if(mMode==AppUtils.MODE_UPDATE)
+                {
+                    spinner_subject.setSelection(AppUtils.getPosition(mListSubject,Str_SubjectId));
+                }
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_subject);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_subject.setAdapter(adapter);
             }
         }
         catch (Exception ex)

@@ -7,55 +7,46 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.SectionListListener;
 import com.daemon.oxfordschool.listeners.SubjectListListener;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by daemonsoft on 1/2/16.
  */
-public class SubjectList_Process
+public class AllSubjectList_Process
 {
-    public static String MODULE = "SubjectList_Process";
+    public static String MODULE = "AllSubjectList_Process";
     public static String TAG ="";
 
     String Str_Msg = "",Str_Code="";
     SubjectListListener mCallBack;
     Object Obj;
-    String Str_Url=ApiConstants.SUBJECTLIST_URL;
+    String Str_Url=ApiConstants.ALLSUBJECTLIST_URL;
     AppCompatActivity mActivity;
     Fragment mFragment;
-    JSONObject Payload;
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;
 
-    public SubjectList_Process(Fragment mFragment,JSONObject Payload)
+    public AllSubjectList_Process(Fragment mFragment)
     {
-        TAG = " SectionList_Process";
+        TAG = " AllSubjectList_Process";
         Log.d(MODULE,TAG);
 
         this.mFragment = mFragment;
-        this.Payload = Payload;
         this.mActivity = (AppCompatActivity) mFragment.getActivity();
         mCallBack = (SubjectListListener) mFragment;
         mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
@@ -69,7 +60,7 @@ public class SubjectList_Process
         // appending offset to url
         String url = Str_Url;
         // Volley's json array request object
-        JsonObjectRequest req = new JsonObjectRequest(url,Payload,responseListener,responseErrorListener);
+        JsonObjectRequest req = new JsonObjectRequest(url,responseListener,responseErrorListener);
         MyApplication.getInstance().addToRequestQueue(req);
     }
 

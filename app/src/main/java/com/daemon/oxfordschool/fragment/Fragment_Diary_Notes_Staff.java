@@ -234,7 +234,7 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
             fab_add_homework.setVisibility(View.VISIBLE);
             SetActionBar();
             showSectionList();
-
+            showStudentsList();
         }
         catch (Exception ex)
         {

@@ -108,7 +108,6 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             getProfile();
             getClassList();
             getExamTypeList();
-            getSubjectList();
             new ExamTypeList_Process(mActivity,this).GetExamTypeList();
         }
         catch (Exception ex)
@@ -245,6 +244,8 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             et_add_theorymark.addTextChangedListener(new MyTextWatcher(et_add_theorymark));
             et_add_practicalmark.addTextChangedListener(new MyTextWatcher(et_add_practicalmark));
             showSectionList();
+            showStudentsList();
+            showSubjectsList();
         }
         catch (Exception ex)
         {
@@ -288,10 +289,6 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
                 subjectListResponse = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() { }.getType());
                 mListSubjects = subjectListResponse.getCclass();
                 Log.d(MODULE, TAG + " mListSubjects : " + mListSubjects.size());
-            }
-            else
-            {
-                new SubjectList_Process(mActivity, this).GetSubjectList();
             }
         }
         catch (Exception ex)
@@ -338,6 +335,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
                 {
                     Str_ClassId = mListClass.get(position - 1).getID();
                     getSectionListFromService();
+                    getSubjectsListFromService();
                 }
             }
             catch (Exception ex)
@@ -447,6 +445,20 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
         try
         {
             new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSubjectsListFromService()
+    {
+        TAG = "getSubjectsListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SubjectList_Process(this, PayloadSection()).GetSubjectsList();
         }
         catch (Exception ex)
         {
@@ -721,9 +733,19 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
         Log.d(MODULE, TAG);
         try
         {
+            String[] items = null;
+
             if(mListSubjects.size()>0)
             {
-                String[] items = AppUtils.getArray(mListSubjects,getString(R.string.lbl_select_subject));
+                items = AppUtils.getArray(mListSubjects,getString(R.string.lbl_select_subject));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_subject.setAdapter(adapter);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_subject);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_subject.setAdapter(adapter);
@@ -744,6 +766,14 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             if(mListStudent.size()>0)
             {
                 String[] items = AppUtils.getStudentArray(mListStudent, getString(R.string.lbl_select_student));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_student.setAdapter(adapter);
+            }
+            else
+            {
+                String[] items = new String[1];
+                items[0] = getString(R.string.lbl_select_student);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_student.setAdapter(adapter);

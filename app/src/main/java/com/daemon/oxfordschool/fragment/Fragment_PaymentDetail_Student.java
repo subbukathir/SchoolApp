@@ -504,6 +504,7 @@ public class Fragment_PaymentDetail_Student extends Fragment implements ViewStud
 
         return obj;
     }
+
     public void getStudentProfile()
     {
         TAG = "getStudentsList";
@@ -597,4 +598,5 @@ public class Fragment_PaymentDetail_Student extends Fragment implements ViewStud
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
