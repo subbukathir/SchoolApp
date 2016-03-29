@@ -333,6 +333,36 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         }
     }
 
+    public void Goto_Fragment_CCE_Report_Chart()
+    {
+        TAG = "Goto_Fragment_CCE_Report_Chart";
+        Log.d(MODULE, TAG);
+
+        try
+        {
+            FragmentTransaction mTransaction = mManager.beginTransaction();
+            Bundle Args = new Bundle();
+            Args.putParcelable(AppUtils.B_SELECTED_USER,mSelectedUser);
+            Fragment_CCE_ExamReport_Chart mFragment = new Fragment_CCE_ExamReport_Chart();
+            mFragment.setArguments(Args);
+            mTransaction.replace(R.id.frame_layout_cce_report, mFragment, AppUtils.FRAGMENT_CCE_REPORT_CHART + "");
+            mTransaction.addToBackStack(AppUtils.FRAGMENT_CCE_REPORT_CHART + "");
+            mTransaction.commit();
+        }
+        catch (Exception e)
+        {
+            Log.e(MODULE, TAG + ", Exception Occurs " + e);
+        }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(true);
+        menu.findItem(R.id.action_chart_view).setVisible(true);
+        super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
@@ -347,7 +377,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
                  Goto_Fragment_CCE_Report_List();
                  break;
             case R.id.action_chart_view:
-                 Toast.makeText(mActivity,"Clicked",Toast.LENGTH_SHORT).show();
+                 Goto_Fragment_CCE_Report_Chart();
                  break;
             default:
                 break;
