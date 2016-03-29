@@ -202,8 +202,8 @@
     <string name="lbl_average">Average</string>
     <string name="lbl_avg">Avg</string>
     <string name="lbl_grade">Grade</string>
-
-
+    <string name="lbl_chart_view">Chart View</string>
+    <string name="lbl_list_view">List View</string>
 
 
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>

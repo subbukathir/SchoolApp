@@ -3,41 +3,34 @@ package com.daemon.oxfordschool.fragment;
 /**
  * Created by Ravi on 29/07/15.
  */
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.adapter.CCEReportAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
-import com.daemon.oxfordschool.asyncprocess.GetCCE_ExamReport;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
-import com.daemon.oxfordschool.classes.CCEResult;
-import com.daemon.oxfordschool.classes.Result;
 import com.daemon.oxfordschool.classes.User;
-import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.CCEExam_Report_Item_Click_Listener;
-import com.daemon.oxfordschool.listeners.CCE_ExamReport_Listener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
 import com.daemon.oxfordschool.response.CCE_ExamReport_Response;
 import com.daemon.oxfordschool.response.StudentsList_Response;
@@ -48,25 +41,20 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Fragment_CCE_ExamReport extends Fragment implements StudentsListListener,CCE_ExamReport_Listener,
-        CCEExam_Report_Item_Click_Listener
+public class Fragment_CCE_ExamReport extends Fragment implements StudentsListListener
 {
 
     public static String MODULE = "Fragment_CCE_ExamReport";
     public static String TAG = "";
 
-    TextView text_view_empty,tv_lbl_subject_name,tv_lbl_average,tv_lbl_grade;
-    RelativeLayout layout_empty;
-    int mSelectedPosition,mSelectedRowPosition;
-    RecycleEmptyErrorView recycler_view;
-    RecyclerView.LayoutManager mLayoutManager;
-
+    int mSelectedPosition;
     SharedPreferences mPreferences;
     User mUser,mSelectedUser;
     ViewPager vp_student;
+    FrameLayout frame_layout_cce_report;
+    FragmentManager mManager;
 
     ArrayList<User> mListStudents =new ArrayList<User>();
-    ArrayList<CCEResult> mListCCEReport =new ArrayList<CCEResult>();
 
     StudentsList_Response studentListResponse;
     CCE_ExamReport_Response response;
@@ -75,8 +63,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
     String Str_Id="",Str_StudentId="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
-    String Str_CCEExamReport_Url = ApiConstants.CCE_EXAM_REPORT_URL;
-    private AlertDialog alert;
+
 
     public Fragment_CCE_ExamReport()
     {
@@ -95,6 +82,8 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
             getStudentsList();
+            setHasOptionsMenu(true);
+            mManager = getChildFragmentManager();
             if (mActivity.getCurrentFocus() != null)
             {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -125,12 +114,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         try
         {
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
-            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_cce_exam_report);
-            layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
-            text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
-            tv_lbl_subject_name = (TextView) view.findViewById(R.id.tv_lbl_subject_name);
-            tv_lbl_average = (TextView) view.findViewById(R.id.tv_lbl_average);
-            tv_lbl_grade = (TextView) view.findViewById(R.id.tv_lbl_grade);
+            frame_layout_cce_report = (FrameLayout) view.findViewById(R.id.frame_layout_cce_report);
             setProperties();
         }
         catch (Exception ex)
@@ -149,7 +133,12 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
 
         try
         {
-            if(mListStudents.size()>0) showStudentsList();
+            if(mListStudents.size()>0)
+            {
+                showStudentsList();
+                Goto_Fragment_CCE_Report_List();
+            }
+
         }
         catch (Exception ex)
         {
@@ -163,13 +152,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            recycler_view.setLayoutManager(mLayoutManager);
             vp_student.addOnPageChangeListener(_OnPageChangeListener);
-            text_view_empty.setTypeface(font.getHelveticaRegular());
-            tv_lbl_subject_name.setTypeface(font.getHelveticaBold());
-            tv_lbl_average.setTypeface(font.getHelveticaBold());
-            tv_lbl_grade.setTypeface(font.getHelveticaBold());
         }
         catch (Exception ex)
         {
@@ -234,7 +217,8 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         @Override
         public void onPageSelected(int position) {
             mSelectedPosition=position;
-            if(mListCCEReport.size()>0)getCCEExamReportFromService();
+            mSelectedUser = mListStudents.get(mSelectedPosition);
+            Goto_Fragment_CCE_Report_List();
         }
 
         @Override
@@ -251,7 +235,6 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         {
             mSelectedUser = mListStudents.get(mSelectedPosition);
             Str_StudentId = mSelectedUser.getStudentId();
-            new GetCCE_ExamReport(Str_CCEExamReport_Url,Payload_CCE_Exam_Report(),this).getCCE_ExamReport();
         }
         catch (Exception ex)
         {
@@ -293,51 +276,6 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         }
     }
 
-    @Override
-    public void onCCEExamReportReceived() {
-        TAG = "onStudentsReceived";
-        Log.d(MODULE, TAG);
-        try
-        {
-            getCCE_ExamReport();
-            showCCE_ExamReport();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onCCEExamReportReceivedError(String Str_Msg) {
-        TAG = "onCCEExamReportReceivedError";
-        Log.d(MODULE, TAG);
-        try
-        {
-            text_view_empty.setText(Str_Msg);
-            showEmptyView();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onReportItemClicked(int position) {
-        TAG = "onReportItemClicked";
-        Log.d(MODULE, TAG);
-        try
-        {
-            mSelectedRowPosition=position;
-            showDetail();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
     public void showStudentsList()
     {
         TAG = "showStudentsList";
@@ -351,65 +289,6 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         {
             ex.printStackTrace();
         }
-    }
-
-    public void getCCE_ExamReport()
-    {
-        TAG = "getCCE_ExamReport";
-        Log.d(MODULE, TAG);
-        try
-        {
-            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_CCE_EXAM_REPORT,"");
-            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
-            if(Str_Json.length()>0)
-            {
-                response = (CCE_ExamReport_Response) AppUtils.fromJson(Str_Json, new TypeToken<CCE_ExamReport_Response>(){}.getType());
-                mListCCEReport = response.getCceresult();
-                Log.d(MODULE, TAG + " mListCCEReport : " + mListCCEReport.size());
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public void showCCE_ExamReport()
-    {
-        TAG = "showCCE_ExamReport";
-        Log.d(MODULE, TAG);
-        try
-        {
-            if(mListCCEReport.size()>0)
-            {
-                CCEReportAdapter adapter = new CCEReportAdapter(mListCCEReport,this);
-                recycler_view.setAdapter(adapter);
-                recycler_view.setVisibility(View.VISIBLE);
-                layout_empty.setVisibility(View.GONE);
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public void showEmptyView()
-    {
-        TAG = "showEmptyView";
-        Log.d(MODULE, TAG);
-
-        try
-        {
-            layout_empty.setVisibility(View.VISIBLE);
-            recycler_view.setVisibility(View.GONE);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-
     }
 
     public JSONObject Payload_StudentList()
@@ -432,62 +311,26 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         return obj;
     }
 
-    public JSONObject Payload_CCE_Exam_Report()
+    public void Goto_Fragment_CCE_Report_List()
     {
-        TAG = "Payload_CCE_Exam_Report";
-        Log.d(MODULE, TAG);
-
-        JSONObject obj = new JSONObject();
-        try {
-           obj.put("StudentId", Str_StudentId);
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.d(MODULE, TAG + " obj : " + obj.toString());
-
-        return obj;
-    }
-
-    public void showDetail()
-    {
-        TAG = "showDetail";
+        TAG = " Goto_Fragment_CCE_Report_List";
         Log.d(MODULE, TAG);
 
         try
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-            // Get the layout inflater
-            LayoutInflater inflater = mActivity.getLayoutInflater();
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-            View view = inflater.inflate(R.layout.view_item_cce_reports_row, null);
-            ArrayList<Result> mList = mListCCEReport.get(mSelectedRowPosition).getResult();
-            LinearLayout ll_mark_details = (LinearLayout) view.findViewById(R.id.ll_mark_details);
-            ll_mark_details.removeAllViews();
-            for(int i=0;i<mList.size();i++)
-            {
-                View view_inner = inflater.inflate(R.layout.view_item_cce_reports_inner_row, null);
-                TextView tv_exam_name = (TextView) view_inner.findViewById(R.id.tv_exam_name);
-                TextView tv_marks = (TextView) view_inner.findViewById(R.id.tv_marks);
-                tv_exam_name.setTypeface(font.getHelveticaRegular());
-                tv_marks.setTypeface(font.getHelveticaRegular());
-                tv_exam_name.setText(mList.get(i).getExamName());
-                tv_marks.setText(mList.get(i).getObtainedMarks());
-                ll_mark_details.addView(view_inner);
-            }
-            builder.setView(view);
-            builder.setTitle(mListCCEReport.get(mSelectedRowPosition).getSubjectName());
-            builder.setCancelable(true);
-            alert = builder.create();
-            alert.show();
+            FragmentTransaction mTransaction = mManager.beginTransaction();
+            Bundle Args = new Bundle();
+            Args.putParcelable(AppUtils.B_SELECTED_USER,mSelectedUser);
+            Fragment_CCE_ExamReport_List mFragment = new Fragment_CCE_ExamReport_List();
+            mFragment.setArguments(Args);
+            mTransaction.replace(R.id.frame_layout_cce_report, mFragment, AppUtils.FRAGMENT_CCE_REPORT_LIST + "");
+            mTransaction.addToBackStack(AppUtils.FRAGMENT_CCE_REPORT_LIST + "");
+            mTransaction.commit();
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            ex.printStackTrace();
+            Log.e(MODULE, TAG + ", Exception Occurs " + e);
         }
-
     }
 
     @Override
@@ -495,15 +338,22 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                 if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
                     FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
+                 else
                     FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+                 return true;
+            case R.id.action_list_view:
+                 Goto_Fragment_CCE_Report_List();
+                 break;
+            case R.id.action_chart_view:
+                 Toast.makeText(mActivity,"Clicked",Toast.LENGTH_SHORT).show();
+                 break;
             default:
                 break;
 
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

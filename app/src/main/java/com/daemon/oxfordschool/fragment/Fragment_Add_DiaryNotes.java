@@ -311,6 +311,26 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
         }
     }
 
+    private void setActionBarFont()
+    {
+        TextView titleTextView = null;
+        try
+        {
+            Field f = mToolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(mToolbar);
+            titleTextView.setTypeface(font.getHelveticaRegular());
+        }
+        catch (NoSuchFieldException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -400,26 +420,6 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
         catch (Exception ex)
         {
             ex.printStackTrace();
-        }
-    }
-
-    private void setActionBarFont()
-    {
-        TextView titleTextView = null;
-        try
-        {
-            Field f = mToolbar.getClass().getDeclaredField("mTitleTextView");
-            f.setAccessible(true);
-            titleTextView = (TextView) f.get(mToolbar);
-            titleTextView.setTypeface(font.getHelveticaRegular());
-        }
-        catch (NoSuchFieldException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
-        {
-            e.printStackTrace();
         }
     }
 

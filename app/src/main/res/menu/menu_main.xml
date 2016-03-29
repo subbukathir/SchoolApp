@@ -9,4 +9,22 @@
         android:orderInCategory="100"
         android:visible="false"
         app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/action_list_view"
+        android:icon="@drawable/ic_action_action_view_list"
+        android:title="@string/lbl_list_view"
+        android:orderInCategory="100"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_chart_view"
+        android:icon="@drawable/ic_action_chart"
+        android:title="@string/lbl_chart_view"
+        android:orderInCategory="100"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
 </menu>

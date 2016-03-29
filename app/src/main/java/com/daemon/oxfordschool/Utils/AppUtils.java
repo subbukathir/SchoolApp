@@ -75,6 +75,7 @@ public class AppUtils extends Dialog
     public static String B_SECTION_ID="Bundle_SectionId";
     public static String B_ATTENDANCE_LIST="Bundle_List";
     public static String B_DATE="Bundle_Date";
+    public static String B_SELECTED_USER="Bundle_SelectedUser";
 
     public static String B_HOMEWORK="Bundle_Homework";
     public static String B_DIARY="Bundle_Diary";
@@ -90,6 +91,8 @@ public class AppUtils extends Dialog
     public static final String FRAGMENT_ADD_EVENT = "502";
     public static final String FRAGMENT_ADD_DIARY_NOTES = "503";
     public static final String FRAGMENT_ADD_SUBJECT = "504";
+    public static final String FRAGMENT_CCE_REPORT_LIST = "505";
+    public static final String FRAGMENT_CCE_REPORT_CHART = "506";
 
 
     public static File root = android.os.Environment.getExternalStorageDirectory();
