@@ -422,7 +422,6 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
         Log.i("Gesture", "START");
