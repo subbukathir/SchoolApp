@@ -64,6 +64,7 @@ import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Add_Event;
 import com.daemon.oxfordschool.fragment.Fragment_Add_Marks;
 import com.daemon.oxfordschool.fragment.Fragment_Subjects;
+import com.daemon.oxfordschool.fragment.Fragment_Mass_Notification;
 
 import com.daemon.oxfordschool.gcm.GcmIntentService;
 import com.daemon.oxfordschool.listeners.RegistrationListener;
@@ -416,6 +417,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new Fragment_Subjects();
                 title = getString(R.string.lbl_subjects);
             }
+        }
+        else if(getString(R.string.lbl_mass_notification).equals(navItem))
+        {
+
+                fragment = new Fragment_Mass_Notification();
+                title = getString(R.string.lbl_mass_notification);
+
         }
 
         if (fragment != null)
