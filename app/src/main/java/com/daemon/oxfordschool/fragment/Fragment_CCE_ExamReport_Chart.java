@@ -84,6 +84,7 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
     private AlertDialog alert;
     Bundle Args;
     private BarChart mChart;
+    int mTextSize=0;float mDensity=0;
 
     public Fragment_CCE_ExamReport_Chart()
     {
@@ -100,6 +101,8 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
         {
             mActivity = (AppCompatActivity) getActivity();
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
+            mDensity =  mActivity.getResources().getDisplayMetrics().density;
+            mTextSize = (int) (mActivity.getResources().getDimension(R.dimen.lbl_size) / mDensity);
             Args = getArguments();
             if(Args!=null)
             {
@@ -291,17 +294,23 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
         for(int i = 0; i < dataSets; i++)
         {
             ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+            float floatValue=0f;
+            String Str_Subject="";String[] items = new String[count];
             for(int j = 0; j < count; j++)
             {
-                float floatValue = Float.parseFloat(mListCCEReport.get(j).getAverage());
-                entries.add(new BarEntry(floatValue,j));
+                floatValue= Float.parseFloat(mListCCEReport.get(j).getAverage());
+                Str_Subject = mListCCEReport.get(j).getSubjectName();
+                entries.add(new BarEntry(floatValue,j,Str_Subject));
+                items[j] = Str_Subject;
             }
-            BarDataSet ds = new BarDataSet(entries, Integer.toString(i));
+            BarDataSet ds = new BarDataSet(entries, "");
             ds.setColors(ColorTemplate.VORDIPLOM_COLORS);
+            ds.setStackLabels(items);
             sets.add(ds);
         }
         BarData d = new BarData(ChartData.generateXVals(0, count), sets);
         d.setValueTypeface(font.getHelveticaRegular());
+        d.setValueTextSize(mTextSize);
         return d;
     }
 
