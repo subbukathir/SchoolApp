@@ -15,6 +15,7 @@
     <string name="lbl_update_event">Update Event</string>
     <string name="lbl_add_subject">Add Subject</string>
     <string name="lbl_update_subject">Update Subject</string>
+    <string name="lbl_mass_notification">Mass Notification</string>
     <string name="lbl_add_marks">Add Marks</string>
     <string name="lbl_exam_schedule">Exam Schedule</string>
     <string name="lbl_exam_result">Exam Result</string>
@@ -37,6 +38,7 @@
         <item>@string/lbl_fees_detail</item>
         <item>@string/lbl_time_table</item>
         <item>@string/lbl_subjects</item>
+        <item>@string/lbl_mass_notification</item>
     </string-array>
 
     <!-- navigation drawer item labels  -->
@@ -61,6 +63,7 @@
     <string name="lbl_parent_module">Parent Module</string>
 
     <string name="title_messages">Messages</string>
+    <string name="lbl_title">Title</string>
     <string name="title_friends">Friends</string>
     <string name="title_home">Home</string>
 
@@ -100,9 +103,13 @@
 
     <string name="lbl_msg_blank_event_name">Please fill event name</string>
     <string name="lbl_msg_blank_subject_name">Please fill subject name</string>
+    <string name="lbl_msg_blank_title">Please fill title for notification</string>
+    <string name="lbl_msg_blank_message">Please fill message</string>
     <string name="lbl_msg_blank_description">Please fill description about event</string>
 
     <string name="lbl_msg_valid_event_name">Event Name should contain atleast 6 characters</string>
+    <string name="lbl_msg_valid_title">Title should contain atleast 4 characters</string>
+    <string name="lbl_msg_valid_message">Message should contain atleast 6 characters</string>
     <string name="lbl_msg_valid_subject_name">Subject Name should contain atleast 4 characters</string>
     <string name="lbl_msg_valid_description">Description should contain atleast 6 characters</string>
 
@@ -284,6 +291,8 @@
 
 
     <string name="lbl_about_us">About Us</string>
+    <string name="msg_notification_not_sent">Notification Not Sent</string>
+    <string name="msg_notification_sent">Notification Sent</string>
     <string name="lbl_our_aims">Our Aims</string>
     <string name="lbl_facilities">Facilities</string>
 
