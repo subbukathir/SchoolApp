@@ -62,6 +62,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamReport_Listener,
         CCEExam_Report_Item_Click_Listener, OnChartGestureListener
@@ -85,6 +86,8 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
     Bundle Args;
     private BarChart mChart;
     int mTextSize=0;float mDensity=0;
+    XAxis xAxis;
+
 
     public Fragment_CCE_ExamReport_Chart()
     {
@@ -192,8 +195,10 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
             leftAxis.setTypeface(font.getHelveticaRegular());
             leftAxis.setAxisMinValue(0f); // this replaces setStartAtZero(true)
             mChart.getAxisRight().setEnabled(false);
-            XAxis xAxis = mChart.getXAxis();
-            xAxis.setEnabled(false);
+            xAxis = mChart.getXAxis();
+            xAxis.setTypeface(font.getHelveticaRegular());
+            xAxis.setTextSize(mTextSize);
+            xAxis.setEnabled(true);
             //programatically add the chart
             FrameLayout parent = (FrameLayout) view.findViewById(R.id.parentLayout);
             parent.addView(mChart);
@@ -291,24 +296,27 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
     protected BarData generateBarData(int dataSets, float range, int count)
     {
         ArrayList<IBarDataSet> sets = new ArrayList<IBarDataSet>();
+        List<String> items = new ArrayList<String>();
         for(int i = 0; i < dataSets; i++)
         {
             ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
             float floatValue=0f;
-            String Str_Subject="";String[] items = new String[count];
+            String Str_Subject="";
+            items = new ArrayList<String>();
             for(int j = 0; j < count; j++)
             {
                 floatValue= Float.parseFloat(mListCCEReport.get(j).getAverage());
-                Str_Subject = mListCCEReport.get(j).getSubjectName();
-                entries.add(new BarEntry(floatValue,j,Str_Subject));
-                items[j] = Str_Subject;
+                Str_Subject = mListCCEReport.get(j).getSubjectName().substring(0,3);
+                BarEntry barEntry = new BarEntry(floatValue,j,Str_Subject);
+                entries.add(barEntry);
+                items.add(Str_Subject);
             }
+            xAxis.setValues(items);
             BarDataSet ds = new BarDataSet(entries, "");
             ds.setColors(ColorTemplate.VORDIPLOM_COLORS);
-            ds.setStackLabels(items);
             sets.add(ds);
         }
-        BarData d = new BarData(ChartData.generateXVals(0, count), sets);
+        BarData d = new BarData(items, sets);
         d.setValueTypeface(font.getHelveticaRegular());
         d.setValueTextSize(mTextSize);
         return d;

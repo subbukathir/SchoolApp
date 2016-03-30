@@ -51,7 +51,7 @@ public class SubjectList_Process
 
     public SubjectList_Process(Fragment mFragment,JSONObject Payload)
     {
-        TAG = " SectionList_Process";
+        TAG = " SubjectList_Process";
         Log.d(MODULE,TAG);
 
         this.mFragment = mFragment;
