@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -571,6 +572,13 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
             e.printStackTrace();
         }
         return Str_ReturnValue;
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(false);
+        menu.findItem(R.id.action_chart_view).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override

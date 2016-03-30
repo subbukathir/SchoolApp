@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,6 +109,7 @@ public class Fragment_Exam_Schedule_Staff extends Fragment implements ClassListL
             getProfile();
             getClassList();
             getSectionList();
+            setHasOptionsMenu(true);
             new ExamTypeList_Process(mActivity,Fragment_Exam_Schedule_Staff.this).GetExamTypeList();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -672,6 +674,13 @@ public class Fragment_Exam_Schedule_Staff extends Fragment implements ClassListL
         Log.d(MODULE, TAG + " obj : " + obj.toString());
 
         return obj;
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(false);
+        menu.findItem(R.id.action_chart_view).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override

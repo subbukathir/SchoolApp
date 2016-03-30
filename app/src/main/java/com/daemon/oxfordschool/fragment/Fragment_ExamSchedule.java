@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,6 +103,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
             getStudentsList();
+            setHasOptionsMenu(true);
             new ExamTypeList_Process(mActivity,this).GetExamTypeList();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -544,6 +546,13 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         Log.d(MODULE, TAG + " obj : " + obj.toString());
 
         return obj;
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(false);
+        menu.findItem(R.id.action_chart_view).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override

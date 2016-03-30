@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +97,7 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
             mActivity = (AppCompatActivity) getActivity();
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
+            setHasOptionsMenu(true);
             new GetStudentProfile(Str_Url,Payload(),this).getStudentProfile();
             Str_Date=GetTodayDate();
             if (mActivity.getCurrentFocus() != null)
@@ -527,5 +529,12 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
 
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(false);
+        menu.findItem(R.id.action_chart_view).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
     }
 }

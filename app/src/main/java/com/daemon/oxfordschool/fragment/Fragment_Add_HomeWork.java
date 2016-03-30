@@ -19,6 +19,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -693,7 +694,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
             spinner_class.setAdapter(adapter);
             if(mMode == AppUtils.MODE_UPDATE)
             {
-                spinner_class.setSelection(AppUtils.getPosition(mListClass,Str_ClassId));
+                spinner_class.setSelection(AppUtils.getPosition(mListClass, Str_ClassId));
             }
         }
         catch (Exception ex)
@@ -881,25 +882,6 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         return obj;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        TAG = "onOptionsItemSelected";
-        Log.d(MODULE, TAG);
-
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                mManager = mActivity.getSupportFragmentManager();
-                mManager.popBackStack();
-                return true;
-            default:
-                break;
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public String ConvertedDate()
     {
         TAG = "ConvertedDate";
@@ -919,5 +901,28 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         }
         return Str_ReturnValue;
     }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(false);
+        menu.findItem(R.id.action_chart_view).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

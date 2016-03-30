@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,7 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
             getSubjectsListFromService();
+            setHasOptionsMenu(true);
             new GetStudentProfile(Str_Url,Payload(),this).getStudentProfile();
         }
         catch (Exception ex)
@@ -519,5 +521,11 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
         }
         return super.onOptionsItemSelected(item);
     }
-
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(false);
+        menu.findItem(R.id.action_chart_view).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
 }

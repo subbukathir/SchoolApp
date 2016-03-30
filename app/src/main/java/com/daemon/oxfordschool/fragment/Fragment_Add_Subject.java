@@ -21,6 +21,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -391,17 +392,23 @@ public class Fragment_Add_Subject extends Fragment implements AddSubjectListener
         Str_Id = mUser.getID();
     }
 
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        TAG = "onOptionsItemSelected";
-        Log.d(MODULE, TAG);
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(false);
+        menu.findItem(R.id.action_chart_view).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case android.R.id.home:
-                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                mManager = mActivity.getSupportFragmentManager();
-                mManager.popBackStack();
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             default:
                 break;

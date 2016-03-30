@@ -19,6 +19,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -248,7 +249,7 @@ public class Fragment_Attendance_Add extends Fragment implements AttendanceAddLi
         Log.d(MODULE, TAG);
         try
         {
-            AppUtils.DialogMessage(mActivity,Str_Msg);
+            AppUtils.DialogMessage(mActivity, Str_Msg);
         }
         catch (Exception ex)
         {
@@ -323,25 +324,6 @@ public class Fragment_Attendance_Add extends Fragment implements AttendanceAddLi
         return Str_ReturnValue;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        TAG = "onOptionsItemSelected";
-        Log.d(MODULE, TAG);
-
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                mManager = mActivity.getSupportFragmentManager();
-                mManager.popBackStack();
-                return true;
-            default:
-                break;
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public JSONObject Payload_AttendanceAdd()
     {
         TAG = "Payload_AttendanceAdd";
@@ -406,6 +388,30 @@ public class Fragment_Attendance_Add extends Fragment implements AttendanceAddLi
         }
 
 
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_list_view).setVisible(false);
+        menu.findItem(R.id.action_chart_view).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
