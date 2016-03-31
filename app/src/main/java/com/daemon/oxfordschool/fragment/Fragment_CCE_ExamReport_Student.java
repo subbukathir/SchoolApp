@@ -230,6 +230,7 @@ public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStu
         {
             getStudentProfile();
             setProfile();
+            getCCEExamReportFromService();
         }
         catch (Exception ex)
         {
