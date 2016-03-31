@@ -59,6 +59,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     public static DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
+    private static String[] left_menu_admin = null;
     private static String[] left_menu_staff = null;
     private static String[] left_menu_parent_student = null;
     private static String[] titles = null;
@@ -98,6 +99,10 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         {
             titles=left_menu_staff;
         }
+        if(mUser.getUserType().equals(ApiConstants.ADMIN))
+        {
+            titles=left_menu_admin;
+        }
         else titles=left_menu_parent_student;
         int itemCount = titles.length;
         // preparing navigation drawer items
@@ -119,6 +124,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         // drawer labels
         left_menu_staff= getActivity().getResources().getStringArray(R.array.left_menu_staff);
         left_menu_parent_student= getActivity().getResources().getStringArray(R.array.left_menu_parent_student);
+        left_menu_admin= getActivity().getResources().getStringArray(R.array.left_menu_admin);
         mActivity = (AppCompatActivity) getActivity();
         getProfile();
     }

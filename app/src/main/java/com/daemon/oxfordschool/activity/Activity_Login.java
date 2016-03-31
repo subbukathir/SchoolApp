@@ -160,6 +160,7 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
         et_username.requestFocus();
         Intent intent=new Intent(this,MainActivity.class);
         startActivity(intent);
+        this.finish();
     }
 
     @Override

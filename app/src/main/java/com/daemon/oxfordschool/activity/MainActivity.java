@@ -35,6 +35,7 @@ import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
+import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Student;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
     User mUser;
     SharedPreferences mPreferences;
+    SharedPreferences.Editor editor;
     String Str_Id="",Str_DeviceId="",Str_Token="",Str_Url="";
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         getProfile();
+        editor = mPreferences.edit();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -251,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
             else
             {
-                fragment = new Fragment_StudentProfile();
+                fragment = new Fragment_StudentList();
                 title = getString(R.string.lbl_students);
             }
         }
@@ -262,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_add_event).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_Add_Event();
                 title = getString(R.string.lbl_add_event);
@@ -270,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_add_marks).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_Add_Marks();
                 title = getString(R.string.lbl_add_marks);
@@ -278,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_homework).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_HomeWork_Staff();
                 title = getString(R.string.lbl_homework);
@@ -296,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_diary).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_Diary_Notes_Staff();
                 title = getString(R.string.lbl_diary);
@@ -314,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_attendance).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_Attendance_Staff();
                 title = getString(R.string.lbl_attendance);
@@ -332,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_exam_schedule).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_Exam_Schedule_Staff();
                 title = getString(R.string.lbl_exam_schedule);
@@ -350,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_exam_result).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_Exam_Result_Staff();
                 title = getString(R.string.lbl_exam_result);
@@ -368,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_fees_detail).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_PaymentDetail_Staff();
                 title = getString(R.string.lbl_fees_detail);
@@ -386,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_time_table).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_TimeTable_Staff();
                 title = getString(R.string.lbl_time_table);
@@ -404,15 +407,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_reports).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STUDENT) || mUser.getUserType().equals(ApiConstants.PARENT))
+            if(mUser.getUserType().equals(ApiConstants.PARENT))
             {
                 fragment = new Fragment_CCE_ExamReport();
+                title = getString(R.string.lbl_reports);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_CCE_ExamReport_Student();
                 title = getString(R.string.lbl_reports);
             }
         }
         else if(getString(R.string.lbl_subjects).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_Subjects();
                 title = getString(R.string.lbl_subjects);
@@ -420,10 +428,21 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         else if(getString(R.string.lbl_mass_notification).equals(navItem))
         {
-
+            if(mUser.getUserType().equals(ApiConstants.ADMIN))
+            {
                 fragment = new Fragment_Mass_Notification();
                 title = getString(R.string.lbl_mass_notification);
+            }
+        }
+        else if(getString(R.string.lbl_logout).equals(navItem))
+        {
+            editor = mPreferences.edit();
+            editor.clear();
+            editor.commit();
 
+            Intent intent=new Intent(this,Activity_Login.class);
+            startActivity(intent);
+            this.finish();
         }
 
         if (fragment != null)

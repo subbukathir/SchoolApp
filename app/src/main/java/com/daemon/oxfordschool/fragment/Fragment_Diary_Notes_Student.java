@@ -573,6 +573,7 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
         }
         return Str_ReturnValue;
     }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.action_settings).setVisible(false);
@@ -597,4 +598,5 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

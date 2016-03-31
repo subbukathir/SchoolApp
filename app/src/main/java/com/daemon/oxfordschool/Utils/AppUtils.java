@@ -40,6 +40,7 @@ public class AppUtils extends Dialog
     public static final String MODULE = "AppUtils";
     public static String TAG = "";
 
+    public static String SHARED_ISLOGGGED_IN = "Shared_IsLoggedIn";
     public static String SHARED_LOGIN_PROFILE = "Shared_Login";
     public static String SHARED_STUDENT_LIST = "Shared_Student_List";
     public static String SHARED_STUDENT_PROFILE= "Shared_Student_Profile";

@@ -5,6 +5,8 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
@@ -27,9 +32,11 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
+import com.daemon.oxfordschool.asyncprocess.GetStudentProfile;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
+import com.daemon.oxfordschool.listeners.ViewStudentProfileListener;
 import com.daemon.oxfordschool.response.CCE_ExamReport_Response;
 import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
@@ -39,31 +46,32 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Fragment_CCE_ExamReport extends Fragment implements StudentsListListener
+public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStudentProfileListener
 {
 
-    public static String MODULE = "Fragment_CCE_ExamReport";
+    public static String MODULE = "Fragment_CCE_ExamReport_Student";
     public static String TAG = "";
 
+    TextView text_view_empty,tv_name,tv_class,tv_section;
+    ImageView imageView;
     int mSelectedPosition;
     SharedPreferences mPreferences;
-    User mUser,mSelectedUser;
-    ViewPager vp_student;
+    User mUser,mStudent;
     FrameLayout frame_layout_cce_report;
     FragmentManager mManager;
 
     ArrayList<User> mListStudents =new ArrayList<User>();
 
-    StudentsList_Response studentListResponse;
     CCE_ExamReport_Response response;
 
     AppCompatActivity mActivity;
-    String Str_Id="",Str_StudentId="";
+    Bitmap mDecodedImage;
+    String Str_Id="",Str_StudentId="",Str_EncodeImage="";
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
+    String Str_Student_Profile_Url = ApiConstants.STUDENT_PROFILE_URL;
 
 
-    public Fragment_CCE_ExamReport()
+    public Fragment_CCE_ExamReport_Student()
     {
         // Required empty public constructor
     }
@@ -79,7 +87,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             mActivity = (AppCompatActivity) getActivity();
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
-            getStudentsList();
+            new GetStudentProfile(Str_Student_Profile_Url,Payload(),this).getStudentProfile();
             setHasOptionsMenu(true);
             mManager = getChildFragmentManager();
             if (mActivity.getCurrentFocus() != null)
@@ -98,7 +106,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_cce_exam_report, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_cce_exam_report_student, container, false);
         TAG = "onCreateView";
         Log.d(MODULE, TAG);
         initView(rootView);
@@ -111,7 +119,10 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
-            vp_student = (ViewPager) view.findViewById(R.id.vp_student);
+            imageView = (ImageView) view.findViewById(R.id.iv_profile);
+            tv_name  = (TextView) view.findViewById(R.id.tv_header_name);
+            tv_class  = (TextView) view.findViewById(R.id.tv_class_name);
+            tv_section  = (TextView) view.findViewById(R.id.tv_section_name);
             frame_layout_cce_report = (FrameLayout) view.findViewById(R.id.frame_layout_cce_report);
             setProperties();
         }
@@ -131,12 +142,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
 
         try
         {
-            if(mListStudents.size()>0)
-            {
-                showStudentsList();
-                Goto_Fragment_CCE_Report_List();
-            }
-
+            Goto_Fragment_CCE_Report_List();
         }
         catch (Exception ex)
         {
@@ -150,7 +156,9 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
-            vp_student.addOnPageChangeListener(_OnPageChangeListener);
+            tv_name.setTypeface(font.getHelveticaRegular());
+            tv_class.setTypeface(font.getHelveticaRegular());
+            tv_section.setTypeface(font.getHelveticaRegular());
         }
         catch (Exception ex)
         {
@@ -180,24 +188,19 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         }
     }
 
-    public void getStudentsList()
+    public void getStudentProfile()
     {
         TAG = "getStudentsList";
         Log.d(MODULE, TAG);
         try
         {
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_STUDENT_LIST,"");
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_STUDENT_PROFILE, "");
             Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
             if(Str_Json.length()>0)
             {
-                studentListResponse = (StudentsList_Response) AppUtils.fromJson(Str_Json, new TypeToken<StudentsList_Response>(){}.getType());
-                mListStudents = studentListResponse.getCstudents();
-                if(mListStudents==null || mListStudents.size()==0)
-                {
-                    new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
-                }
-                else  getCCEExamReportFromService();
+                mStudent = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
+                Log.d(MODULE, TAG + " mStudent : " + mStudent.getClassName());
             }
         }
         catch (Exception ex)
@@ -205,25 +208,6 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             ex.printStackTrace();
         }
     }
-
-    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            mSelectedPosition=position;
-            mSelectedUser = mListStudents.get(mSelectedPosition);
-            Goto_Fragment_CCE_Report_List();
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    };
 
     public void getCCEExamReportFromService()
     {
@@ -231,8 +215,21 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
-            mSelectedUser = mListStudents.get(mSelectedPosition);
-            Str_StudentId = mSelectedUser.getStudentId();
+            Str_StudentId = mStudent.getStudentId();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void onStudentProfileReceived() {
+        TAG = "onStudentProfileReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getStudentProfile();
+            setProfile();
         }
         catch (Exception ex)
         {
@@ -241,64 +238,67 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
     }
 
     @Override
-    public void onStudentsReceived() {
-        TAG = "onStudentsReceived";
+    public void onStudentProfileReceivedError(String Str_Msg) {
+        TAG = "onStudentProfileReceivedError";
         Log.d(MODULE, TAG);
         try
         {
-            getStudentsList();
-            if(mListStudents.size()>0)
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void setProfile()
+    {
+        TAG = "setProfile";
+        Log.d(MODULE, TAG);
+
+        try
+        {
+            StringBuilder Str_Name = new StringBuilder();
+            Str_Name.append(mStudent.getFirstName()).append(" ");
+            Str_Name.append(mStudent.getLastName());
+            StringBuilder Str_ClassName = new StringBuilder();
+            Str_ClassName.append(mActivity.getString(R.string.lbl_class)).append(" ");
+            Str_ClassName.append(mStudent.getClassName());
+            StringBuilder Str_SectionName = new StringBuilder();
+            Str_SectionName.append(mActivity.getString(R.string.lbl_section)).append(" ");
+            Str_SectionName.append(mStudent.getSectionName());
+            tv_name.setText(Str_Name.toString());
+            tv_class.setText(Str_ClassName);
+            tv_section.setText(Str_SectionName.toString());
+
+            Str_EncodeImage = mStudent.getImageData();
+
+
+            if(Str_EncodeImage.equals("")) imageView.setImageResource(R.drawable.ic_profile);
+            else
             {
-                showStudentsList();
-                mSelectedPosition=0;
-                getCCEExamReportFromService();
+                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
+                byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imageView.setImageBitmap(mDecodedImage);
+
             }
+
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
             ex.printStackTrace();
         }
     }
 
-    @Override
-    public void onStudentsReceivedError(String Str_Msg) {
-        TAG = "onStudentsReceivedError";
-        Log.d(MODULE, TAG);
-        try
-        {
-
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public void showStudentsList()
+    public JSONObject Payload()
     {
-        TAG = "showStudentsList";
-        Log.d(MODULE, TAG);
-        try
-        {
-            StudentPagerAdapter adapter = new StudentPagerAdapter(mActivity,mListStudents);
-            vp_student.setAdapter(adapter);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public JSONObject Payload_StudentList()
-    {
-        TAG = "Payload_StudentList";
+        TAG = "Payload";
         Log.d(MODULE, TAG);
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("ParentId", Str_Id);
-            obj.put("ClassId", "");
-            obj.put("SectionId", "");
+            obj.put("UserId", Str_Id);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -318,7 +318,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         {
             FragmentTransaction mTransaction = mManager.beginTransaction();
             Bundle Args = new Bundle();
-            Args.putParcelable(AppUtils.B_SELECTED_USER,mSelectedUser);
+            Args.putParcelable(AppUtils.B_SELECTED_USER,mStudent);
             Fragment_CCE_ExamReport_List mFragment = new Fragment_CCE_ExamReport_List();
             mFragment.setArguments(Args);
             mTransaction.replace(R.id.frame_layout_cce_report, mFragment, AppUtils.FRAGMENT_CCE_REPORT_LIST + "");
@@ -340,7 +340,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         {
             FragmentTransaction mTransaction = mManager.beginTransaction();
             Bundle Args = new Bundle();
-            Args.putParcelable(AppUtils.B_SELECTED_USER,mSelectedUser);
+            Args.putParcelable(AppUtils.B_SELECTED_USER,mStudent);
             Fragment_CCE_ExamReport_Chart mFragment = new Fragment_CCE_ExamReport_Chart();
             mFragment.setArguments(Args);
             mTransaction.replace(R.id.frame_layout_cce_report, mFragment, AppUtils.FRAGMENT_CCE_REPORT_CHART + "");

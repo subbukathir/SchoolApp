@@ -158,7 +158,10 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         {
             mLayoutManager = new LinearLayoutManager(getActivity());
             recycler_view.setLayoutManager(mLayoutManager);
-            if(mUser.getUserType().equals(ApiConstants.STAFF)) fab_add_event.setVisibility(View.VISIBLE);
+            if(mUser.getUserType().equals(ApiConstants.STAFF)||mUser.getUserType().equals(ApiConstants.ADMIN))
+            {
+                fab_add_event.setVisibility(View.VISIBLE);
+            }
             fab_add_event.setOnClickListener(_OnClickListener);
             SetActionBar();
         }
@@ -347,6 +350,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_EVENT + "");
         fragmentTransaction.commit();
     }
+
     public void gotoFragmentUpdate(int position)
     {
         TAG = "gotoFragmentUpdate";
@@ -427,4 +431,5 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

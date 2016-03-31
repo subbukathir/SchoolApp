@@ -128,7 +128,7 @@ public class Fragment_Mass_Notification extends Fragment implements SendNotifica
 
         try
         {
-            SetActionBar();
+
         }
         catch (Exception ex)
         {
@@ -154,29 +154,6 @@ public class Fragment_Mass_Notification extends Fragment implements SendNotifica
         AppUtils.DialogMessage(mActivity, Str_Msg);
     }
 
-    public void SetActionBar()
-    {
-        TAG = "SetActionBar";
-        Log.d(MODULE, TAG);
-
-        try
-        {
-            if (mActivity != null)
-            {
-                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-                mActivity.setSupportActionBar(mToolbar);
-                mToolbar.setTitle(R.string.lbl_mass_notification);
-                final ActionBar ab = mActivity.getSupportActionBar();
-                ab.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-                ab.setDisplayHomeAsUpEnabled(true);
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
     public void setProperties()
     {
         TAG = "setProperties";
@@ -186,9 +163,6 @@ public class Fragment_Mass_Notification extends Fragment implements SendNotifica
             et_title.setTypeface(font.getHelveticaRegular());
             et_notification_message.setTypeface(font.getHelveticaRegular());
             btn_send_notification.setOnClickListener(_OnClickListener);
-
-            setActionBarFont();
-
             et_title.addTextChangedListener(new MyTextWatcher(et_title));
             et_notification_message.addTextChangedListener(new MyTextWatcher(et_notification_message));
         }
@@ -196,20 +170,6 @@ public class Fragment_Mass_Notification extends Fragment implements SendNotifica
         {
             ex.printStackTrace();
         }
-    }
-
-    private void setActionBarFont()
-    {
-        try
-        {
-            /*TextView subTitleView = (TextView) mToolbar.getChildAt(1);
-            subTitleView.setTypeface(font.getHelveticaRegular());*/
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-
     }
 
     public void getProfile()
@@ -343,6 +303,7 @@ public class Fragment_Mass_Notification extends Fragment implements SendNotifica
         }
         return true;
     }
+
     public boolean IsValid() {
         TAG = "IsValid";
         Log.d(MODULE, TAG);
@@ -361,6 +322,7 @@ public class Fragment_Mass_Notification extends Fragment implements SendNotifica
         Log.d(MODULE, TAG);
         new MassNotification(Str_Send_Notification_Url,this,Payload_Send_Notification()).sendNotification();
     }
+
     public boolean onOptionsItemSelected(MenuItem item)
     {
         TAG = "onOptionsItemSelected";

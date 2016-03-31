@@ -1,6 +1,8 @@
 package com.daemon.oxfordschool.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -10,13 +12,16 @@ import android.widget.TextView;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
+import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.listeners.ClassListListener;
 import com.daemon.oxfordschool.listeners.SectionListListener;
 import com.daemon.oxfordschool.listeners.SubjectListListener;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
 import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Created by daemonsoft on 1/2/16.
@@ -30,7 +35,8 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
     int pStatus = 0;
     private Handler handler = new Handler();
     private Font font= MyApplication.getInstance().getFontInstance();
-
+    SharedPreferences mPreferences;
+    AppCompatActivity mActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +44,7 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
         TAG = "onCreate";
         Log.d(MODULE, TAG);
         setContentView(R.layout.splash_screen);
-
+        mActivity=this;
         Init();
         new ClassList_Process(SplashScreen.this,this).GetClassList();
         new Thread(new Runnable() {
@@ -57,7 +63,7 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
                             progressBar.setSecondaryProgress(pStatus + 5);
                             tv_loading.setText(pStatus + "/" + progressBar.getMax());
                             if (pStatus == 100) {
-                                ShowIntent();
+                                checkLogIn();
                             }
                         }
                     });
@@ -125,13 +131,40 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
         Log.d(MODULE, TAG);
     }
 
-    public void ShowIntent() {
-        TAG = "ShowIntent";
+    public void Goto_LoginActivity() {
+        TAG = "Goto_LoginActivity";
         Log.d(MODULE, TAG);
 
         Intent intent = new Intent(this, Activity_Login.class);
         startActivity(intent);
         this.finish();
+    }
+
+    public void Goto_MainActivity() {
+        TAG = "Goto_MainActivity";
+        Log.d(MODULE, TAG);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
+
+    public void checkLogIn()
+    {
+        TAG = "checkLogIn";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            boolean IsLoggedIn = mPreferences.getBoolean(AppUtils.SHARED_ISLOGGGED_IN,false);
+            Log.d(MODULE, TAG + " IsLoggedIn : " + IsLoggedIn);
+            if(IsLoggedIn) Goto_MainActivity();
+            else Goto_LoginActivity();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
 }

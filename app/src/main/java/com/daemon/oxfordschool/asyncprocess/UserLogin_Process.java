@@ -78,10 +78,8 @@ public class UserLogin_Process
 
                         if (response.length() == 0)
                         {
-                            editor = mPreferences.edit();
-                            editor.putString(AppUtils.SHARED_LOGIN_PROFILE, "");
-                            editor.commit();
-                            mCallBack.onLoginSuccess();
+                            Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
+                            mCallBack.onLoginFailed(Str_Msg);
                         }
                         else
                         {
@@ -92,12 +90,14 @@ public class UserLogin_Process
                             {
                                 editor = mPreferences.edit();
                                 editor.putString(AppUtils.SHARED_LOGIN_PROFILE, response.toString());
+                                editor.putBoolean(AppUtils.SHARED_ISLOGGGED_IN,true);
                                 editor.commit();
                                 mCallBack.onLoginSuccess();
                             }
                             else
                             {
                                 Str_Msg = response.getString("message");
+                                editor.putBoolean(AppUtils.SHARED_ISLOGGGED_IN,false);
                                 mCallBack.onLoginFailed(Str_Msg);
                             }
                         }
