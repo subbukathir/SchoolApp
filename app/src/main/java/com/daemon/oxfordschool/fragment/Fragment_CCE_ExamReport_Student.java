@@ -209,20 +209,6 @@ public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStu
         }
     }
 
-    public void getCCEExamReportFromService()
-    {
-        TAG = "getCCEExamReportFromService";
-        Log.d(MODULE, TAG);
-        try
-        {
-            Str_StudentId = mStudent.getStudentId();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
     public void onStudentProfileReceived() {
         TAG = "onStudentProfileReceived";
         Log.d(MODULE, TAG);
@@ -230,7 +216,7 @@ public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStu
         {
             getStudentProfile();
             setProfile();
-            getCCEExamReportFromService();
+            Goto_Fragment_CCE_Report_List();
         }
         catch (Exception ex)
         {

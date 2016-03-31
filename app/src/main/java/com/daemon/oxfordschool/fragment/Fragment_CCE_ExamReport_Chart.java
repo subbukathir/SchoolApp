@@ -331,6 +331,7 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
             if(mListCCEReport.size()>0)
             {
                 mChart.setData(generateBarData(1,100,mListCCEReport.size()));
+                mChart.performClick();
             }
         }
         catch (Exception ex)
