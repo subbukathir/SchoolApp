@@ -204,7 +204,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         Log.d(MODULE, TAG);
         try
         {
-
+            AppUtils.showDialog(mActivity,Str_Msg);
         }
         catch (Exception ex)
         {
@@ -279,7 +279,6 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         }
     }
 
-
     public void SetProfileImage(String Str_EncodeImage)
     {
         TAG = "SetProfileImage";
@@ -337,6 +336,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.action_settings).setVisible(false);
@@ -344,4 +344,5 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         menu.findItem(R.id.action_chart_view).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
+
 }
