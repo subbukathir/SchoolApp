@@ -77,8 +77,10 @@ public class MyGcmPushReceiver extends GcmListenerService
 
     private void showNotificationMessage(Context context, String title, String message,Intent intent)
     {
+
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        notificationUtils.clearNotifications();
         notificationUtils.showNotificationMessage(title, message,"",intent);
     }
 

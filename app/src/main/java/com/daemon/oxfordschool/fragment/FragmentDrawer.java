@@ -92,18 +92,22 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
 
     public static List<NavDrawerItem> getData()
     {
-        TAG="setDrawerListener";
+        TAG="getData";
         Log.d(MODULE,TAG);
         List<NavDrawerItem> data = new ArrayList<>();
         if(mUser.getUserType().equals(ApiConstants.STAFF))
         {
             titles=left_menu_staff;
         }
-        if(mUser.getUserType().equals(ApiConstants.ADMIN))
+        else if(mUser.getUserType().equals(ApiConstants.ADMIN))
         {
             titles=left_menu_admin;
         }
-        else titles=left_menu_parent_student;
+        else
+        {
+            titles=left_menu_parent_student;
+        }
+
         int itemCount = titles.length;
         // preparing navigation drawer items
         for (int i = 0; i <itemCount; i++)
@@ -156,8 +160,8 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             }
         }));
         image_view_profile.setOnClickListener(_OnClickListener);
-        initImageLoader();
-        SetProfileImage();
+        //initImageLoader();
+        //SetProfileImage();
         return layout;
     }
 
