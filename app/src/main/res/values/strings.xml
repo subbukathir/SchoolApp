@@ -11,6 +11,7 @@
     <string name="lbl_homework">Homework</string>
     <string name="lbl_diary">Diary</string>
     <string name="lbl_attendance">Attendance</string>
+    <string name="lbl_calendar">Calendar</string>
     <string name="lbl_add_event">Add Event</string>
     <string name="lbl_update_event">Update Event</string>
     <string name="lbl_add_subject">Add Subject</string>
@@ -33,6 +34,7 @@
         <item>@string/lbl_homework</item>
         <item>@string/lbl_diary</item>
         <item>@string/lbl_attendance</item>
+        <item>@string/lbl_calendar</item>
         <item>@string/lbl_add_marks</item>
         <item>@string/lbl_exam_schedule</item>
         <item>@string/lbl_exam_result</item>
@@ -51,6 +53,7 @@
         <item>@string/lbl_homework</item>
         <item>@string/lbl_diary</item>
         <item>@string/lbl_attendance</item>
+        <item>@string/lbl_calendar</item>
         <item>@string/lbl_add_marks</item>
         <item>@string/lbl_exam_schedule</item>
         <item>@string/lbl_exam_result</item>
@@ -70,6 +73,7 @@
         <item>@string/lbl_homework</item>
         <item>@string/lbl_diary</item>
         <item>@string/lbl_attendance</item>
+        <item>@string/lbl_calendar</item>
         <item>@string/lbl_exam_schedule</item>
         <item>@string/lbl_exam_result</item>
         <item>@string/lbl_fees_detail</item>

@@ -36,6 +36,7 @@ import com.daemon.oxfordschool.fragment.FragmentDrawer;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport_Student;
+import com.daemon.oxfordschool.fragment.Fragment_Calendar;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Student;
@@ -332,6 +333,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new Fragment_Attendance();
                 title = getString(R.string.lbl_attendance);
             }
+        }
+        else if(getString(R.string.lbl_calendar).equals(navItem))
+        {
+            fragment = new Fragment_Calendar();
+            title = getString(R.string.lbl_calendar);
         }
         else if(getString(R.string.lbl_exam_schedule).equals(navItem))
         {
