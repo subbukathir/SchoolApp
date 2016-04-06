@@ -65,6 +65,8 @@ public class AppUtils extends Dialog
     public static String SHARED_TERM_LIST= "Shared_Term_List";
     public static String SHARED_UPLOAD_IMAGE= "Shared_Upload_Image";
     public static String SHARED_CCE_EXAM_REPORT= "Shared_CCE_ExamReport";
+    public static String SHARED_HOLIDAY_LIST= "Shared_HolidayList";
+
     public static final String SHARED_PREFS = "MY_PREFERENCES";
 
     public static int MODE_UPDATE=1;

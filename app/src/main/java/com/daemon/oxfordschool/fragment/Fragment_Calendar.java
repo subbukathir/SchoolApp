@@ -2,6 +2,7 @@ package com.daemon.oxfordschool.fragment;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,11 +19,29 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.daemon.oxfordschool.Utils.AppUtils;
+import com.daemon.oxfordschool.adapter.EventsAdapter;
+import com.daemon.oxfordschool.asyncprocess.GetEventsList;
+import com.daemon.oxfordschool.asyncprocess.GetHolidayList;
+import com.daemon.oxfordschool.classes.CEvents;
+import com.daemon.oxfordschool.classes.CHolidays;
+import com.daemon.oxfordschool.classes.Common_Class;
+import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.decorators.EventDecorator;
 import com.daemon.oxfordschool.decorators.HighlightWeekendsDecorator;
+import com.daemon.oxfordschool.decorators.HolidayDecorator;
 import com.daemon.oxfordschool.decorators.MySelectorDecorator;
 import com.daemon.oxfordschool.decorators.OneDayDecorator;
+import com.daemon.oxfordschool.listeners.EventsListListener;
+import com.daemon.oxfordschool.listeners.HolidayList_Listener;
+import com.daemon.oxfordschool.response.CommonList_Response;
+import com.daemon.oxfordschool.response.EventsList_Response;
+import com.daemon.oxfordschool.response.ExamResult_Response;
+import com.daemon.oxfordschool.response.HolidaysList_Response;
+import com.google.gson.reflect.TypeToken;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
@@ -35,7 +54,8 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.Font;
 
-public class Fragment_Calendar extends Fragment implements OnDateSelectedListener, OnMonthChangedListener
+public class Fragment_Calendar extends Fragment implements OnDateSelectedListener, OnMonthChangedListener,
+        HolidayList_Listener,EventsListListener
 {
     public static String MODULE = "Fragment_Calendar";
     public static String TAG = "";
@@ -47,6 +67,12 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
     MaterialCalendarView widget;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
     int mTitleSize=0;float mDensity=0;
+    SharedPreferences mPreferences;
+    HolidaysList_Response response;
+    EventsList_Response eventsListResponse;
+    ArrayList<CHolidays> mListHolidays =new ArrayList<CHolidays>();
+    ArrayList<CEvents> mListEvents =new ArrayList<CEvents>();
+    String Str_EventsUrl = ApiConstants.EVENTS_LIST_URL;
 
     public Fragment_Calendar()
     {
@@ -65,6 +91,8 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
             setHasOptionsMenu(true);
             mDensity =  mActivity.getResources().getDisplayMetrics().density;
             mTitleSize = (int) (mActivity.getResources().getDimension(R.dimen.lbl_size) / mDensity);
+            new GetHolidayList(ApiConstants.HOLIDAYS_URL,this).getHolidays();
+            new GetEventsList(Str_EventsUrl,this).getEvents();
             if (mActivity.getCurrentFocus() != null)
             {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -142,18 +170,192 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                     new HighlightWeekendsDecorator(),
                     oneDayDecorator
             );
-
-            ArrayList<CalendarDay> dates = new ArrayList<>();
-            for (int i = 0; i < 29; i++) {
-                CalendarDay day = CalendarDay.from(2016,4,(i+1));
-                dates.add(day);
-            }
-            widget.addDecorator(new EventDecorator(Color.RED, dates));
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
+    }
+
+    public void getHolidaysList()
+    {
+        TAG = "getHolidaysList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_HOLIDAY_LIST, "");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if (Str_Json.length() > 0)
+            {
+                response = (HolidaysList_Response) AppUtils.fromJson(Str_Json, new TypeToken<HolidaysList_Response>() { }.getType());
+                mListHolidays = response.getCholidays();
+                Log.d(MODULE, TAG + " mListHolidays : " + mListHolidays.size());
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void setHolidaysList()
+    {
+        TAG = "setHolidaysList";
+        Log.d(MODULE, TAG);
+        try
+        {
+           if(mListHolidays.size()>0)
+           {
+               ArrayList<CalendarDay> dates = new ArrayList<>();
+               for (int i = 0; i < mListHolidays.size(); i++) {
+                   String hdate = mListHolidays.get(i).getHolidayDate();
+                   String[] array_datetime = hdate.split("-");
+                   int mYear = Integer.parseInt(array_datetime[0]);
+                   int mMonth = Integer.parseInt(array_datetime[1]);
+                   int mDate = Integer.parseInt(array_datetime[2]);
+                   CalendarDay day = CalendarDay.from(mYear,(mMonth-1),mDate);
+                   dates.add(day);
+               }
+               widget.addDecorator(new HolidayDecorator(dates));
+           }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onHolidayListReceived() {
+        TAG = "onHolidayListReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getHolidaysList();
+            setHolidaysList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onHolidayListReceivedError(String Str_Msg) {
+        TAG = "onHolidayListReceivedError";
+        Log.d(MODULE, TAG);
+        try
+        {
+            AppUtils.showDialog(mActivity, Str_Msg);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onEventsReceived() {
+        TAG = "onEventsReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getEventsList();
+            showEventsList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onEventsReceivedError(String Str_Msg) {
+        TAG = "onEventsReceivedError";
+        Log.d(MODULE, TAG);
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getEventsList()
+    {
+        TAG = "getEventsList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_EVENTS_LIST,"");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if(Str_Json.length()>0)
+            {
+                eventsListResponse = (EventsList_Response) AppUtils.fromJson(Str_Json, new TypeToken<EventsList_Response>(){}.getType());
+                mListEvents = eventsListResponse.getCevents();
+                Log.d(MODULE, TAG + " mListStudents : " + mListEvents.size());
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showEventsList()
+    {
+        TAG = "showEventsList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if(mListEvents.size()>0)
+            {
+                ArrayList<CalendarDay> dates = new ArrayList<>();
+                for (int i = 0; i < mListEvents.size(); i++)
+                {
+                    String startDateTime = mListEvents.get(i).getStartDate();
+                    CalendarDay startDay = GetCalendarDay(startDateTime);
+                    if(startDay!=null) dates.add(startDay);
+
+                    String endDateTime = mListEvents.get(i).getEndDate();
+                    CalendarDay endDay = GetCalendarDay(endDateTime);
+                    if(endDay!=null) dates.add(endDay);
+                }
+                widget.addDecorator(new EventDecorator(Color.RED,dates));
+            }
+            else
+            {
+
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public CalendarDay GetCalendarDay(String Str_DateTime)
+    {
+        try
+        {
+            String[] startDate = Str_DateTime.split(" ");
+            String[] array_datetime = startDate[0].split("-");
+            int mYear = Integer.parseInt(array_datetime[0]);
+            int mMonth = Integer.parseInt(array_datetime[1]);
+            int mDate = Integer.parseInt(array_datetime[2]);
+            CalendarDay day = CalendarDay.from(mYear,(mMonth-1),mDate);
+            return day;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @Override
