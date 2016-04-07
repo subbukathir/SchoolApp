@@ -237,6 +237,12 @@
     <string name="lbl_chart_view">Chart View</string>
     <string name="lbl_list_view">List View</string>
 
+    <!-- Calendar -->
+    <string name="lbl_today">Today</string>
+    <string name="lbl_event">Event</string>
+    <string name="lbl_holiday">Holiday</string>
+    <string name="lbl_have_nice_day">Have a nice day!</string>
+
 
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>
     <string name="lbl_msg_blank_last_name">Please fill out last name</string>

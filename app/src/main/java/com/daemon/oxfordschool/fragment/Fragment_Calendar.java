@@ -16,8 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.adapter.EventsAdapter;
@@ -46,9 +50,11 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
@@ -65,8 +71,10 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
     private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
 
     MaterialCalendarView widget;
+    LinearLayout ll_view_calendar;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
     int mTitleSize=0;float mDensity=0;
+    TextView text_view_cal_header,text_view_cal_description;
     SharedPreferences mPreferences;
     HolidaysList_Response response;
     EventsList_Response eventsListResponse;
@@ -123,9 +131,9 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         try
         {
             widget = (MaterialCalendarView) view.findViewById(R.id.calendarView);
-            widget.setFirstDayOfWeek(Calendar.MONDAY);
-            widget.setOnDateChangedListener(this);
-            widget.setOnMonthChangedListener(this);
+            ll_view_calendar = (LinearLayout) view.findViewById(R.id.ll_view_calendar);
+            text_view_cal_header= (TextView) view.findViewById(R.id.text_view_cal_header);
+            text_view_cal_description = (TextView) view.findViewById(R.id.text_view_cal_description);
             setProperties();
         }
         catch (Exception ex)
@@ -162,6 +170,11 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         Log.d(MODULE, TAG);
         try
         {
+            text_view_cal_header.setTypeface(font.getHelveticaRegular());
+            text_view_cal_description.setTypeface(font.getHelveticaRegular());
+            widget.setFirstDayOfWeek(Calendar.MONDAY);
+            widget.setOnDateChangedListener(this);
+            widget.setOnMonthChangedListener(this);
             widget.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
             widget.setArrowColor(getResources().getColor(R.color.color_app));
             widget.setSelectionColor(getResources().getColor(R.color.color_app));
@@ -170,6 +183,8 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                     new HighlightWeekendsDecorator(),
                     oneDayDecorator
             );
+            CalendarDay day= CalendarDay.today();
+            showDescription(day);
         }
         catch (Exception ex)
         {
@@ -325,7 +340,7 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                     CalendarDay endDay = GetCalendarDay(endDateTime);
                     if(endDay!=null) dates.add(endDay);
                 }
-                widget.addDecorator(new EventDecorator(Color.RED,dates));
+                widget.addDecorator(new EventDecorator(Color.YELLOW,dates));
             }
             else
             {
@@ -385,8 +400,77 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected) {
+        TAG = "onDateSelected";
+        Log.d(MODULE, TAG);
+        try
+        {
 
+            showDescription(date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
+
+    public void showDescription(CalendarDay date)
+    {
+        TAG = "showDescription";
+        Log.d(MODULE, TAG);
+        try
+        {
+            boolean isFound=false;
+            Date convertedDate = new Date();
+            for(int i=0;i<mListHolidays.size(); i++) {
+                String[] dtime = mListHolidays.get(i).getHolidayDate().split(" ");
+                String[] cdate = dtime[0].split("-");
+                int year = Integer.parseInt(cdate[0]);
+                int month=Integer.parseInt(cdate[1]);
+                int day = Integer.parseInt(cdate[2]);
+                if((date.getYear()==year) && ((date.getMonth()+1)==month) &&
+                        (date.getDay()==day)){
+                    text_view_cal_header.setText(getString(R.string.lbl_holiday));
+                    text_view_cal_description.setText(mListHolidays.get(i).getDescription());
+                    isFound=true;
+                    break;
+                }
+            }
+            if(!isFound)
+            {
+                text_view_cal_header.setText(getString(R.string.lbl_welcome));
+                text_view_cal_description.setText(getString(R.string.lbl_have_nice_day));
+            }
+            else
+            {
+                Animation RightSwipe = AnimationUtils.loadAnimation( mActivity,R.anim.slide_out_right);
+                ll_view_calendar.startAnimation(RightSwipe);
+                RightSwipe.setAnimationListener(animationListener);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+
+            Animation LeftSwipe = AnimationUtils.loadAnimation( mActivity,R.anim.slide_in_left);
+            ll_view_calendar.startAnimation(LeftSwipe);
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    };
 
     @Override
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
