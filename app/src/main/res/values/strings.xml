@@ -242,7 +242,9 @@
     <string name="lbl_event">Event</string>
     <string name="lbl_holiday">Holiday</string>
     <string name="lbl_have_nice_day">Have a nice day!</string>
-
+    <string name="lbl_help_yellow">Yellow color for events.</string>
+    <string name="lbl_help_grey">Grey color for holidays.</string>
+    <string name="lbl_help">Grey color for holidays.</string>
 
     <string name="lbl_msg_blank_first_name">Please fill out first name</string>
     <string name="lbl_msg_blank_last_name">Please fill out last name</string>

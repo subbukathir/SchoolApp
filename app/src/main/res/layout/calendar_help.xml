@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/match_parent_style"
+    android:orientation="vertical"
+    android:background="@color/color_black"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/text_view_holiday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_help_grey"
+        android:layout_margin="@dimen/space_layout_margin"
+        android:textSize="@dimen/lbl_profile_title"
+        android:textColor="#c1c1c1"/>
+
+    <TextView
+        android:id="@+id/text_view_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_help_yellow"
+        android:layout_margin="@dimen/space_layout_margin"
+        android:textSize="@dimen/lbl_profile_title"
+        android:textColor="@color/color_yellow"/>
+
+</LinearLayout>
+

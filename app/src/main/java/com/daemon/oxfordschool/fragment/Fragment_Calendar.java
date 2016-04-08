@@ -2,6 +2,7 @@ package com.daemon.oxfordschool.fragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -378,6 +380,7 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         menu.findItem(R.id.action_settings).setVisible(false);
         menu.findItem(R.id.action_list_view).setVisible(false);
         menu.findItem(R.id.action_chart_view).setVisible(false);
+        menu.findItem(R.id.action_help).setVisible(true);
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -391,6 +394,9 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                 else
                     FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.action_help:
+                 showHelpDialog();
+                 break;
             default:
                 break;
 
@@ -484,6 +490,32 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
             return "No Selection";
         }
         return FORMATTER.format(date.getDate());
+    }
+
+    public void showHelpDialog() {
+        TAG = "showHelpDialog";
+        Log.d(MODULE, TAG);
+        try
+        {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mActivity);
+            LayoutInflater inflater = mActivity.getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.calendar_help, null);
+            dialogBuilder.setView(dialogView);
+
+            final TextView text_view_holiday = (TextView) dialogView.findViewById(R.id.text_view_holiday);
+            final TextView text_view_event = (TextView) dialogView.findViewById(R.id.text_view_event);
+
+            text_view_holiday.setTypeface(font.getHelveticaRegular());
+            text_view_event.setTypeface(font.getHelveticaRegular());
+
+            AlertDialog b = dialogBuilder.create();
+            b.setCanceledOnTouchOutside(true);
+            b.show();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
 }

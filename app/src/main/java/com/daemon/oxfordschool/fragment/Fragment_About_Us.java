@@ -128,6 +128,7 @@ public class Fragment_About_Us extends Fragment
         menu.findItem(R.id.action_settings).setVisible(false);
         menu.findItem(R.id.action_list_view).setVisible(false);
         menu.findItem(R.id.action_chart_view).setVisible(false);
+        menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
 

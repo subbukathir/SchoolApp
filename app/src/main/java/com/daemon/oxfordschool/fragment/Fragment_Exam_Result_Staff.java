@@ -788,6 +788,7 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
         menu.findItem(R.id.action_settings).setVisible(false);
         menu.findItem(R.id.action_list_view).setVisible(false);
         menu.findItem(R.id.action_chart_view).setVisible(false);
+        menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
 

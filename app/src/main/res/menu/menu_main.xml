@@ -27,4 +27,12 @@
         android:visible="true"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_help"
+        android:icon="@drawable/ic_action_action_info_outline"
+        android:title="@string/lbl_help"
+        android:orderInCategory="100"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
 </menu>

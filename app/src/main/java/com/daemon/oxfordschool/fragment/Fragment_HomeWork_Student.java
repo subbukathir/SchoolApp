@@ -535,6 +535,7 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
         menu.findItem(R.id.action_settings).setVisible(false);
         menu.findItem(R.id.action_list_view).setVisible(false);
         menu.findItem(R.id.action_chart_view).setVisible(false);
+        menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
 }

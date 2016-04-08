@@ -358,6 +358,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
         menu.findItem(R.id.action_settings).setVisible(false);
         menu.findItem(R.id.action_list_view).setVisible(true);
         menu.findItem(R.id.action_chart_view).setVisible(true);
+        menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
 
