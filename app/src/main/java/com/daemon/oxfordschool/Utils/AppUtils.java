@@ -97,7 +97,6 @@ public class AppUtils extends Dialog
     public static final String FRAGMENT_CCE_REPORT_LIST = "505";
     public static final String FRAGMENT_CCE_REPORT_CHART = "506";
 
-
     public static File root = android.os.Environment.getExternalStorageDirectory();
     public static String RootPath = "/Android/data/com.daemon.oxfordschool";
 

@@ -8,17 +8,22 @@
 
     <include layout="@layout/view_student_profile_header" />
 
-    <LinearLayout
+    <RelativeLayout
         style="@style/match_parent_style"
         android:layout_weight="0.8"
+        android:padding="@dimen/space_layout_padding"
         android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/vp_time_table"
-                style="@style/match_parent_style">
+        <GridView
+            android:id="@+id/grid_view_table"
+            style="@style/match_parent_style"
+            android:layout_marginTop="@dimen/space_layout_margin"
+            android:numColumns="6">
 
-            </android.support.v4.view.ViewPager>
+        </GridView>
 
-    </LinearLayout>
+        <include layout="@layout/view_list_empty"  />
+
+    </RelativeLayout>
 
 </LinearLayout>

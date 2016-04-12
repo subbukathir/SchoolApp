@@ -229,6 +229,7 @@
     <string name="lbl_6hour">6 Hour</string>
     <string name="lbl_7hour">7 Hour</string>
     <string name="lbl_8hour">8 Hour</string>
+    <string name="lbl_timetable_not_found">Timetable not found.</string>
 
     <!-- CCE Report -->
     <string name="lbl_average">Average</string>

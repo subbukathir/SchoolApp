@@ -26,6 +26,8 @@ public class EventDecorator implements DayViewDecorator  {
     }
     @Override
     public void decorate(DayViewFacade view) {
-        view.setBackgroundDrawable(new ColorDrawable(color));
+        //view.setBackgroundDrawable(new ColorDrawable(color));
+        view.addSpan(new DotSpan(20, color));
     }
+
 }

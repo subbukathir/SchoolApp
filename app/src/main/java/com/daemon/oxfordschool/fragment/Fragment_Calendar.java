@@ -336,11 +336,22 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                 {
                     String startDateTime = mListEvents.get(i).getStartDate();
                     CalendarDay startDay = GetCalendarDay(startDateTime);
-                    if(startDay!=null) dates.add(startDay);
+
 
                     String endDateTime = mListEvents.get(i).getEndDate();
                     CalendarDay endDay = GetCalendarDay(endDateTime);
-                    if(endDay!=null) dates.add(endDay);
+
+                    if(startDay.equals(endDay))
+                    {
+                        dates.add(startDay);
+                    }
+                    else
+                    {
+                        Date startDate = startDay.getDate();
+                        Date endDate = endDay.getDate();
+                        dates.addAll(getDaysBetweenDates(startDate,endDate));
+                    }
+
                 }
                 widget.addDecorator(new EventDecorator(Color.YELLOW,dates));
             }
@@ -425,7 +436,7 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         Log.d(MODULE, TAG);
         try
         {
-            boolean isFound=false;
+            boolean isHolidayFound=false;
             Date convertedDate = new Date();
             for(int i=0;i<mListHolidays.size(); i++) {
                 String[] dtime = mListHolidays.get(i).getHolidayDate().split(" ");
@@ -437,14 +448,40 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                         (date.getDay()==day)){
                     text_view_cal_header.setText(getString(R.string.lbl_holiday));
                     text_view_cal_description.setText(mListHolidays.get(i).getDescription());
-                    isFound=true;
+                    isHolidayFound=true;
                     break;
                 }
             }
-            if(!isFound)
+            if(!isHolidayFound)
             {
-                text_view_cal_header.setText(getString(R.string.lbl_welcome));
-                text_view_cal_description.setText(getString(R.string.lbl_have_nice_day));
+                boolean isEventFound=false;
+
+                for(int i=0;i<mListEvents.size(); i++) {
+                    String[] dtime = mListEvents.get(i).getStartDate().split(" ");
+                    String[] cdate = dtime[0].split("-");
+                    int year = Integer.parseInt(cdate[0]);
+                    int month=Integer.parseInt(cdate[1]);
+                    int day = Integer.parseInt(cdate[2]);
+                    if((date.getYear()==year) && ((date.getMonth()+1)==month) &&
+                            (date.getDay()==day)){
+                        text_view_cal_header.setText(getString(R.string.lbl_event));
+                        text_view_cal_description.setText(mListEvents.get(i).getDescription());
+                        isEventFound=true;
+                        break;
+                    }
+                }
+
+                if(!isEventFound)
+                {
+                    text_view_cal_header.setText(getString(R.string.lbl_welcome));
+                    text_view_cal_description.setText(getString(R.string.lbl_have_nice_day));
+                }
+                else
+                {
+                    Animation RightSwipe = AnimationUtils.loadAnimation( mActivity,R.anim.slide_out_right);
+                    ll_view_calendar.startAnimation(RightSwipe);
+                    RightSwipe.setAnimationListener(animationListener);
+                }
             }
             else
             {
@@ -452,6 +489,7 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                 ll_view_calendar.startAnimation(RightSwipe);
                 RightSwipe.setAnimationListener(animationListener);
             }
+
         }
         catch (Exception e)
         {
@@ -516,6 +554,23 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         {
             ex.printStackTrace();
         }
+    }
+
+    public ArrayList<CalendarDay> getDaysBetweenDates(Date startdate, Date enddate)
+    {
+        ArrayList<CalendarDay> dates = new ArrayList<CalendarDay>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startdate);
+
+        while (calendar.getTime().before(enddate))
+        {
+            Date result = calendar.getTime();
+            int year = result.getYear(); int month = result.getMonth(); int day = result.getDay();
+            CalendarDay calendarDay = new CalendarDay(year,month,day);
+            dates.add(calendarDay);
+            calendar.add(Calendar.DATE, 1);
+        }
+        return dates;
     }
 
 }

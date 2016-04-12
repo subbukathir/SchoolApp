@@ -56,11 +56,11 @@ import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
 import com.daemon.oxfordschool.fragment.Fragment_Student_View_Profile;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable;
-import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult_Student;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Student;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule_Student;
+import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable_Student;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Add_Event;
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
             else
             {
-                fragment = new Fragment_StudentList();
+                fragment = new Fragment_StudentProfile();
                 title = getString(R.string.lbl_students);
             }
         }

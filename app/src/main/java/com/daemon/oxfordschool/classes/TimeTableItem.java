@@ -6,11 +6,17 @@ import android.os.Parcelable;
 /**
  * Created by daemonsoft on 29/1/16.
  */
-public class Common_Class implements Parcelable
+public class TimeTableItem implements Parcelable
 {
     private String ID;
     private String Name;
-    private String Type;
+    private int Type;
+    private String ColorCode;
+
+    public TimeTableItem()
+    {
+
+    }
 
     @Override
     public int describeContents() {
@@ -22,24 +28,26 @@ public class Common_Class implements Parcelable
     {
         dest.writeString(ID);
         dest.writeString(Name);
-        dest.writeString(Type);
+        dest.writeInt(Type);
+        dest.writeString(ColorCode);
     }
 
-    public Common_Class(Parcel source) {
+    public TimeTableItem(Parcel source) {
         this.ID = source.readString();
         this.Name = source.readString();
-        this.Type = source.readString();
+        this.Type = source.readInt();
+        this.ColorCode = source.readString();
     }
 
-    public static final Parcelable.Creator<Common_Class> CREATOR = new Parcelable.Creator<Common_Class>()
+    public static final Creator<TimeTableItem> CREATOR = new Creator<TimeTableItem>()
     {
-        public Common_Class createFromParcel(Parcel in)
+        public TimeTableItem createFromParcel(Parcel in)
         {
-            return new Common_Class(in);
+            return new TimeTableItem(in);
         }
-        public Common_Class[] newArray(int size)
+        public TimeTableItem[] newArray(int size)
         {
-            return new Common_Class[size];
+            return new TimeTableItem[size];
         }
     };
 
@@ -59,11 +67,20 @@ public class Common_Class implements Parcelable
         Name = name;
     }
 
-    public String getType() {
+    public int getType() {
         return Type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         Type = type;
     }
+
+    public String getColorCode() {
+        return ColorCode;
+    }
+
+    public void setColorCode(String colorCode) {
+        ColorCode = colorCode;
+    }
+
 }
