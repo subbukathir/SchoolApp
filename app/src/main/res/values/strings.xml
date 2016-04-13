@@ -10,6 +10,7 @@
     <string name="lbl_events">Events</string>
     <string name="lbl_homework">Homework</string>
     <string name="lbl_diary">Diary</string>
+    <string name="lbl_discipline_report">Discipline Report</string>
     <string name="lbl_attendance">Attendance</string>
     <string name="lbl_calendar">Calendar</string>
     <string name="lbl_add_event">Add Event</string>
@@ -72,6 +73,7 @@
         <item>@string/lbl_events</item>
         <item>@string/lbl_homework</item>
         <item>@string/lbl_diary</item>
+        <item>@string/lbl_discipline_report</item>
         <item>@string/lbl_attendance</item>
         <item>@string/lbl_calendar</item>
         <item>@string/lbl_exam_schedule</item>
@@ -298,6 +300,23 @@
     <string name="lbl_save">Save</string>
     <string name="lbl_select_all">Select All</string>
     <string name="lbl_attendance_not_found">Attendance details not found.</string>
+
+    <!-- Subject -->
+
+    <string name="lbl_is_auxiliary">Is auxiliary subject?</string>
+    <string name="lbl_yes">Yes</string>
+    <string name="lbl_no">No</string>
+
+    <!-- Discipline -->
+
+    <string name="lbl_self_control">Self Control</string>
+    <string name="lbl_obey_rules">Obey Rules</string>
+    <string name="lbl_obey_staff">Obey Staff</string>
+    <string name="lbl_dress_code">Dress Code</string>
+    <string name="lbl_time_keeping">Time Keeping</string>
+    <string name="lbl_conduct">Conduct</string>
+    <string name="lbl_no_discipline_report_found">No discipline report found </string>
+
 
     <string-array name="array_months">
         <item>Select Month</item>

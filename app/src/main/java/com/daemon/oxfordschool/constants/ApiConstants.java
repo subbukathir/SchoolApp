@@ -42,6 +42,7 @@ public class ApiConstants
     public static String DEVICE_REG_URL=SERVER_URL + "device_register.php";
     public static String MASS_NOTIFICATION_URL=SERVER_URL + "Notification.php";
     public static String HOLIDAYS_URL=SERVER_URL + "Holidays.php";
+    public static String DISCIPLINE_REPORT_URL=SERVER_URL + "DisciplineReport.php";
 
     public static String SUCCESS_CODE="0";
 

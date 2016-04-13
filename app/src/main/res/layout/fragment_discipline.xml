@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_student_profile_header" />
+
+    <LinearLayout
+        style="@style/match_parent_style"
+        android:layout_weight="0.8"
+        android:layout_marginTop="@dimen/space_layout_padding"
+        android:orientation="vertical">
+
+        <include layout="@layout/view_discipline_report" />
+
+    </LinearLayout>
+
+</LinearLayout>

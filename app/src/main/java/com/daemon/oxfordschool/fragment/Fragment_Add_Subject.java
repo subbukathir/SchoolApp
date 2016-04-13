@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -55,6 +56,7 @@ public class Fragment_Add_Subject extends Fragment implements AddSubjectListener
     User mUser;
     Common_Class mSubject;
     Button btn_add_subject;
+    SwitchCompat switch_compat;
 
     AppCompatActivity mActivity;
     String Str_Id="",Str_Subject_Name="",Str_SubjectId="";
@@ -116,9 +118,8 @@ public class Fragment_Add_Subject extends Fragment implements AddSubjectListener
         try
         {
             et_add_subject_name = (EditText) view.findViewById(R.id.et_add_subject_name);
-
             til_add_subject_name= (TextInputLayout) view.findViewById(R.id.til_add_subject_name);
-
+            switch_compat = (SwitchCompat) view.findViewById(R.id.switch_compat);
             btn_add_subject = (Button) view.findViewById(R.id.btn_add_subjet);
             setProperties();
         }
@@ -179,8 +180,6 @@ public class Fragment_Add_Subject extends Fragment implements AddSubjectListener
             et_add_subject_name.setTypeface(font.getHelveticaRegular());
             btn_add_subject.setOnClickListener(_OnClickListener);
 
-            setActionBarFont();
-
             if(!Str_SubjectId.equals(""))
             {
                 Log.d(MODULE, TAG + "bundle available");
@@ -197,20 +196,6 @@ public class Fragment_Add_Subject extends Fragment implements AddSubjectListener
         {
             ex.printStackTrace();
         }
-    }
-
-    private void setActionBarFont()
-    {
-        try
-        {
-            TextView subTitleView = (TextView) mToolbar.getChildAt(1);
-            subTitleView.setTypeface(font.getHelveticaRegular());
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-
     }
 
     public void getProfile()
@@ -294,11 +279,13 @@ public class Fragment_Add_Subject extends Fragment implements AddSubjectListener
 
         JSONObject obj=new JSONObject();
         try {
+
             obj.put("UserId", Str_Id);
             obj.put("SubjectName", Str_Subject_Name);
             obj.put("SubjectId",Str_SubjectId);
+            if(switch_compat.isChecked()) obj.put("Type","1");
+            else obj.put("Type","0");
             obj.put("Mode",mMode.toString());
-
         }
         catch (JSONException e) {
             e.printStackTrace();
