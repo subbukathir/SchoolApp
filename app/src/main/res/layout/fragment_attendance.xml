@@ -8,7 +8,7 @@
 
     <LinearLayout
         style="@style/match_parent_style"
-        android:layout_weight="1"
+        android:layout_weight="0.8"
         android:orientation="vertical">
 
         <!-- Select Month Starts -->
