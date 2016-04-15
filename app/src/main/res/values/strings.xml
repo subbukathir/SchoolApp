@@ -34,6 +34,7 @@
         <item>@string/lbl_events</item>
         <item>@string/lbl_homework</item>
         <item>@string/lbl_diary</item>
+        <item>@string/lbl_discipline_report</item>
         <item>@string/lbl_attendance</item>
         <item>@string/lbl_calendar</item>
         <item>@string/lbl_add_marks</item>
@@ -53,6 +54,7 @@
         <item>@string/lbl_events</item>
         <item>@string/lbl_homework</item>
         <item>@string/lbl_diary</item>
+        <item>@string/lbl_discipline_report</item>
         <item>@string/lbl_attendance</item>
         <item>@string/lbl_calendar</item>
         <item>@string/lbl_add_marks</item>
@@ -316,6 +318,7 @@
     <string name="lbl_time_keeping">Time Keeping</string>
     <string name="lbl_conduct">Conduct</string>
     <string name="lbl_no_discipline_report_found">No discipline report found </string>
+    <string name="lbl_select_class_student">Please select class,section and student. </string>
 
 
     <string-array name="array_months">

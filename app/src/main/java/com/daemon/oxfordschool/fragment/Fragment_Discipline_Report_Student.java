@@ -5,16 +5,15 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,72 +21,61 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.adapter.DiaryListAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.DisciplineReport_Process;
-import com.daemon.oxfordschool.asyncprocess.GetDiaryNotesList;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
-import com.daemon.oxfordschool.classes.CHomework;
+import com.daemon.oxfordschool.asyncprocess.GetStudentProfile;
 import com.daemon.oxfordschool.classes.Discipline;
 import com.daemon.oxfordschool.classes.User;
-import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.DateSetListener;
-import com.daemon.oxfordschool.listeners.DiaryNotesListListener;
-import com.daemon.oxfordschool.listeners.Diary_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.DisciplineReportListener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
-import com.daemon.oxfordschool.response.HomeWorkList_Response;
+import com.daemon.oxfordschool.listeners.ViewStudentProfileListener;
 import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class Fragment_Discipline_Report extends Fragment implements StudentsListListener,DisciplineReportListener
+public class Fragment_Discipline_Report_Student extends Fragment implements DisciplineReportListener,ViewStudentProfileListener
 {
 
-    public static String MODULE = "Fragment_Discipline_Report ";
+    public static String MODULE = "Fragment_Discipline_Report_Student ";
     public static String TAG = "";
 
     TextView tv_lbl_self_control,tv_self_control,tv_lbl_obey_rules,tv_obey_rules,tv_lbl_obey_staff,tv_obey_staff,tv_lbl_dress_code,
-     tv_dress_code,tv_lbl_time_keeping,tv_time_keeping,tv_lbl_conduct,tv_conduct,text_view_empty;
+     tv_dress_code,tv_lbl_time_keeping,tv_time_keeping,tv_lbl_conduct,tv_conduct,text_view_empty,tv_name,tv_class,tv_section;
+    ImageView imageView;
     LinearLayout ll_discipline_report;
     RelativeLayout layout_empty;
     SharedPreferences mPreferences;
     Toolbar mToolbar;
-    User mUser,mSelectedUser;
-    ViewPager vp_student;
+    User mUser,mStudent;
 
-    ArrayList<User> mListStudents =new ArrayList<User>();
-    StudentsList_Response studentListresponse;
     Discipline mDiscipline;
 
     AppCompatActivity mActivity;
     Bundle mSavedInstanceState;
-    String Str_Id="",Str_ClassId="",Str_SectionId="",Str_StudentId="";
+    String Str_Id="",Str_ClassId="",Str_SectionId="",Str_StudentId="",Str_EncodeImage="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
-
+    String Str_Student_Profile_Url = ApiConstants.STUDENT_PROFILE_URL;
+    Bitmap mDecodedImage;
     int mStudentListPosition=0;
     final static String ARG_STUDENT_LIST_POSITION = "Student_List_Position";
 
-    public Fragment_Discipline_Report()
+    public Fragment_Discipline_Report_Student()
     {
         // Required empty public constructor
     }
@@ -105,7 +93,7 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
             setRetainInstance(false);
             mSavedInstanceState=savedInstanceState;
             getProfile();
-            getStudentList();
+            new GetStudentProfile(Str_Student_Profile_Url,Payload(),this).getStudentProfile();
             if (mActivity.getCurrentFocus() != null)
             {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -122,7 +110,7 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_discipline, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_discipline_student, container, false);
         TAG = "onCreateView";
         Log.d(MODULE, TAG);
         initView(rootView);
@@ -135,7 +123,10 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         Log.d(MODULE, TAG);
         try
         {
-            vp_student = (ViewPager) view.findViewById(R.id.vp_student);
+            imageView = (ImageView) view.findViewById(R.id.iv_profile);
+            tv_name  = (TextView) view.findViewById(R.id.tv_header_name);
+            tv_class  = (TextView) view.findViewById(R.id.tv_class_name);
+            tv_section  = (TextView) view.findViewById(R.id.tv_section_name);
             ll_discipline_report = (LinearLayout) view.findViewById(R.id.ll_discipline_report);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             tv_lbl_self_control = (TextView) view.findViewById(R.id.tv_lbl_self_control);
@@ -174,7 +165,6 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
                 mStudentListPosition=mSavedInstanceState.getInt(ARG_STUDENT_LIST_POSITION);
                 Log.d(MODULE,TAG + "mStudentListPosition" + mStudentListPosition);
             }
-            if(mListStudents.size()>0) showStudentsList();
         }
         catch (Exception ex)
         {
@@ -201,7 +191,6 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
             tv_lbl_conduct.setTypeface(font.getHelveticaRegular());
             tv_conduct.setTypeface(font.getHelveticaRegular());
             text_view_empty.setTypeface(font.getHelveticaRegular());
-            vp_student.addOnPageChangeListener(_OnPageChangeListener);
             ll_discipline_report.setVisibility(View.VISIBLE);
             SetActionBar();
         }
@@ -260,16 +249,36 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         }
     }
 
+    public void getStudentProfile()
+    {
+        TAG = "getStudentsList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_STUDENT_PROFILE, "");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if(Str_Json.length()>0)
+            {
+                mStudent = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
+                Log.d(MODULE, TAG + " mStudent : " + mStudent.getClassName());
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     public void getDisciplineReportFromService()
     {
         TAG = "getDisciplineReportFromService";
         Log.d(MODULE, TAG);
         try
         {
-            mSelectedUser = mListStudents.get(mStudentListPosition);
-            Str_ClassId = mSelectedUser.getClassId();
-            Str_SectionId = mSelectedUser.getSectionId();
-            Str_StudentId = mSelectedUser.getStudentId();
+             Str_ClassId = mStudent.getClassId();
+            Str_SectionId = mStudent.getSectionId();
+            Str_StudentId = mStudent.getStudentId();
             new DisciplineReport_Process(mActivity,this,Payload_Discipline()).GetDisciplineReport();
         }
         catch (Exception ex)
@@ -278,39 +287,34 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         }
     }
 
-    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            mStudentListPosition=position;
+    @Override
+    public void onStudentProfileReceived() {
+        TAG = "onStudentProfileReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getStudentProfile();
+            setProfile();
             getDisciplineReportFromService();
         }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
         }
-    };
-
-    @Override
-    public void onStudentsReceived()
-    {
-        TAG = "onStudentsReceived";
-        Log.d(MODULE, TAG);
-        getStudentList();
-        showStudentsList();
     }
 
     @Override
-    public void onStudentsReceivedError(String Str_Msg)
-    {
-        TAG = "onStudentsReceivedError";
+    public void onStudentProfileReceivedError(String Str_Msg) {
+        TAG = "onStudentProfileReceivedError";
         Log.d(MODULE, TAG);
-        AppUtils.hideProgressDialog();
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -345,31 +349,6 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         }
     }
 
-    public void getStudentList()
-    {
-        TAG = "getStudentList";
-        Log.d(MODULE, TAG);
-        try
-        {
-            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_STUDENT_LIST, "");
-            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
-            if (Str_Json.length() > 0)
-            {
-                studentListresponse = (StudentsList_Response) AppUtils.fromJson(Str_Json, new TypeToken<StudentsList_Response>() { }.getType());
-                mListStudents = studentListresponse.getCstudents();
-                Log.d(MODULE, TAG + " mListStudent : " + mListStudents.size());
-            }
-            else
-            {
-                new GetStudentList(Str_StudentList_Url,Payload_Student_List(), this).getStudents();
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
 
     public void getDisciplineReport()
     {
@@ -392,20 +371,41 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         }
     }
 
-    public void showStudentsList()
+    public void setProfile()
     {
-        TAG = "showStudentsList";
+        TAG = "setProfile";
         Log.d(MODULE, TAG);
+
         try
         {
-            if(mListStudents.size()>0)
+            StringBuilder Str_Name = new StringBuilder();
+            Str_Name.append(mStudent.getFirstName()).append(" ");
+            Str_Name.append(mStudent.getLastName());
+            StringBuilder Str_ClassName = new StringBuilder();
+            Str_ClassName.append(mActivity.getString(R.string.lbl_class)).append(" ");
+            Str_ClassName.append(mStudent.getClassName());
+            StringBuilder Str_SectionName = new StringBuilder();
+            Str_SectionName.append(mActivity.getString(R.string.lbl_section)).append(" ");
+            Str_SectionName.append(mStudent.getSectionName());
+            tv_name.setText(Str_Name.toString());
+            tv_class.setText(Str_ClassName);
+            tv_section.setText(Str_SectionName.toString());
+
+            Str_EncodeImage = mStudent.getImageData();
+
+
+            if(Str_EncodeImage.equals("")) imageView.setImageResource(R.drawable.ic_profile);
+            else
             {
-                StudentPagerAdapter adapter = new StudentPagerAdapter(mActivity,mListStudents);
-                vp_student.setAdapter(adapter);
-                getDisciplineReportFromService();
+                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
+                byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
+                mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imageView.setImageBitmap(mDecodedImage);
+
             }
+
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
             ex.printStackTrace();
         }
@@ -458,15 +458,14 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
 
     }
 
-    public JSONObject Payload_Discipline()
+    public JSONObject Payload()
     {
-        TAG = "Payload_DiaryNotes";
+        TAG = "Payload";
         Log.d(MODULE, TAG);
 
         JSONObject obj = new JSONObject();
         try {
-
-            obj.put("StudentId",Str_StudentId);
+            obj.put("UserId", Str_Id);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -477,16 +476,15 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         return obj;
     }
 
-    public JSONObject Payload_Student_List()
+    public JSONObject Payload_Discipline()
     {
-        TAG = "Payload_Student_List";
+        TAG = "Payload_DiaryNotes";
         Log.d(MODULE, TAG);
 
         JSONObject obj = new JSONObject();
         try {
-            obj.put("ParentId", "");
-            obj.put("ClassId", Str_ClassId);
-            obj.put("SectionId", Str_SectionId);
+
+            obj.put("StudentId",Str_StudentId);
         }
         catch (JSONException e) {
             e.printStackTrace();

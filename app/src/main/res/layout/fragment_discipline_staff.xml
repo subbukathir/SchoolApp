@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_section_class_selector" />
+
+    <!-- Select student Starts Here -->
+
+    <LinearLayout
+        style="@style/match_wrap_style"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_lbl_select_student"
+                style="@style/text_view_label_teacher"
+                android:gravity="left"
+                android:paddingLeft="@dimen/space_layout_padding"
+                android:text="@string/lbl_select_student" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_layout_margin"
+                android:layout_marginRight="@dimen/space_layout_margin">
+
+                <Spinner
+                    android:id="@+id/spinner_student"
+                    style="@style/spinner_style"></Spinner>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Select student Ends Here -->
+
+    <LinearLayout
+        style="@style/match_parent_style"
+        android:layout_weight="0.8"
+        android:layout_marginTop="@dimen/space_layout_padding"
+        android:orientation="vertical">
+
+
+        <include layout="@layout/view_discipline_report" />
+
+    </LinearLayout>
+
+</LinearLayout>

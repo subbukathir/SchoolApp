@@ -6,14 +6,10 @@ package com.daemon.oxfordschool.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -32,50 +29,51 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.adapter.DiaryListAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
+import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.DisciplineReport_Process;
-import com.daemon.oxfordschool.asyncprocess.GetDiaryNotesList;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
+import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
 import com.daemon.oxfordschool.classes.CHomework;
+import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.Discipline;
 import com.daemon.oxfordschool.classes.User;
-import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.DateSetListener;
-import com.daemon.oxfordschool.listeners.DiaryNotesListListener;
-import com.daemon.oxfordschool.listeners.Diary_List_Item_Click_Listener;
+import com.daemon.oxfordschool.listeners.ClassListListener;
 import com.daemon.oxfordschool.listeners.DisciplineReportListener;
+import com.daemon.oxfordschool.listeners.SectionListListener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
-import com.daemon.oxfordschool.response.HomeWorkList_Response;
+import com.daemon.oxfordschool.response.CommonList_Response;
 import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class Fragment_Discipline_Report extends Fragment implements StudentsListListener,DisciplineReportListener
+public class Fragment_Discipline_Report_Staff extends Fragment implements ClassListListener,SectionListListener,
+        StudentsListListener,DisciplineReportListener
 {
 
-    public static String MODULE = "Fragment_Discipline_Report ";
+    public static String MODULE = "Fragment_Discipline_Report_Staff ";
     public static String TAG = "";
 
     TextView tv_lbl_self_control,tv_self_control,tv_lbl_obey_rules,tv_obey_rules,tv_lbl_obey_staff,tv_obey_staff,tv_lbl_dress_code,
-     tv_dress_code,tv_lbl_time_keeping,tv_time_keeping,tv_lbl_conduct,tv_conduct,text_view_empty;
+             tv_dress_code,tv_lbl_time_keeping,tv_time_keeping,tv_lbl_conduct,tv_conduct,tv_lbl_class,tv_lbl_section,
+             tv_lbl_select_student,text_view_empty;
+    Spinner spinner_class,spinner_section,spinner_student;
     LinearLayout ll_discipline_report;
     RelativeLayout layout_empty;
     SharedPreferences mPreferences;
     Toolbar mToolbar;
     User mUser,mSelectedUser;
-    ViewPager vp_student;
 
     ArrayList<User> mListStudents =new ArrayList<User>();
+    ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
+    ArrayList<Common_Class> mListSection =new ArrayList<Common_Class>();
     StudentsList_Response studentListresponse;
+    CommonList_Response responseCommon;
     Discipline mDiscipline;
 
     AppCompatActivity mActivity;
@@ -84,10 +82,12 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
 
-    int mStudentListPosition=0;
+    int mClassListPosition=0,mSectionListPosition=0,mStudentListPosition=0;
+    final static String ARG_CLASS_LIST_POSITION = "Class_List_Position";
+    final static String ARG_SECTION_LIST_POSITION = "Section_List_Position";
     final static String ARG_STUDENT_LIST_POSITION = "Student_List_Position";
 
-    public Fragment_Discipline_Report()
+    public Fragment_Discipline_Report_Staff()
     {
         // Required empty public constructor
     }
@@ -105,7 +105,7 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
             setRetainInstance(false);
             mSavedInstanceState=savedInstanceState;
             getProfile();
-            getStudentList();
+            getClassList();
             if (mActivity.getCurrentFocus() != null)
             {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -122,7 +122,7 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_discipline, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_discipline_staff, container, false);
         TAG = "onCreateView";
         Log.d(MODULE, TAG);
         initView(rootView);
@@ -135,7 +135,14 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         Log.d(MODULE, TAG);
         try
         {
-            vp_student = (ViewPager) view.findViewById(R.id.vp_student);
+            tv_lbl_class = (TextView) view.findViewById(R.id.tv_lbl_class);
+            tv_lbl_section = (TextView) view.findViewById(R.id.tv_lbl_section);
+            tv_lbl_select_student = (TextView) view.findViewById(R.id.tv_lbl_select_student);
+
+            spinner_class = (Spinner) view.findViewById(R.id.spinner_class);
+            spinner_section = (Spinner) view.findViewById(R.id.spinner_section);
+            spinner_student = (Spinner) view.findViewById(R.id.spinner_student);
+
             ll_discipline_report = (LinearLayout) view.findViewById(R.id.ll_discipline_report);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             tv_lbl_self_control = (TextView) view.findViewById(R.id.tv_lbl_self_control);
@@ -164,6 +171,8 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
     {
         super.onStart();
 
+        super.onStart();
+
         TAG = "onStart";
         Log.d(MODULE, TAG);
 
@@ -171,9 +180,15 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         {
             if(mSavedInstanceState!=null)
             {
+                mClassListPosition=mSavedInstanceState.getInt(ARG_CLASS_LIST_POSITION);
+                mSectionListPosition=mSavedInstanceState.getInt(ARG_SECTION_LIST_POSITION);
                 mStudentListPosition=mSavedInstanceState.getInt(ARG_STUDENT_LIST_POSITION);
+                Log.d(MODULE,TAG + "mClassListPosition" + mClassListPosition);
+                Log.d(MODULE,TAG + "mSectionListPosition" + mSectionListPosition);
                 Log.d(MODULE,TAG + "mStudentListPosition" + mStudentListPosition);
             }
+            if(mListClass.size()>0) showClassList();
+            if(mListSection.size()>0) showSectionList();
             if(mListStudents.size()>0) showStudentsList();
         }
         catch (Exception ex)
@@ -188,6 +203,11 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         Log.d(MODULE, TAG);
         try
         {
+            tv_lbl_class.setTypeface(font.getHelveticaRegular());
+            tv_lbl_section.setTypeface(font.getHelveticaRegular());
+            tv_lbl_select_student.setTypeface(font.getHelveticaRegular());
+            tv_lbl_class.setTypeface(font.getHelveticaRegular());
+            tv_lbl_section.setTypeface(font.getHelveticaRegular());
             tv_lbl_self_control.setTypeface(font.getHelveticaRegular());
             tv_self_control.setTypeface(font.getHelveticaRegular());
             tv_lbl_obey_rules .setTypeface(font.getHelveticaRegular());
@@ -201,9 +221,17 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
             tv_lbl_conduct.setTypeface(font.getHelveticaRegular());
             tv_conduct.setTypeface(font.getHelveticaRegular());
             text_view_empty.setTypeface(font.getHelveticaRegular());
-            vp_student.addOnPageChangeListener(_OnPageChangeListener);
-            ll_discipline_report.setVisibility(View.VISIBLE);
+
+            text_view_empty.setText(getString(R.string.lbl_select_class_date));
+            showEmptyView();
+
+            spinner_class.setOnItemSelectedListener(_OnClassItemSelectedListener);
+            spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
+            spinner_student.setOnItemSelectedListener(_OnStudentItemSelectedListener);
+
             SetActionBar();
+            showSectionList();
+            showStudentsList();
         }
         catch (Exception ex)
         {
@@ -278,23 +306,131 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         }
     }
 
-    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener() {
+    AdapterView.OnItemSelectedListener _OnClassItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
         @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+        {
+            TAG = "onItemSelected";
+            Log.d(MODULE, TAG);
+            try
+            {
+                if (position > 0)
+                {
+                    Str_ClassId = mListClass.get(position - 1).getID();
+                    getSectionListFromService();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
         }
-
         @Override
-        public void onPageSelected(int position) {
-            mStudentListPosition=position;
-            getDisciplineReportFromService();
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
+        public void onNothingSelected(AdapterView<?> adapterView)
+        {
 
         }
     };
+
+    AdapterView.OnItemSelectedListener _OnSectionItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+        {
+            TAG = "_OnSectionItem";
+            Log.d(MODULE, TAG);
+            try
+            {
+                if(position>0)
+                {
+                    Log.d(MODULE, TAG + " Spinner Section : " + position);
+                    Str_SectionId=mListSection.get(position-1).getID();
+                    new GetStudentList(Str_StudentList_Url,Payload_Student_List(),Fragment_Discipline_Report_Staff.this).getStudents();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView)
+        {
+
+        }
+    };
+
+    AdapterView.OnItemSelectedListener _OnStudentItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+        {
+            TAG = "_OnStudentItem";
+            Log.d(MODULE, TAG);
+            try
+            {
+                if(position>0)
+                {
+                    Log.d(MODULE, TAG + " Spinner Student : " + position);
+                    Str_StudentId=mListStudents.get(position-1).getUserId();
+                    Log.d(MODULE, TAG + " Str_StudentId : " + Str_StudentId);
+                    getDisciplineReportFromService();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView)
+        {
+
+        }
+    };
+
+    @Override
+    public void onClassListReceived() {
+        TAG = "onClassListReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getClassList();
+            showClassList();
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    @Override
+    public void onClassListReceivedError(String Str_Msg) {
+
+    }
+
+    @Override
+    public void onSectionListReceived() {
+        TAG = "onSectionListReceived";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getSectionList();
+            showSectionList();
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onSectionListReceivedError(String Str_Msg) {
+
+    }
 
     @Override
     public void onStudentsReceived()
@@ -338,6 +474,69 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         {
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSectionListFromService()
+    {
+        TAG = "getSectionListFromService";
+        Log.d(MODULE, TAG);
+        try
+        {
+            new SectionList_Process(this, PayloadSection()).GetSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+
+    public void getClassList()
+    {
+        TAG = "getClassList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_CLASS_LIST, "");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if (Str_Json.length() > 0)
+            {
+                responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
+                mListClass = responseCommon.getCclass();
+                Log.d(MODULE, TAG + " mListClass : " + mListClass.size());
+            }
+            else
+            {
+                new ClassList_Process(mActivity, this).GetClassList();
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getSectionList()
+    {
+        TAG = "getSectionList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
+            String Str_Json = mPreferences.getString(AppUtils.SHARED_SECTION_LIST, "");
+            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
+            if (Str_Json.length() > 0)
+            {
+                responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
+                mListSection = responseCommon.getCclass();
+                Log.d(MODULE, TAG + " mListSection : " + mListSection.size());
+            }
         }
         catch (Exception ex)
         {
@@ -392,17 +591,77 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         }
     }
 
+    public void showClassList()
+    {
+        TAG = "showClassList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            String[] items = AppUtils.getArray(mListClass,getString(R.string.lbl_select_class));
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_class.setAdapter(adapter);
+            spinner_class.setSelection(mClassListPosition);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showSectionList()
+    {
+        TAG = "showSectionList";
+        Log.d(MODULE, TAG);
+        try
+        {
+            String[] items=null;
+            if(mListSection.size()>0)
+            {
+                items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+                spinner_section.setSelection(mSectionListPosition);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_section);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_section.setAdapter(adapter);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     public void showStudentsList()
     {
         TAG = "showStudentsList";
         Log.d(MODULE, TAG);
         try
         {
+            String[] items=null;
             if(mListStudents.size()>0)
             {
-                StudentPagerAdapter adapter = new StudentPagerAdapter(mActivity,mListStudents);
-                vp_student.setAdapter(adapter);
-                getDisciplineReportFromService();
+                items = AppUtils.getStudentArray(mListStudents, getString(R.string.lbl_select_student));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_student.setAdapter(adapter);
+                spinner_student.setSelection(mStudentListPosition);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_student);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_student.setAdapter(adapter);
             }
         }
         catch (Exception ex)
@@ -456,6 +715,26 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
             ex.printStackTrace();
         }
 
+    }
+
+    public JSONObject PayloadSection()
+    {
+        TAG = "Payload";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("ClassId", Str_ClassId);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
     }
 
     public JSONObject Payload_Discipline()

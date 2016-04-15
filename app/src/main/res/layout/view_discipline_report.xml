@@ -8,114 +8,120 @@
         style="@style/match_parent_style"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/ll_discipline_report"
-            style="@style/match_parent_style"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/match_parent_style">
 
             <LinearLayout
-                android:orientation="horizontal"
-                style="@style/match_wrap_style">
+                android:id="@+id/ll_discipline_report"
+                style="@style/match_parent_style"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_lbl_self_control"
-                    style="@style/text_view_discipline_left"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_self_control"/>
+                <LinearLayout
+                    style="@style/match_wrap_style"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_self_control"
-                    android:layout_weight="1"
-                    style="@style/text_view_discipline_right" />
+                    <TextView
+                        android:id="@+id/tv_lbl_self_control"
+                        style="@style/text_view_discipline_left"
+                        android:layout_weight="1"
+                        android:text="@string/lbl_self_control" />
+
+                    <TextView
+                        android:id="@+id/tv_self_control"
+                        style="@style/text_view_discipline_right"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/match_wrap_style"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_lbl_obey_rules"
+                        style="@style/text_view_discipline_left"
+                        android:layout_weight="1"
+                        android:text="@string/lbl_obey_rules" />
+
+                    <TextView
+                        android:id="@+id/tv_obey_rules"
+                        style="@style/text_view_discipline_right"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/match_wrap_style"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_lbl_obey_staff"
+                        style="@style/text_view_discipline_left"
+                        android:layout_weight="1"
+                        android:text="@string/lbl_obey_staff" />
+
+                    <TextView
+                        android:id="@+id/tv_obey_staff"
+                        style="@style/text_view_discipline_right"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/match_wrap_style"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_lbl_dress_code"
+                        style="@style/text_view_discipline_left"
+                        android:layout_weight="1"
+                        android:text="@string/lbl_dress_code" />
+
+                    <TextView
+                        android:id="@+id/tv_dress_code"
+                        style="@style/text_view_discipline_right"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/match_wrap_style"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_lbl_time_keeping"
+                        style="@style/text_view_discipline_left"
+                        android:layout_weight="1"
+                        android:text="@string/lbl_time_keeping" />
+
+                    <TextView
+                        android:id="@+id/tv_time_keeping"
+                        style="@style/text_view_discipline_right"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/match_wrap_style"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_lbl_conduct"
+                        style="@style/text_view_discipline_left"
+                        android:layout_weight="1"
+                        android:text="@string/lbl_conduct" />
+
+                    <TextView
+                        android:id="@+id/tv_conduct"
+                        style="@style/text_view_discipline_right"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                style="@style/match_wrap_style">
+            <include layout="@layout/view_list_empty" />
 
-                <TextView
-                    android:id="@+id/tv_lbl_obey_rules"
-                    style="@style/text_view_discipline_left"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_obey_rules"/>
-
-                <TextView
-                    android:id="@+id/tv_obey_rules"
-                    android:layout_weight="1"
-                    style="@style/text_view_discipline_right" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                style="@style/match_wrap_style">
-
-                <TextView
-                    android:id="@+id/tv_lbl_obey_staff"
-                    style="@style/text_view_discipline_left"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_obey_staff"/>
-
-                <TextView
-                    android:id="@+id/tv_obey_staff"
-                    android:layout_weight="1"
-                    style="@style/text_view_discipline_right" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                style="@style/match_wrap_style">
-
-                <TextView
-                    android:id="@+id/tv_lbl_dress_code"
-                    style="@style/text_view_discipline_left"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_dress_code"/>
-
-                <TextView
-                    android:id="@+id/tv_dress_code"
-                    android:layout_weight="1"
-                    style="@style/text_view_discipline_right" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                style="@style/match_wrap_style">
-
-                <TextView
-                    android:id="@+id/tv_lbl_time_keeping"
-                    style="@style/text_view_discipline_left"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_time_keeping"/>
-
-                <TextView
-                    android:id="@+id/tv_time_keeping"
-                    android:layout_weight="1"
-                    style="@style/text_view_discipline_right" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                style="@style/match_wrap_style">
-
-                <TextView
-                    android:id="@+id/tv_lbl_conduct"
-                    style="@style/text_view_discipline_left"
-                    android:layout_weight="1"
-                    android:text="@string/lbl_conduct"/>
-
-                <TextView
-                    android:id="@+id/tv_conduct"
-                    android:layout_weight="1"
-                    style="@style/text_view_discipline_right" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

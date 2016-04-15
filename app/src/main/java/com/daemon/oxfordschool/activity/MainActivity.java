@@ -40,6 +40,9 @@ import com.daemon.oxfordschool.fragment.Fragment_Calendar;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Student;
+import com.daemon.oxfordschool.fragment.Fragment_Discipline_Report;
+import com.daemon.oxfordschool.fragment.Fragment_Discipline_Report_Staff;
+import com.daemon.oxfordschool.fragment.Fragment_Discipline_Report_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Events;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult;
 import com.daemon.oxfordschool.fragment.Fragment_ExamSchedule;
@@ -314,6 +317,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             {
                 fragment = new Fragment_Diary_Notes();
                 title = getString(R.string.lbl_diary);
+            }
+        }
+        else if(getString(R.string.lbl_discipline_report).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
+            {
+                fragment = new Fragment_Discipline_Report_Staff();
+                title = getString(R.string.lbl_discipline_report);
+            }
+            else if(mUser.getUserType().equals(ApiConstants.STUDENT))
+            {
+                fragment = new Fragment_Discipline_Report_Student();
+                title = getString(R.string.lbl_discipline_report);
+            }
+            else
+            {
+                fragment = new Fragment_Discipline_Report();
+                title = getString(R.string.lbl_discipline_report);
             }
         }
         else if(getString(R.string.lbl_attendance).equals(navItem))
