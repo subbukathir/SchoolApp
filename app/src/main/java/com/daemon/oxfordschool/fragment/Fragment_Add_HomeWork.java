@@ -915,11 +915,9 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+                 FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                 mManager.popBackStack();
+                 return true;
             default:
                 break;
 
