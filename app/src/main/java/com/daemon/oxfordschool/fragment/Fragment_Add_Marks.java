@@ -953,6 +953,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
             }
         }
     }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.action_settings).setVisible(false);
@@ -978,4 +979,5 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
