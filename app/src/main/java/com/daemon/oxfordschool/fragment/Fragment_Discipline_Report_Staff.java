@@ -222,7 +222,7 @@ public class Fragment_Discipline_Report_Staff extends Fragment implements ClassL
             tv_conduct.setTypeface(font.getHelveticaRegular());
             text_view_empty.setTypeface(font.getHelveticaRegular());
 
-            text_view_empty.setText(getString(R.string.lbl_select_class_date));
+            text_view_empty.setText(getString(R.string.lbl_select_class_student));
             showEmptyView();
 
             spinner_class.setOnItemSelectedListener(_OnClassItemSelectedListener);
@@ -374,6 +374,7 @@ public class Fragment_Discipline_Report_Staff extends Fragment implements ClassL
                     Log.d(MODULE, TAG + " Spinner Student : " + position);
                     Str_StudentId=mListStudents.get(position-1).getUserId();
                     Log.d(MODULE, TAG + " Str_StudentId : " + Str_StudentId);
+                    mStudentListPosition=position-1;
                     getDisciplineReportFromService();
                 }
 
