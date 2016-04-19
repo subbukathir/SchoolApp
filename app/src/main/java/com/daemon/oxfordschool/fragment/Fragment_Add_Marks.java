@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -92,6 +93,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
     String Str_AddMarks_Url = ApiConstants.ADD_MARKS_URL;
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
     Fragment mFragment;
+    FragmentManager mManager;
 
     public Fragment_Add_Marks()
     {
@@ -108,6 +110,7 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
         {
             mActivity = (AppCompatActivity) getActivity();
             mFragment = this;
+            mManager = mActivity.getSupportFragmentManager();
             getProfile();
             getClassList();
             getExamTypeList();
@@ -968,10 +971,8 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                mManager.popBackStack();
                 return true;
             default:
                 break;

@@ -37,6 +37,7 @@ import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport_Student;
 import com.daemon.oxfordschool.fragment.Fragment_Calendar;
+import com.daemon.oxfordschool.fragment.Fragment_Class_List;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Diary_Notes_Student;
@@ -317,6 +318,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             {
                 fragment = new Fragment_Diary_Notes();
                 title = getString(R.string.lbl_diary);
+            }
+        }
+        else if(getString(R.string.lbl_class_management).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.ADMIN))
+            {
+                fragment = new Fragment_Class_List();
+                title = getString(R.string.lbl_class_management);
             }
         }
         else if(getString(R.string.lbl_discipline_report).equals(navItem))
