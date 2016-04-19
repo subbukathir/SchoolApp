@@ -68,6 +68,7 @@ public class AppUtils extends Dialog
     public static String SHARED_HOLIDAY_LIST= "Shared_HolidayList";
     public static String SHARED_DISCIPLINE= "Shared_HolidayList";
 
+
     public static final String SHARED_PREFS = "MY_PREFERENCES";
 
     public static int MODE_UPDATE=1;
@@ -85,6 +86,7 @@ public class AppUtils extends Dialog
     public static String B_DIARY="Bundle_Diary";
     public static String B_EVENTS="Bundle_Events";
     public static String B_SUBJECTS="Bundle_Subjects";
+    public static String B_SINGLE_CLASS="Bundle_SingleClass";
 
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
@@ -97,6 +99,7 @@ public class AppUtils extends Dialog
     public static final String FRAGMENT_ADD_SUBJECT = "504";
     public static final String FRAGMENT_CCE_REPORT_LIST = "505";
     public static final String FRAGMENT_CCE_REPORT_CHART = "506";
+    public static final String FRAGMENT_ADD_CLASS = "507";
 
     public static File root = android.os.Environment.getExternalStorageDirectory();
     public static String RootPath = "/Android/data/com.daemon.oxfordschool";

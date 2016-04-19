@@ -3,30 +3,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     style="@style/match_parent_style"
-    android:padding="@dimen/space_layout_padding_small"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/space_layout_padding_small">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="2dp"
-        card_view:cardUseCompatPadding="true"
         card_view:cardBackgroundColor="@color/color_white"
-        card_view:cardElevation="2dp">
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="2dp"
+        card_view:cardUseCompatPadding="true">
 
         <LinearLayout
             style="@style/match_wrap_style"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_class_name"
-                style="@style/text_view_event_list_item"
-                android:textSize="@dimen/lbl_event_tile"
-                android:text="Tamil"
-                android:padding="@dimen/space_layout_padding"
-                android:layout_margin="@dimen/space_layout_margin"
-                android:textColor="@color/color_dark_grey"/>
+            <LinearLayout
+                android:id="@+id/ll_class_name"
+                style="@style/match_wrap_style"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_class_name"
+                    style="@style/text_view_event_list_item"
+                    android:layout_margin="@dimen/space_layout_margin"
+                    android:padding="@dimen/space_layout_padding"
+                    android:text="Tamil"
+                    android:textColor="@color/color_dark_grey"
+                    android:textSize="@dimen/lbl_event_tile" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_class_list_item_delete"
+                style="@style/wrap_content_style"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/space_layout_margin"
+                android:src="@drawable/ic_action_navigation_close" />
 
         </LinearLayout>
 

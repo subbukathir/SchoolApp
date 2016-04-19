@@ -313,6 +313,14 @@
     <string name="lbl_yes">Yes</string>
     <string name="lbl_no">No</string>
 
+    <!-- Class Management -->
+    <string name="lbl_class_name">Class Name</string>
+    <string name="lbl_msg_delete_class">Are you sure want to delete the class?</string>
+    <string name="lbl_add_new_class">Add a new class </string>
+    <string name="lbl_update_class">Update class</string>
+    <string name="lbl_msg_blank_class_name">Please fill out class name.</string>
+    <string name="lbl_msg_min_class_name">Class name should have atleast 1 character.</string>
+
     <!-- Discipline -->
 
     <string name="lbl_self_control">Self Control</string>

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.classes.Common_Class;
+import com.daemon.oxfordschool.listeners.Class_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.Subject_List_Item_Click_Listener;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     static Typeface mTypeFace;
     private boolean isFooterEnabled = false;
     int mMargin=0;float mDensity=0;
+    Class_List_Item_Click_Listener mCallBack;
 
 
     private static String MODULE = "ClassAdapter";
@@ -60,6 +63,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
              int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         params = new LinearLayout.LayoutParams(width,height,1);
+        mCallBack = (Class_List_Item_Click_Listener) mFragment;
     }
 
     @Override
@@ -81,15 +85,23 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 holder.tv_class_name.setText(mClass.getName());
 
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                holder.ll_class_name.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        try
-                        {
-
+                        try {
+                            mCallBack.onClassListItemClicked(position);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
-                        catch (Exception ex)
-                        {
+                    }
+                });
+
+                holder.iv_class_list_item_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            mCallBack.onClassListDeleteBtnClicked(position);
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     }
@@ -159,16 +171,17 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         //Declaring parent view items
         public TextView  tv_class_name;
-        public View itemView;
-
+        LinearLayout ll_class_name;
+        ImageView iv_class_list_item_delete;
 
         public ClassList_Holder(View itemView)
         {
             super(itemView);
             try
             {
-                this.itemView = itemView;
+                ll_class_name = (LinearLayout) itemView.findViewById(R.id.ll_class_name);
                 tv_class_name = (TextView) itemView.findViewById(R.id.tv_class_name);
+                iv_class_list_item_delete = (ImageView) itemView.findViewById(R.id.iv_class_list_item_delete);
                 //Setting properties
                 mActivity.runOnUiThread(new Runnable() {
                     @Override

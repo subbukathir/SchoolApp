@@ -4,6 +4,7 @@ package com.daemon.oxfordschool.fragment;
  * Created by Ravi on 29/07/15.
  */
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,7 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,23 +33,24 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.ClassAdapter;
-import com.daemon.oxfordschool.adapter.SubjectsAdapter;
-import com.daemon.oxfordschool.asyncprocess.AllSubjectList_Process;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
-import com.daemon.oxfordschool.asyncprocess.SubjectList_Process;
+import com.daemon.oxfordschool.asyncprocess.UpdateClass;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
 import com.daemon.oxfordschool.constants.ApiConstants;
+import com.daemon.oxfordschool.listeners.AddClassListener;
 import com.daemon.oxfordschool.listeners.ClassListListener;
-import com.daemon.oxfordschool.listeners.Subject_List_Item_Click_Listener;
-import com.daemon.oxfordschool.listeners.SubjectListListener;
+import com.daemon.oxfordschool.listeners.Class_List_Item_Click_Listener;
 import com.daemon.oxfordschool.response.CommonList_Response;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class Fragment_Class_List extends Fragment implements ClassListListener
+public class Fragment_Class_List extends Fragment implements ClassListListener,Class_List_Item_Click_Listener,AddClassListener
 {
 
     public static String MODULE = "Fragment_Class_List ";
@@ -61,7 +63,7 @@ public class Fragment_Class_List extends Fragment implements ClassListListener
 
     SharedPreferences mPreferences;
     User mUser;
-    Common_Class mSubjects;
+    Common_Class mClass;
     ArrayList<Common_Class> mListClasses =new ArrayList<Common_Class>();
     CommonList_Response response;
     Toolbar mToolbar;
@@ -69,9 +71,9 @@ public class Fragment_Class_List extends Fragment implements ClassListListener
     AppCompatActivity mActivity;
     Bundle mSavedInstanceState;
     FloatingActionButton fab_add_subject;
-    String Str_Id="";
+    String Str_Id="",Str_Class_Name="",Str_ClassId="";
     private Font font= MyApplication.getInstance().getFontInstance();
-    String Str_Url = ApiConstants.SUBJECTLIST_URL;
+    String Str_Add_Class_Url = ApiConstants.ADD_CLASS_URL;
 
     public Fragment_Class_List()
     {
@@ -162,22 +164,7 @@ public class Fragment_Class_List extends Fragment implements ClassListListener
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            default:
-                break;
 
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public void setProperties()
     {
@@ -280,6 +267,67 @@ public class Fragment_Class_List extends Fragment implements ClassListListener
         }
     }
 
+    @Override
+    public void onClassListItemClicked(int position) {
+        TAG = "onClassListItemClicked";
+        Log.d(MODULE, TAG);
+        try
+        {
+            goto_UpdateClassFragment(position);
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    @Override
+    public void onClassListDeleteBtnClicked(int position) {
+        TAG = "onClassListItemClicked";
+        Log.d(MODULE, TAG);
+        try
+        {
+            Str_Class_Name = mListClasses.get(position).getName();
+            Str_ClassId = mListClasses.get(position).getID();
+            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+            builder.setMessage(getString(R.string.lbl_msg_delete_class))
+                    .setPositiveButton(getString(R.string.lbl_yes), dialogClickListener)
+                    .setNegativeButton(getString(R.string.lbl_no), dialogClickListener)
+                    .show();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClassUpdated(String Str_Msg)
+    {
+        TAG = "onClassUpdated";
+        Log.d(MODULE, TAG);
+        try
+        {
+            AppUtils.hideProgressDialog();
+            AppUtils.DialogMessage(mActivity, Str_Msg);
+            new ClassList_Process(mActivity,this).GetClassList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClassUpdatedError(String Str_Msg)
+    {
+        TAG = "onClassUpdatedError";
+        Log.d(MODULE, TAG);
+        AppUtils.hideProgressDialog();
+        AppUtils.DialogMessage(mActivity, Str_Msg);
+    }
+
+
     public void getClassList()
     {
         TAG = "getClassList";
@@ -293,7 +341,7 @@ public class Fragment_Class_List extends Fragment implements ClassListListener
             {
                 response = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>(){}.getType());
                 mListClasses = response.getCclass();
-                Log.d(MODULE, TAG + " mListSubjects : " + mListClasses.size());
+                Log.d(MODULE, TAG + " mListClasses : " + mListClasses.size());
             }
         }
         catch (Exception ex)
@@ -356,48 +404,79 @@ public class Fragment_Class_List extends Fragment implements ClassListListener
             switch (view.getId())
             {
                 case R.id.fab:
-                    goto_AddSubjectFragment();
+                    goto_AddClassFragment();
                     break;
             }
         }
     };
 
-    public void goto_AddSubjectFragment()
+    public void goto_AddClassFragment()
     {
-        mSavedInstanceState=getSavedState();
-        Fragment _fragment = new Fragment_Add_Subject();
-        FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_body, _fragment,AppUtils.FRAGMENT_ADD_SUBJECT);
-        fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_SUBJECT + "");
-        fragmentTransaction.commit();
+        TAG = "goto_AddClassFragment";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mSavedInstanceState=getSavedState();
+            Fragment _fragment = new Fragment_Add_Class();
+            FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, _fragment,AppUtils.FRAGMENT_ADD_CLASS);
+            fragmentTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_CLASS + "");
+            fragmentTransaction.commit();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
-    public void gotoFragmentUpdate(int position)
+    public void goto_UpdateClassFragment(int position)
     {
-        TAG = "gotoFragmentUpdate";
+        TAG = "goto_UpdateClassFragment";
         Log.d(MODULE, TAG);
 
         if(mListClasses.size()>0)
         {
             mSavedInstanceState=getSavedState();
-            mSubjects = mListClasses.get(position);
-            Log.d(MODULE, TAG + "values of list " + mSubjects.getName());
-            Log.d(MODULE, TAG + "getSectionId of list " + mSubjects.getID());
+            mClass = mListClasses.get(position);
+            Log.d(MODULE, TAG + "values of list " + mClass.getName());
+            Log.d(MODULE, TAG + "getSectionId of list " + mClass.getID());
 
             Bundle  mBundle = new Bundle();
 
-            mBundle.putParcelable(AppUtils.B_SUBJECTS, mSubjects);
+            mBundle.putParcelable(AppUtils.B_SINGLE_CLASS, mClass);
             mBundle.putInt(AppUtils.B_MODE,AppUtils.MODE_UPDATE);
 
-            Fragment mFragment = new Fragment_Add_Subject();
+            Fragment mFragment = new Fragment_Add_Class();
             FragmentManager mManager = mActivity.getSupportFragmentManager();
             FragmentTransaction mTransaction = mManager.beginTransaction();
             mFragment.setArguments(mBundle);
-            mTransaction.replace(R.id.container_body, mFragment,AppUtils.FRAGMENT_ADD_SUBJECT);
-            mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_SUBJECT + "");
+            mTransaction.replace(R.id.container_body, mFragment,AppUtils.FRAGMENT_ADD_CLASS);
+            mTransaction.addToBackStack(AppUtils.FRAGMENT_ADD_CLASS + "");
             mTransaction.commit();
         }
+    }
+
+    public JSONObject Payload_Delete_Class()
+    {
+        TAG = "Payload_Delete_Class";
+        Log.d(MODULE, TAG);
+
+        JSONObject obj=new JSONObject();
+        try {
+
+            obj.put("UserId", Str_Id);
+            obj.put("ClassName", Str_Class_Name);
+            obj.put("ClassId",Str_ClassId);
+            obj.put("Mode","2");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(MODULE, TAG + " obj : " + obj.toString());
+
+        return obj;
     }
 
     @Override
@@ -428,12 +507,48 @@ public class Fragment_Class_List extends Fragment implements ClassListListener
         Log.d(MODULE, TAG);
         return outState;
     }
+
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(Menu menu)
+    {
         menu.findItem(R.id.action_settings).setVisible(false);
         menu.findItem(R.id.action_list_view).setVisible(false);
         menu.findItem(R.id.action_chart_view).setVisible(false);
         menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
+    {
+        @Override
+        public void onClick(DialogInterface dialog, int which)
+        {
+            switch (which)
+            {
+                case DialogInterface.BUTTON_POSITIVE:
+                     new UpdateClass(Str_Add_Class_Url,Fragment_Class_List.this,Payload_Delete_Class()).updateClass();
+                     break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                     break;
+            }
+        }
+    };
 }
