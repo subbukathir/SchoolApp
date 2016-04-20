@@ -87,6 +87,7 @@ public class AppUtils extends Dialog
     public static String B_EVENTS="Bundle_Events";
     public static String B_SUBJECTS="Bundle_Subjects";
     public static String B_SINGLE_CLASS="Bundle_SingleClass";
+    public static String B_SINGLE_SECTION="Bundle_SingleSection";
 
 
     public static int SHARED_INT_DIALOG_PICKER = 1400;
@@ -100,6 +101,7 @@ public class AppUtils extends Dialog
     public static final String FRAGMENT_CCE_REPORT_LIST = "505";
     public static final String FRAGMENT_CCE_REPORT_CHART = "506";
     public static final String FRAGMENT_ADD_CLASS = "507";
+    public static final String FRAGMENT_ADD_SECTION = "508";
 
     public static File root = android.os.Environment.getExternalStorageDirectory();
     public static String RootPath = "/Android/data/com.daemon.oxfordschool";

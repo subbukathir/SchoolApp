@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/match_parent_style"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/match_parent_style"
+        android:orientation="vertical">
+
+        <include layout="@layout/view_section_class_selector" />
+
+        <RelativeLayout
+            style="@style/match_parent_style"
+            android:layout_marginTop="@dimen/space_layout_margin">
+
+            <com.daemon.oxfordschool.components.RecycleEmptyErrorView
+                android:id="@+id/recycler_view_section"
+                style="@style/match_parent_style" />
+
+            <include layout="@layout/view_list_empty" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        android:visibility="visible"
+        app:layout_anchorGravity="bottom|right|end" />
+
+</android.support.design.widget.CoordinatorLayout>

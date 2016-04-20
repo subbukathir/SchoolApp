@@ -55,6 +55,7 @@ import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
 import com.daemon.oxfordschool.fragment.Fragment_School_Profile;
+import com.daemon.oxfordschool.fragment.Fragment_Section_List;
 import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
@@ -326,6 +327,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             {
                 fragment = new Fragment_Class_List();
                 title = getString(R.string.lbl_class_management);
+            }
+        }
+        else if(getString(R.string.lbl_section_management).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.ADMIN))
+            {
+                fragment = new Fragment_Section_List();
+                title = getString(R.string.lbl_section_management);
             }
         }
         else if(getString(R.string.lbl_discipline_report).equals(navItem))

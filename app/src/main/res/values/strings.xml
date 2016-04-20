@@ -321,6 +321,15 @@
     <string name="lbl_msg_blank_class_name">Please fill out class name.</string>
     <string name="lbl_msg_min_class_name">Class name should have atleast 1 character.</string>
 
+    <!--Section Management -->
+    <string name="lbl_section_name">Section Name</string>
+    <string name="lbl_msg_delete_section">Are you sure want to delete the Section?</string>
+    <string name="lbl_add_new_section">Add a new section </string>
+    <string name="lbl_update_section">Update Section</string>
+    <string name="lbl_msg_blank_section_name">Please select section</string>
+    <string name="lbl_msg_min_section_name">Section name should have atleast 1 character.</string>
+    <string name="lbl_no_section_list">No section list found.</string>
+
     <!-- Discipline -->
 
     <string name="lbl_self_control">Self Control</string>
