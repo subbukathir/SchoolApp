@@ -163,6 +163,7 @@ public class Fragment_Section_List extends Fragment implements ClassListListener
             if(mSavedInstanceState!=null)
             {
                 mClassListPosition = mSavedInstanceState.getInt(ARG_CLASS_LIST_POSITION);
+                Log.d(MODULE, TAG + " mClassListPosition:" + mClassListPosition);
                 getClassList();
                 showClassList();
                 if (mActivity.getCurrentFocus() != null)
@@ -352,7 +353,7 @@ public class Fragment_Section_List extends Fragment implements ClassListListener
         {
             AppUtils.hideProgressDialog();
             AppUtils.DialogMessage(mActivity, Str_Msg);
-            new ClassList_Process(mActivity,this).GetClassList();
+            new SectionList_Process(this,PayloadSection()).GetSectionList();
         }
         catch (Exception ex)
         {
@@ -473,7 +474,7 @@ public class Fragment_Section_List extends Fragment implements ClassListListener
             else
             {
                 items = new String[1];
-                items[0] = getString(R.string.lbl_select_subject);
+                items[0] = getString(R.string.lbl_select_class);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_class.setAdapter(adapter);
@@ -644,6 +645,7 @@ public class Fragment_Section_List extends Fragment implements ClassListListener
         try
         {
             outState.putInt(ARG_CLASS_LIST_POSITION,spinner_class.getSelectedItemPosition());
+            Log.d(MODULE, TAG + " ARG_CLASS_LIST_POSITION:" + spinner_class.getSelectedItemPosition());
         }
         catch (Exception ex)
         {

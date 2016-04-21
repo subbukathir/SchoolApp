@@ -381,7 +381,8 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
     {
         AppUtils.hideProgressDialog();
         AppUtils.showDialog(mActivity, Str_Msg);
-        goto_SectionListFragment();
+        spinner_section.setSelection(0);
+        spinner_class.setSelection(0);
     }
 
     @Override
