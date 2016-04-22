@@ -33,6 +33,7 @@ import com.daemon.oxfordschool.asyncprocess.RegisterDevice;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
+import com.daemon.oxfordschool.fragment.Fragment_Attendance_Parent;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport_Student;
@@ -369,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
             else
             {
-                fragment = new Fragment_Attendance();
+                fragment = new Fragment_Attendance_Parent();
                 title = getString(R.string.lbl_attendance);
             }
         }

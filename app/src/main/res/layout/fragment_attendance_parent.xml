@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
             android:paddingLeft="@dimen/space_layout_padding"
             android:paddingRight="@dimen/space_layout_padding">
 
@@ -32,9 +33,16 @@
         </LinearLayout>
 
         <!-- Select Month Ends -->
-
-        <include layout="@layout/view_attendance_details" />
-
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.daemon.oxfordschool.components.InteractiveScrollView
+                android:id="@+id/scrollView_Calendar"
+                style="@style/match_wrap_style">
+                <include layout="@layout/view_attendance_details_parent" />
+            </com.daemon.oxfordschool.components.InteractiveScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 
 </LinearLayout>
