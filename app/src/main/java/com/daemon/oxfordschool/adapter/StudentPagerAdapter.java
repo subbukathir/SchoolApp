@@ -54,7 +54,6 @@ public class StudentPagerAdapter extends PagerAdapter
     public Object instantiateItem(ViewGroup container, int position)
     {
         TAG = "instantiateItem";
-        Log.d(MODULE, TAG + "checking data !!!");
 
         View itemView=null;
         try
@@ -81,7 +80,6 @@ public class StudentPagerAdapter extends PagerAdapter
             if(Str_EncodeImage.equals("")) imageView.setImageResource(R.drawable.ic_profile);
             else
             {
-                Log.d(MODULE, TAG + "encoded string ***" + Str_EncodeImage);
                 byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
                 mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 imageView.setImageBitmap(mDecodedImage);

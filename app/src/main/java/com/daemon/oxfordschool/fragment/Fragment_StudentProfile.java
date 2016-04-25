@@ -182,7 +182,8 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
     };
 
     @Override
-    public void onStudentsReceived() {
+    public void onStudentsReceived()
+    {
         TAG = "onStudentsReceived";
         Log.d(MODULE, TAG);
         try
@@ -201,7 +202,8 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
     }
 
     @Override
-    public void onStudentsReceivedError(String Str_Msg) {
+    public void onStudentsReceivedError(String Str_Msg)
+    {
         TAG = "onStudentsReceivedError";
         Log.d(MODULE, TAG);
         try
@@ -280,12 +282,14 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
 
         JSONObject obj = new JSONObject();
-        try {
+        try
+        {
             obj.put("ParentId", Str_Id);
             obj.put("ClassId", "");
             obj.put("SectionId", "");
         }
-        catch (JSONException e) {
+        catch (JSONException e)
+        {
             e.printStackTrace();
         }
 
@@ -295,7 +299,8 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId())
         {
             case android.R.id.home:
@@ -311,7 +316,8 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         return super.onOptionsItemSelected(item);
     }
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(Menu menu)
+    {
         menu.findItem(R.id.action_settings).setVisible(false);
         menu.findItem(R.id.action_list_view).setVisible(false);
         menu.findItem(R.id.action_chart_view).setVisible(false);

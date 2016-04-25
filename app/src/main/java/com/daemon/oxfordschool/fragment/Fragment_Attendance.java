@@ -2,22 +2,30 @@ package com.daemon.oxfordschool.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -27,42 +35,52 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.adapter.AttendanceAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetAttendance;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
-import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.classes.CResult;
-import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
+import com.daemon.oxfordschool.classes.User;
+import com.daemon.oxfordschool.components.InteractiveScrollView;
+import com.daemon.oxfordschool.components.SimpleGestureFilter;
 import com.daemon.oxfordschool.constants.ApiConstants;
-import com.daemon.oxfordschool.listeners.Attendance_List_Item_Click_Listener;
-import com.daemon.oxfordschool.response.Attendance_Response;
-import com.daemon.oxfordschool.response.StudentsList_Response;
+import com.daemon.oxfordschool.decorators.AttendanceDecorator;
+import com.daemon.oxfordschool.decorators.HighlightWeekendsDecorator;
+import com.daemon.oxfordschool.decorators.MySelectorDecorator;
+import com.daemon.oxfordschool.decorators.OneDayDecorator;
 import com.daemon.oxfordschool.listeners.AttendanceListener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
+import com.daemon.oxfordschool.response.Attendance_Response;
+import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by daemonsoft on 3/2/16.
  */
-public class Fragment_Attendance extends Fragment implements StudentsListListener,AttendanceListener,AdapterView.OnItemSelectedListener
-        ,Attendance_List_Item_Click_Listener
+public class Fragment_Attendance extends Fragment implements StudentsListListener,AttendanceListener,
+        OnDateSelectedListener, OnMonthChangedListener
 {
     public static String MODULE = "Fragment_Attendance ";
     public static String TAG = "";
 
     int mSelectedPosition,mSelectedMonthPosition;
 
-    RecycleEmptyErrorView recycler_view;
-    RecyclerView.LayoutManager mLayoutManager;
     SharedPreferences mPreferences;
     User mUser,mSelectedUser;
     ViewPager vp_student;
+    MaterialCalendarView widget;
+    SwipeRefreshLayout swipe_refresh_layout;
+    InteractiveScrollView scrollView_Calendar;
     ArrayList<User> mListStudents =new ArrayList<User>();
     ArrayList<CResult> mAttendanceResult =new ArrayList<CResult>();
     Integer mSuccess;
@@ -76,11 +94,13 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
     ArrayAdapter<CharSequence> adapter;
     RelativeLayout layout_empty;
     LinearLayout ll_attendance;
+    private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
 
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
     String Str_Attendance_Url = ApiConstants.ATTENDANCE_BY_STUDENT_URL;
-
+    CalendarDay day;
+    private SimpleGestureFilter detector;
 
     public Fragment_Attendance()
     {
@@ -131,10 +151,10 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         try
         {
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
-            recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_attendance);
+            swipe_refresh_layout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+            scrollView_Calendar = (InteractiveScrollView) view.findViewById(R.id.scrollView_Calendar);
+            widget = (MaterialCalendarView) view.findViewById(R.id.calendarView);
             tv_lbl_select_month = (TextView)view.findViewById(R.id.tv_lbl_select_month);
-            tv_lbl_date = (TextView)view.findViewById(R.id.tv_lbl_date);
-            tv_lbl_status = (TextView)view.findViewById(R.id.tv_lbl_status);
             tv_working_days = (TextView)view.findViewById(R.id.tv_working_days);
             tv_present_days = (TextView)view.findViewById(R.id.tv_present_days);
             tv_percentage = (TextView)view.findViewById(R.id.tv_percentage);
@@ -143,11 +163,10 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
             ll_attendance = (LinearLayout) view.findViewById(R.id.ll_attendance_details);
             String[] items = getResources().getStringArray(R.array.array_months);
-            adapter = ArrayAdapter.createFromResource(mActivity,
-                    R.array.array_months, android.R.layout.simple_spinner_item);
+            adapter = ArrayAdapter.createFromResource(mActivity,R.array.array_months, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_months.setAdapter(adapter);
-            spinner_months.setOnItemSelectedListener(this);
+            spinner_months.setOnItemSelectedListener(_OnMonthSelectedListener);
             setProperties();
         }
         catch (Exception ex)
@@ -162,23 +181,50 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         Log.d(MODULE, TAG);
         try
         {
-            layout_empty.setVisibility(View.GONE);
-            ll_attendance.setVisibility(View.GONE);
             text_view_empty.setTypeface(font.getHelveticaRegular());
             tv_lbl_select_month.setTypeface(font.getHelveticaRegular());
             tv_working_days.setTypeface(font.getHelveticaRegular());
             tv_present_days.setTypeface(font.getHelveticaRegular());
             tv_percentage.setTypeface(font.getHelveticaRegular());
-            tv_lbl_date.setTypeface(font.getHelveticaBold());
-            tv_lbl_status.setTypeface(font.getHelveticaBold());
-            mLayoutManager = new LinearLayoutManager(getActivity());
-            recycler_view.setLayoutManager(mLayoutManager);
+
             vp_student.addOnPageChangeListener(_OnPageChangeListener);
+            scrollView_Calendar.setOnBottomReachedListener(_OnBottomChangedListener);
+            swipe_refresh_layout.setRefreshing(false);
+            swipe_refresh_layout.setOnRefreshListener(_OnRefreshListener);
             text_view_empty.setText(getString(R.string.lbl_no_attendance) + " " + mMonth_value);
+
+            widget.setFirstDayOfWeek(Calendar.MONDAY);
+            widget.setOnDateChangedListener(this);
+            widget.setOnMonthChangedListener(this);
+            widget.setShowOtherDates(MaterialCalendarView.SHOW_ALL);
+            widget.setArrowColor(getResources().getColor(R.color.color_app));
+            widget.setSelectionColor(getResources().getColor(R.color.color_app));
+            widget.addDecorators(
+                    new MySelectorDecorator(mActivity),
+                    new HighlightWeekendsDecorator(),
+                    oneDayDecorator
+            );
+            day= CalendarDay.today();
+            mMonth = Integer.toString(day.getMonth() + 1);
+            try
+            {
+                Field f = swipe_refresh_layout.getClass().getDeclaredField("mCircleView");
+                f.setAccessible(true);
+                ImageView img = (ImageView)f.get(swipe_refresh_layout);
+                img.setAlpha(0f);
+            }
+            catch (NoSuchFieldException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
         }
         catch (Exception ex)
         {
-
+            ex.printStackTrace();
         }
     }
 
@@ -192,7 +238,11 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
 
         try
         {
-            if(mListStudents.size()>0) showStudentsList();
+            if (mListStudents.size()>0)
+            {
+                showStudentsList();
+                getAttendanceFromService();
+            }
         }
         catch (Exception ex)
         {
@@ -222,54 +272,81 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l)
+    AdapterView.OnItemSelectedListener _OnMonthSelectedListener = new AdapterView.OnItemSelectedListener()
     {
-        TAG="onItemSelected";
-        Log.d(MODULE,TAG);
-        try
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id)
         {
-            if(pos>0)
+            TAG="onItemSelected";
+            Log.d(MODULE,TAG);
+            try
             {
-                mSelectedMonthPosition=pos;
-                mMonth=Integer.toString(pos);
-                mMonth_value= spinner_months.getSelectedItem().toString();
-                Log.d(MODULE, TAG + " position " + pos + " value " + mMonth_value);
-                getAttendanceFromService();
+                if(pos>0)
+                {
+                    mSelectedMonthPosition=pos;
+                    mMonth=Integer.toString(pos);
+                    mMonth_value= spinner_months.getSelectedItem().toString();
+                    Log.d(MODULE, TAG + " position " + pos + " value " + mMonth_value);
+                    getAttendanceFromService();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
             }
         }
-        catch (Exception ex)
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView)
         {
-            ex.printStackTrace();
+
         }
+    };
 
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
-    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener() {
+    ViewPager.OnPageChangeListener _OnPageChangeListener = new ViewPager.OnPageChangeListener()
+    {
         @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+        {
 
         }
 
         @Override
-        public void onPageSelected(int position) {
+        public void onPageSelected(int position)
+        {
             mSelectedPosition=position;
             getAttendanceFromService();
         }
 
         @Override
-        public void onPageScrollStateChanged(int state) {
+        public void onPageScrollStateChanged(int state) {}
+    };
 
+    InteractiveScrollView.OnBottomReachedListener _OnBottomChangedListener = new InteractiveScrollView.OnBottomReachedListener()
+    {
+        @Override
+        public void onBottomReached()
+        {
+            vp_student.setVisibility(View.GONE);
         }
     };
 
+   SwipeRefreshLayout.OnRefreshListener _OnRefreshListener = new SwipeRefreshLayout.OnRefreshListener()
+   {
+       @Override
+       public void onRefresh()
+       {
+           if (swipe_refresh_layout.isRefreshing()) swipe_refresh_layout.setRefreshing(false);
+           if(!vp_student.isShown())
+           {
+              vp_student.setVisibility(View.VISIBLE);
+           }
+       }
+   };
+
     @Override
-    public void onStudentsReceived() {
+    public void onStudentsReceived()
+    {
         TAG = "onStudentsReceived";
         Log.d(MODULE, TAG);
         try
@@ -278,7 +355,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             if(mListStudents.size()>0)
             {
                 showStudentsList();
-                mSelectedPosition=0;
+                getAttendanceFromService();
             }
         }
         catch (Exception ex)
@@ -288,7 +365,8 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
     }
 
     @Override
-    public void onStudentsReceivedError(String Str_Msg) {
+    public void onStudentsReceivedError(String Str_Msg)
+    {
         TAG = "onStudentsReceivedError";
         Log.d(MODULE, TAG);
         try
@@ -298,6 +376,38 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         catch (Exception ex)
         {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected)
+    {
+        TAG = "onDateSelected";
+        Log.d(MODULE, TAG);
+        try
+        {
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onMonthChanged(MaterialCalendarView widget, CalendarDay date)
+    {
+        TAG = "onMonthChanged";
+        Log.d(MODULE, TAG);
+        try
+        {
+            mSelectedMonthPosition=date.getMonth()+1;
+            mMonth=Integer.toString(date.getMonth()+1);
+            getAttendanceFromService();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -344,20 +454,13 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
 
     public void getAttendanceFromService()
     {
-        Log.d(MODULE,TAG + "getAttendanceFromService");
+        TAG = "getAttendanceFromService";
+        Log.d(MODULE, TAG);
         mSelectedUser=mListStudents.get(mSelectedPosition);
-        if(mSelectedMonthPosition==0)
-        {
-            text_view_empty.setText(getString(R.string.lbl_select_month));
-            showEmptyView();
-        }
-        else
-        {
-            AppUtils.showProgressDialog(mActivity);
-            new GetAttendance(Str_Attendance_Url,Payload_Attendance(),Fragment_Attendance.this).getAttendance();
-            ll_attendance.setVisibility(View.VISIBLE);
-            text_view_empty.setText(getString(R.string.lbl_no_attendance) + " "+mMonth_value);
-        }
+        AppUtils.showProgressDialog(mActivity);
+        new GetAttendance(Str_Attendance_Url,Payload_Attendance(),Fragment_Attendance.this).getAttendance();
+        ll_attendance.setVisibility(View.VISIBLE);
+        text_view_empty.setText(getString(R.string.lbl_no_attendance) + " "+mMonth_value);
     }
 
     @Override
@@ -378,11 +481,6 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         Log.d(MODULE, TAG + "error " + Str_Msg);
 
         showEmptyView();
-    }
-
-    @Override
-    public void onAttendanceListItemClicked(int position) {
-
     }
 
     public void getAttendanceDetails()
@@ -438,14 +536,22 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             if(mSuccess==0)
             {
                 tv_working_days.setText( getString(R.string.lbl_working_days) + " : " + mWorkingDays);
-                tv_present_days.setText(getString(R.string.lbl_present_days) + " : " +mPresentDays);
+                tv_present_days.setText(getString(R.string.lbl_present_days) + " : " + mPresentDays);
                 tv_percentage.setText(mPercentage);
-                ll_attendance.setVisibility(View.VISIBLE);
-                layout_empty.setVisibility(View.GONE);
+
                 if(mAttendanceResult.size()>0)
                 {
-                    AttendanceAdapter adapter = new AttendanceAdapter(mAttendanceResult,this);
-                    if(recycler_view!=null)recycler_view.setAdapter(adapter);
+                    ArrayList<CalendarDay> presentDates = new ArrayList<>();
+                    ArrayList<CalendarDay> ObsentDates = new ArrayList<>();
+                    for(int i=0;i<mAttendanceResult.size(); i++)
+                    {
+                        String startDateTime = mAttendanceResult.get(i).getAttendanceDate();
+                        CalendarDay day = GetCalendarDay(startDateTime);
+                        if(mAttendanceResult.get(i).getIsPresent().equals("0")) presentDates.add(day);
+                        else ObsentDates.add(day);
+                    }
+                    widget.addDecorator(new AttendanceDecorator(Color.GREEN,presentDates));
+                    widget.addDecorator(new AttendanceDecorator(Color.RED,ObsentDates));
                 }
                 else
                 {
@@ -455,14 +561,12 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
             else
             {
                 showEmptyView();
-
             }
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
-
     }
 
     public void showEmptyView()
@@ -472,8 +576,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         AppUtils.hideProgressDialog();
         try
         {
-            layout_empty.setVisibility(View.VISIBLE);
-            ll_attendance.setVisibility(View.GONE);
+
         }
         catch (Exception ex)
         {
@@ -518,6 +621,26 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         Log.d(MODULE, TAG + " obj : " + obj.toString());
         return obj;
     }
+
+    public CalendarDay GetCalendarDay(String Str_DateTime)
+    {
+        try
+        {
+            String[] startDate = Str_DateTime.split(" ");
+            String[] array_datetime = startDate[0].split("-");
+            int mYear = Integer.parseInt(array_datetime[0]);
+            int mMonth = Integer.parseInt(array_datetime[1]);
+            int mDate = Integer.parseInt(array_datetime[2]);
+            CalendarDay day = CalendarDay.from(mYear,(mMonth-1),mDate);
+            return day;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.action_settings).setVisible(false);
@@ -528,7 +651,8 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         switch (item.getItemId())
         {
             case android.R.id.home:
@@ -543,4 +667,6 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

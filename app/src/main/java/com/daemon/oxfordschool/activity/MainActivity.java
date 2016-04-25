@@ -33,7 +33,7 @@ import com.daemon.oxfordschool.asyncprocess.RegisterDevice;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
-import com.daemon.oxfordschool.fragment.Fragment_Attendance_Parent;
+import com.daemon.oxfordschool.fragment.Fragment_Attendance;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport_Student;
@@ -59,7 +59,6 @@ import com.daemon.oxfordschool.fragment.Fragment_School_Profile;
 import com.daemon.oxfordschool.fragment.Fragment_Section_List;
 import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
-import com.daemon.oxfordschool.fragment.Fragment_Attendance;
 import com.daemon.oxfordschool.fragment.Fragment_Student_View_Profile;
 import com.daemon.oxfordschool.fragment.Fragment_TimeTable;
 import com.daemon.oxfordschool.fragment.Fragment_ExamResult_Student;
@@ -249,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         else if(getString(R.string.lbl_student_profile).equals(navItem))
         {
-            if(mUser.getUserType().equals(ApiConstants.STAFF))
+            if(mUser.getUserType().equals(ApiConstants.STAFF) || mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_StudentList();
                 title = getString(R.string.lbl_students);
@@ -370,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
             else
             {
-                fragment = new Fragment_Attendance_Parent();
+                fragment = new Fragment_Attendance();
                 title = getString(R.string.lbl_attendance);
             }
         }

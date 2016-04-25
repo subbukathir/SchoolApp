@@ -24,14 +24,12 @@
             <TextView
                 android:id="@+id/tv_student_name"
                 style="@style/match_wrap_style"
-                android:text="Naveen Charkravarthi"
                 android:textColor="@color/color_black"
                 android:textSize="@dimen/txt_size_btn" />
 
             <TextView
                 android:id="@+id/tv_phone_no"
                 style="@style/match_wrap_style"
-                android:text="989999999999"
                 android:layout_marginTop="@dimen/space_layout_margin"
                 android:textSize="@dimen/lbl_size_list_item" />
 
@@ -39,7 +37,6 @@
                 android:id="@+id/tv_email"
                 style="@style/match_wrap_style"
                 android:layout_marginTop="@dimen/space_layout_margin"
-                android:text="sing@kidnapsing.com"
                 android:textSize="@dimen/lbl_size_list_item" />
 
 
