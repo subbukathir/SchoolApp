@@ -199,6 +199,10 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
                 }
                 else  getCCEExamReportFromService();
             }
+            else
+            {
+                new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
+            }
         }
         catch (Exception ex)
         {

@@ -226,6 +226,10 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
                     new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
                 }
             }
+            else
+            {
+                new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
+            }
         }
         catch (Exception ex)
         {

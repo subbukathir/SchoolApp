@@ -232,6 +232,10 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
                     new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
                 }
             }
+            else
+            {
+                new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
+            }
         }
         catch (Exception ex)
         {

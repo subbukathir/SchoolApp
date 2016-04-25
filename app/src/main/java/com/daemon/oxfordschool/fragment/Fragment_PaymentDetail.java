@@ -260,6 +260,10 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
                     new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
                 }
             }
+            else
+            {
+                new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
+            }
         }
         catch (Exception ex)
         {

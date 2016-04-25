@@ -238,6 +238,10 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
                     new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
                 }
             }
+            else
+            {
+                new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
+            }
         }
         catch (Exception ex)
         {

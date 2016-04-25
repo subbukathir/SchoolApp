@@ -402,7 +402,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         try
         {
             mSelectedMonthPosition=date.getMonth()+1;
-            mMonth=Integer.toString(date.getMonth()+1);
+            mMonth=Integer.toString(date.getMonth() + 1);
             getAttendanceFromService();
         }
         catch (Exception e)
@@ -429,6 +429,10 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
                 {
                     new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
                 }
+            }
+            else
+            {
+                new GetStudentList(Str_StudentList_Url,Payload_StudentList(),this).getStudents();
             }
         }
         catch (Exception ex)
