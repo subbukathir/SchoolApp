@@ -19,38 +19,39 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.listeners.AddClassListener;
 import com.daemon.oxfordschool.listeners.AddSectionListener;
+import com.daemon.oxfordschool.listeners.AssignSectionListener;
 
 import org.json.JSONObject;
 
 /**
  * Created by daemonsoft on 18/3/16.
  */
-public class UpdateSection
+public class AssignSection
 {
-    public static String MODULE = "UpdateClass";
+    public static String MODULE = "UpdateSection";
     public static String TAG ="";
     String Str_Msg = "",Str_Code="";
-    AddSectionListener mCallBack;
+    AssignSectionListener mCallBack;
     String Str_Url="";
     Fragment mFragment;
     AppCompatActivity mActivity;
     JSONObject object;
 
-    public UpdateSection(String Str_Url, Fragment mFragment, JSONObject object)
+    public AssignSection(String Str_Url, Fragment mFragment, JSONObject object)
     {
         this.Str_Url = Str_Url;
         this.mFragment=mFragment;
         this.object=object;
         this.mActivity = (AppCompatActivity)mFragment.getActivity();
-        mCallBack = (AddSectionListener) mFragment;
+        mCallBack = (AssignSectionListener) mFragment;
     }
 
     /**
      * Getting students list json by making http call
      */
-    public void updateSection()
+    public void assignSection()
     {
-        TAG = "updateSection";
+        TAG = "assignSection";
         Log.d(MODULE,TAG);
         // appending offset to url
         String url = Str_Url;
@@ -76,19 +77,19 @@ public class UpdateSection
                     if (Str_Code.equals(ApiConstants.SUCCESS_CODE))
                     {
                         Str_Msg = response.getString("message");
-                        mCallBack.onSectionUpdated(Str_Msg);
+                        mCallBack.onSectionAssigned(Str_Msg);
                     }
                     else
                     {
                         Str_Msg = response.getString("message");
-                        mCallBack.onSectionUpdatedError(Str_Msg);
+                        mCallBack.onSectionAssignedError(Str_Msg);
                     }
 
             }
             catch (Exception ex)
             {
                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
-                mCallBack.onSectionUpdatedError(Str_Msg);
+                mCallBack.onSectionAssignedError(Str_Msg);
             }
 
         }
@@ -125,7 +126,7 @@ public class UpdateSection
             {
                 Str_Msg = mActivity.getResources().getString(R.string.msg_unexpected_error);
             }
-            mCallBack.onSectionUpdatedError(Str_Msg);
+            mCallBack.onSectionAssignedError(Str_Msg);
         }
     };
 

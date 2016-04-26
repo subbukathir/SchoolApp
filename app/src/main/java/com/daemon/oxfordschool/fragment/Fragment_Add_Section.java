@@ -1,12 +1,13 @@
 package com.daemon.oxfordschool.fragment;
 
 /**
- * Created by Vikram on 20/04/16.
+ * Created by Ravi on 18/03/16.
  */
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,70 +15,56 @@ import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
-import com.daemon.oxfordschool.asyncprocess.AllSectionList_Process;
-import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
+import com.daemon.oxfordschool.asyncprocess.UpdateClass;
 import com.daemon.oxfordschool.asyncprocess.UpdateSection;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
+import com.daemon.oxfordschool.listeners.AddClassListener;
 import com.daemon.oxfordschool.listeners.AddSectionListener;
-import com.daemon.oxfordschool.listeners.ClassListListener;
-import com.daemon.oxfordschool.listeners.SectionListListener;
-import com.daemon.oxfordschool.response.CommonList_Response;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-public class Fragment_Add_Section extends Fragment implements AddSectionListener, ClassListListener,SectionListListener
+public class Fragment_Add_Section extends Fragment implements AddSectionListener
 {
 
     public static String MODULE = "Fragment_Add_Section ";
     public static String TAG = "";
 
-    TextView tv_lbl_class,tv_lbl_section;
     SharedPreferences mPreferences;
     Toolbar mToolbar;
     User mUser;
     Common_Class mSection;
     Button btn_add_section;
-    RelativeLayout layout_empty;
-    Spinner spinner_class,spinner_section;
-    CommonList_Response responseCommon;
-
-    ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
-    ArrayList<Common_Class> mListSection =new ArrayList<Common_Class>();
 
     AppCompatActivity mActivity;
-    String Str_Id="",Str_ClassId="",Str_SectionId="";
+    String Str_Id="",Str_Section_Name="",Str_SectionId="";
     private Font font= MyApplication.getInstance().getFontInstance();
     Integer mMode=0;
-    String Str_Add_Section_Url = ApiConstants.ADD_SECTION_URL;
-    Bundle mBundle,mSavedInstanceState;
-    FragmentManager mManager;
-    int mClassListPosition=0,mSectionListPosition=0;
 
-    final static String ARG_CLASS_LIST_POSITION = "Class_List_Position";
-    final static String ARG_SECTION_LIST_POSITION = "Section_List_Position";
+    EditText et_add_section_name;
+    TextInputLayout til_add_section_name;
+    String Str_Add_Section_Url = ApiConstants.ADD_SECTION_URL;
+    Bundle mBundle;
+    FragmentManager mManager;
 
     public Fragment_Add_Section()
     {
@@ -95,12 +82,10 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
             mActivity = (AppCompatActivity) getActivity();
             setHasOptionsMenu(true);
             setRetainInstance(false);
-            mSavedInstanceState=savedInstanceState;
+            mBundle=savedInstanceState;
             mManager = mActivity.getSupportFragmentManager();
             mBundle = this.getArguments();
             getProfile();
-            getClassList();
-            getSectionListFromService();
             if(mBundle!=null)
             {
                 getBundle();
@@ -129,11 +114,8 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
         Log.d(MODULE, TAG);
         try
         {
-            tv_lbl_class = (TextView) view.findViewById(R.id.tv_lbl_class);
-            tv_lbl_section = (TextView) view.findViewById(R.id.tv_lbl_section);
-            layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
-            spinner_class = (Spinner) view.findViewById(R.id.spinner_class);
-            spinner_section = (Spinner) view.findViewById(R.id.spinner_section);
+            et_add_section_name = (EditText) view.findViewById(R.id.et_add_section_name);
+            til_add_section_name= (TextInputLayout) view.findViewById(R.id.til_add_section_name);
             btn_add_section = (Button) view.findViewById(R.id.btn_add_section);
             setProperties();
         }
@@ -154,14 +136,6 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
         try
         {
             SetActionBar();
-            if(mSavedInstanceState!=null)
-            {
-                mClassListPosition=mSavedInstanceState.getInt(ARG_CLASS_LIST_POSITION);
-                mSectionListPosition=mSavedInstanceState.getInt(ARG_SECTION_LIST_POSITION);
-                Log.d(MODULE,TAG + "mClassListPosition" + mClassListPosition);
-                Log.d(MODULE,TAG + "mSectionListPosition" + mSectionListPosition);
-            }
-
         }
         catch (Exception ex)
         {
@@ -199,25 +173,20 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
         Log.d(MODULE, TAG);
         try
         {
-            tv_lbl_class.setTypeface(font.getHelveticaRegular());
-            tv_lbl_section.setTypeface(font.getHelveticaRegular());
-            btn_add_section.setTypeface(font.getHelveticaRegular());
-
+            et_add_section_name.setTypeface(font.getHelveticaRegular());
             btn_add_section.setOnClickListener(_OnClickListener);
 
-            if(!Str_ClassId.equals(""))
+            if(!Str_SectionId.equals(""))
             {
                 Log.d(MODULE, TAG + "bundle available");
                 btn_add_section.setText(getString(R.string.lbl_update));
+                et_add_section_name.setText(Str_Section_Name);
             }
             else
             {
                 btn_add_section.setText(getString(R.string.lbl_add));
             }
-            spinner_class.setOnItemSelectedListener(_OnClassItemSelectedListener);
-            spinner_section.setOnItemSelectedListener(_OnSectionItemSelectedListener);
-            showClassList();
-            showSectionList();
+            et_add_section_name.addTextChangedListener(new MyTextWatcher(et_add_section_name));
         }
         catch (Exception ex)
         {
@@ -236,7 +205,7 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
             Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
             if(Str_Json.length()>0)
             {
-                mUser = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>() {}.getType());
+                mUser = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());
                 Str_Id = mUser.getID();
                 Log.d(MODULE, TAG + " Str_Id : " + Str_Id);
             }
@@ -247,59 +216,31 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
         }
     }
 
-    AdapterView.OnItemSelectedListener _OnClassItemSelectedListener =  new AdapterView.OnItemSelectedListener()
+    @Override
+    public void onSectionUpdated(String Str_Msg)
     {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+        TAG = "onSectionUpdated";
+        Log.d(MODULE, TAG);
+        try
         {
-            TAG = "onItemSelected";
-            Log.d(MODULE, TAG);
-            try
-            {
-                if (position > 0)
-                {
-                    Str_ClassId = mListClass.get(position - 1).getID();
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
+            AppUtils.hideProgressDialog();
+            AppUtils.DialogMessage(mActivity, Str_Msg);
+            goto_SectionListFragment();
         }
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView)
+        catch (Exception ex)
         {
-
+            ex.printStackTrace();
         }
-    };
+    }
 
-    AdapterView.OnItemSelectedListener _OnSectionItemSelectedListener =  new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
-        {
-            TAG = "_OnSectionItem";
-            Log.d(MODULE, TAG);
-            try
-            {
-                if(position>0)
-                {
-                    Log.d(MODULE, TAG + " Spinner Section : " + position);
-                    Str_SectionId=mListSection.get(position-1).getID();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-
-        }
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView)
-        {
-
-        }
-    };
+    @Override
+    public void onSectionUpdatedError(String Str_Msg)
+    {
+        TAG = "onClassUpdatedError";
+        Log.d(MODULE, TAG);
+        AppUtils.hideProgressDialog();
+        AppUtils.DialogMessage(mActivity, Str_Msg);
+    }
 
     View.OnClickListener _OnClickListener = new View.OnClickListener()
     {
@@ -309,247 +250,38 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
             switch (view.getId())
             {
                 case R.id.btn_add_section:
-                     addSection();
+                     if(IsValid()) addSection();
                      break;
+
                 default:
                      break;
             }
         }
     };
 
-
-    public void getSectionListFromService()
-    {
-        TAG = "getSectionListFromService";
-        Log.d(MODULE, TAG);
-        try
-        {
-            new AllSectionList_Process(this).GetSectionList();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onClassListReceived()
-    {
-        TAG = "onClassListReceived";
-        Log.d(MODULE, TAG);
-        try
-        {
-            getClassList();
-            showClassList();
-        }
-        catch (Exception ex)
-        {
-
-        }
-    }
-
-    @Override
-    public void onClassListReceivedError(String Str_Msg)
-    {
-        AppUtils.showDialog(mActivity, Str_Msg);
-    }
-
-    @Override
-    public void onSectionListReceived()
-    {
-        TAG = "onSectionListReceived";
-        Log.d(MODULE, TAG);
-        try
-        {
-            getSectionList();
-            showSectionList();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onSectionListReceivedError(String Str_Msg)
-    {
-        AppUtils.showDialog(mActivity, Str_Msg);
-    }
-
-    @Override
-    public void onSectionUpdated(String Str_Msg)
-    {
-        AppUtils.hideProgressDialog();
-        AppUtils.showDialog(mActivity, Str_Msg);
-        spinner_section.setSelection(0);
-        spinner_class.setSelection(0);
-    }
-
-    @Override
-    public void onSectionUpdatedError(String Str_Msg)
-    {
-        AppUtils.hideProgressDialog();
-        AppUtils.showDialog(mActivity, Str_Msg);
-    }
-
-    public void getClassList()
-    {
-        TAG = "getClassList";
-        Log.d(MODULE, TAG);
-        try
-        {
-            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_CLASS_LIST, "");
-            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
-            if (Str_Json.length() > 0)
-            {
-                responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
-                mListClass = responseCommon.getCclass();
-                Log.d(MODULE, TAG + " mListClass : " + mListClass.size());
-            }
-            else
-            {
-                new ClassList_Process(mActivity, this).GetClassList();
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public void getSectionList()
-    {
-        TAG = "getSectionList";
-        Log.d(MODULE, TAG);
-        try
-        {
-            mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
-            String Str_Json = mPreferences.getString(AppUtils.SHARED_SECTION_LIST, "");
-            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
-            if (Str_Json.length() > 0)
-            {
-                responseCommon = (CommonList_Response) AppUtils.fromJson(Str_Json, new TypeToken<CommonList_Response>() {}.getType());
-                mListSection = responseCommon.getCclass();
-                Log.d(MODULE, TAG + " mListSection : " + mListSection.size());
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public void showClassList()
-    {
-        TAG = "showClassList";
-        Log.d(MODULE, TAG);
-        try
-        {
-            String[] items=null;
-
-            String Str = getString(R.string.lbl_select_class);
-            Log.d(MODULE, TAG + " Str:" + Str);
-            if(mListClass.size()>0)
-            {
-                items = AppUtils.getArray(mListClass,Str);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_class.setAdapter(adapter);
-                spinner_class.setSelection(mClassListPosition);
-            }
-            else
-            {
-                items = new String[1];
-                items[0] = Str;
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_class.setAdapter(adapter);
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    public void showSectionList()
-    {
-        TAG = "showSectionList";
-        Log.d(MODULE, TAG);
-        try
-        {
-            String[] items=null;
-
-            if(mListSection.size()>0)
-            {
-                items = AppUtils.getArray(mListSection,getString(R.string.lbl_select_section));
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_section.setAdapter(adapter);
-                spinner_section.setSelection(mSectionListPosition);
-            }
-            else
-            {
-                items = new String[1];
-                items[0] = getString(R.string.lbl_select_section);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_section.setAdapter(adapter);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-
     public void addSection()
     {
         TAG = "addSection";
         Log.d(MODULE, TAG);
         AppUtils.showProgressDialog(mActivity);
-        new UpdateSection(Str_Add_Section_Url,this,PayloadAddSection()).updateSection();
+        et_add_section_name.setText("");
+        new UpdateSection(Str_Add_Section_Url,this,Payload_Add_Section()).updateSection();
     }
 
-
-    public JSONObject PayloadSection()
+    public JSONObject Payload_Add_Section()
     {
-        TAG = "Payload";
+        TAG = "Payload_Add_Section";
         Log.d(MODULE, TAG);
 
-        JSONObject obj = new JSONObject();
-        try
-        {
-            obj.put("ClassId", Str_ClassId);
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
+        JSONObject obj=new JSONObject();
+        try {
 
-        Log.d(MODULE, TAG + " obj : " + obj.toString());
-
-        return obj;
-    }
-
-    public JSONObject PayloadAddSection()
-    {
-        TAG = "PayloadAddSection";
-        Log.d(MODULE, TAG);
-
-        JSONObject obj = new JSONObject();
-        try
-        {
             obj.put("UserId", Str_Id);
-            obj.put("ClassId", Str_ClassId);
-            obj.put("SectionId", Str_SectionId);
-            obj.put("Mode", mMode.toString());
+            obj.put("SectionName", Str_Section_Name);
+            obj.put("SectionId",Str_SectionId);
+            obj.put("Mode",mMode.toString());
         }
-        catch (JSONException e)
-        {
+        catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -558,6 +290,66 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
         return obj;
     }
 
+    private class MyTextWatcher implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.et_add_subject_name:
+                     validateClassName();
+                     break;
+                default:
+                     break;
+
+            }
+        }
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        }
+    }
+
+    private boolean validateClassName() {
+        if (et_add_section_name.getText().toString().trim().isEmpty()) {
+            til_add_section_name.setError(getString(R.string.lbl_msg_blank_class_name));
+            requestFocus(et_add_section_name);
+            return false;
+        }else if(et_add_section_name.getText().length()<1){
+            til_add_section_name.setError(getString(R.string.lbl_msg_min_class_name));
+            requestFocus(et_add_section_name);
+            return false;
+        }else {
+            Str_Section_Name=et_add_section_name.getText().toString().trim();
+            til_add_section_name.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    public boolean IsValid() {
+        TAG = "IsValid";
+        Log.d(MODULE, TAG);
+
+        boolean IsValid = true;
+
+        if(validateClassName()==true) IsValid=true;
+        else IsValid=false;
+
+        return IsValid;
+    }
 
     public void goto_SectionListFragment()
     {
@@ -585,38 +377,10 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
 
         mMode = mBundle.getInt(AppUtils.B_MODE);
         mSection= mBundle.getParcelable(AppUtils.B_SINGLE_SECTION);
+
+        Str_Section_Name = mSection.getName();
         Str_SectionId = mSection.getID();
         Str_Id = mUser.getID();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        super.onSaveInstanceState(outState);
-        TAG = "onSaveInstanceState";
-        Log.d(MODULE, TAG);
-        mSavedInstanceState=getSavedState();
-    }
-
-    public Bundle getSavedState()
-    {
-        TAG = "getSavedState";
-        Log.d(MODULE, TAG);
-
-        Bundle outState = new Bundle();
-        try
-        {
-            outState.putInt(ARG_CLASS_LIST_POSITION,spinner_class.getSelectedItemPosition());
-            outState.putInt(ARG_SECTION_LIST_POSITION,spinner_section.getSelectedItemPosition());
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-
-
-        Log.d(MODULE, TAG);
-        return outState;
     }
 
     @Override
@@ -630,8 +394,7 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case android.R.id.home:

@@ -20,11 +20,12 @@ import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.classes.Common_Class;
+import com.daemon.oxfordschool.listeners.Class_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.Section_List_Item_Click_Listener;
 
 import java.util.ArrayList;
 
-public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public class AssignedSectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
@@ -42,13 +43,13 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     Section_List_Item_Click_Listener mCallBack;
 
 
-    private static String MODULE = "SectionAdapter";
+    private static String MODULE = "AssignedSectionAdapter";
     private static String TAG="";
     LinearLayout.LayoutParams params;
 
-    public SectionAdapter(ArrayList<Common_Class> mListSection, Fragment mFragment)
+    public AssignedSectionAdapter(ArrayList<Common_Class> mListSection, Fragment mFragment)
     {
-        TAG = "SectionAdapter";
+        TAG = "AssignedSectionAdapter";
         Log.d(MODULE, TAG);
         Log.d(MODULE, TAG + "mListSection Size: " + mListSection.size());
         this.mListSection = mListSection;
@@ -83,6 +84,12 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Log.d(MODULE, TAG + " mSection Id : " + mSection.getID());
 
                 holder.tv_class_name.setText(mSection.getName());
+
+                if(position!=mListSection.size()-1)
+                {
+                    holder.iv_class_list_item_delete.setVisibility(View.GONE);
+                }
+
                 holder.ll_class_name.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -93,6 +100,7 @@ public class SectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                 });
+
                 holder.iv_class_list_item_delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

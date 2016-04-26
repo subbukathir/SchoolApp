@@ -8,7 +8,8 @@
     <string name="lbl_profile">Profile</string>
     <string name="lbl_student_profile">Student Profile</string>
     <string name="lbl_class_management">Class Management</string>
-    <string name="lbl_section_management">Section Management</string>
+    <string name="lbl_section_managment">Section Management</string>
+    <string name="lbl_assign_section">Assign Section</string>
     <string name="lbl_events">Events</string>
     <string name="lbl_homework">Homework</string>
     <string name="lbl_diary">Diary</string>
@@ -53,7 +54,8 @@
         <item>@string/lbl_about_us</item>
         <item>@string/lbl_profile</item>
         <item>@string/lbl_class_management</item>
-        <item>@string/lbl_section_management</item>
+        <item>@string/lbl_section_managment</item>
+        <item>@string/lbl_assign_section</item>
         <item>@string/lbl_student_profile</item>
         <item>@string/lbl_events</item>
         <item>@string/lbl_homework</item>

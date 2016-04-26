@@ -33,6 +33,7 @@ import com.daemon.oxfordschool.asyncprocess.RegisterDevice;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
+import com.daemon.oxfordschool.fragment.Fragment_Assigned_Section_List;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_CCE_ExamReport;
@@ -52,11 +53,11 @@ import com.daemon.oxfordschool.fragment.Fragment_Exam_Result_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_Exam_Schedule_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork;
 import com.daemon.oxfordschool.fragment.Fragment_HomeWork_Staff;
+import com.daemon.oxfordschool.fragment.Fragment_Section_List;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail;
 import com.daemon.oxfordschool.fragment.Fragment_PaymentDetail_Staff;
 import com.daemon.oxfordschool.fragment.Fragment_ProfileView;
 import com.daemon.oxfordschool.fragment.Fragment_School_Profile;
-import com.daemon.oxfordschool.fragment.Fragment_Section_List;
 import com.daemon.oxfordschool.fragment.Fragment_StudentList;
 import com.daemon.oxfordschool.fragment.Fragment_StudentProfile;
 import com.daemon.oxfordschool.fragment.Fragment_Student_View_Profile;
@@ -329,12 +330,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.lbl_class_management);
             }
         }
-        else if(getString(R.string.lbl_section_management).equals(navItem))
+        else if(getString(R.string.lbl_section_managment).equals(navItem))
         {
             if(mUser.getUserType().equals(ApiConstants.ADMIN))
             {
                 fragment = new Fragment_Section_List();
-                title = getString(R.string.lbl_section_management);
+                title = getString(R.string.lbl_section_managment);
+            }
+        }
+        else if(getString(R.string.lbl_assign_section).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.ADMIN))
+            {
+                fragment = new Fragment_Assigned_Section_List();
+                title = getString(R.string.lbl_assign_section);
             }
         }
         else if(getString(R.string.lbl_discipline_report).equals(navItem))
