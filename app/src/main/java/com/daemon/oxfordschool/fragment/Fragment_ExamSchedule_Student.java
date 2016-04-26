@@ -192,6 +192,7 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
             recycler_view.setLayoutManager(mLayoutManager);
             spinner_exam_type.setOnItemSelectedListener(_OnItemSelectedListener);
             text_view_empty.setText(getString(R.string.lbl_no_exams));
+            setExamTypeList();
         }
         catch (Exception ex)
         {
@@ -203,8 +204,16 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
 
-            Str_ExamTypeId = mListExamType.get(position).getID();
-            getExamListFromService(position);
+            if(position>0)
+            {
+                Str_ExamTypeId = mListExamType.get(position).getID();
+                getExamListFromService(position);
+            }
+            else
+            {
+                text_view_empty.setText(getString(R.string.lbl_no_exams));
+                showEmptyView();
+            }
         }
 
         @Override
@@ -372,13 +381,24 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
         Log.d(MODULE, TAG);
         try
         {
-           if(mListExamType.size()>0)
-           {
-               String[] items = AppUtils.getArray(mListExamType);
-               ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
-               adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-               spinner_exam_type.setAdapter(adapter);
-           }
+            String[] items=null;
+
+            if(mListExamType.size()>0)
+            {
+                items = AppUtils.getArray(mListExamType,getString(R.string.lbl_select_exam_type));
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_exam_type.setAdapter(adapter);
+                spinner_exam_type.setSelection(mSelectedPosition);
+            }
+            else
+            {
+                items = new String[1];
+                items[0] = getString(R.string.lbl_select_exam_type);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity,android.R.layout.simple_spinner_item,items);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_exam_type.setAdapter(adapter);
+            }
         }
         catch (Exception ex)
         {
