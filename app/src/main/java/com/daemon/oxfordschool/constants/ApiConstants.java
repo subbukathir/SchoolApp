@@ -47,6 +47,7 @@ public class ApiConstants
     public static String ADD_SECTION_URL=SERVER_URL + "AddSection.php";
     public static String ASSIGN_SECTION_URL=SERVER_URL + "AddSectionClass.php";
     public static String ALL_SECTION_URL=SERVER_URL + "SectionList.php";
+    public static String ADD_EXAM_URL=SERVER_URL + "AddExam.php";
 
     public static String SUCCESS_CODE="0";
 

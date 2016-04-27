@@ -22,6 +22,7 @@
     <string name="lbl_update_subject">Update Subject</string>
     <string name="lbl_mass_notification">Mass Notification</string>
     <string name="lbl_add_marks">Add Marks</string>
+    <string name="lbl_add_exam">Add Examination</string>
     <string name="lbl_exam_schedule">Exam Schedule</string>
     <string name="lbl_exam_result">Exam Result</string>
     <string name="lbl_fees_detail">Fees Detail</string>
@@ -63,6 +64,7 @@
         <item>@string/lbl_discipline_report</item>
         <item>@string/lbl_attendance</item>
         <item>@string/lbl_calendar</item>
+        <item>@string/lbl_add_exam</item>
         <item>@string/lbl_add_marks</item>
         <item>@string/lbl_exam_schedule</item>
         <item>@string/lbl_exam_result</item>

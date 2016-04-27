@@ -33,6 +33,7 @@ import com.daemon.oxfordschool.asyncprocess.RegisterDevice;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.fragment.FragmentDrawer;
+import com.daemon.oxfordschool.fragment.Fragment_Add_Exam;
 import com.daemon.oxfordschool.fragment.Fragment_Assigned_Section_List;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance;
 import com.daemon.oxfordschool.fragment.Fragment_Attendance_Staff;
@@ -276,6 +277,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             {
                 fragment = new Fragment_Add_Event();
                 title = getString(R.string.lbl_add_event);
+            }
+        }
+        else if(getString(R.string.lbl_add_exam).equals(navItem))
+        {
+            if(mUser.getUserType().equals(ApiConstants.ADMIN))
+            {
+                fragment = new Fragment_Add_Exam();
+                title = getString(R.string.lbl_add_exam);
             }
         }
         else if(getString(R.string.lbl_add_marks).equals(navItem))
