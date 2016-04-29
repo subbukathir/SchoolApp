@@ -298,7 +298,13 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
         Log.d(MODULE, TAG);
         try
         {
+            if(mUser.getUserType().equals(ApiConstants.ADMIN))
+                Str_Url = ApiConstants.DIARY_NOTES_LIST_URL;
+            else if(mUser.getUserType().equals(ApiConstants.STAFF))
+                Str_Url = ApiConstants.DIARY_NOTES_LIST_STAFF_URL;
+            Log.d(MODULE, TAG + " Str_Url : " + Str_Url);
             new GetDiaryNotesList(Str_Url,Payload_DiaryNotes(Str_Date),this).getDiaryNotes();
+            AppUtils.showProgressDialog(mActivity);
         }
         catch (Exception ex)
         {
@@ -486,6 +492,7 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getDiaryNotesList();
             showDiaryNotesList();
         }
@@ -501,6 +508,7 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             text_view_empty.setText(Str_Msg);
             showEmptyView();
         }
@@ -516,7 +524,7 @@ public class Fragment_Diary_Notes_Staff extends Fragment implements ClassListLis
         TAG = "onHomeWorkListItemClicked";
         Log.d(MODULE, TAG);
 
-        gotoFragmentUpdate(position);
+        if(mUser.getUserType().equals(ApiConstants.STAFF)) gotoFragmentUpdate(position);
     }
 
     public void getSectionListFromService()

@@ -281,7 +281,13 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         Log.d(MODULE, TAG);
         try
         {
+            if(mUser.getUserType().equals(ApiConstants.ADMIN))
+                Str_HomeWorkList_Url = ApiConstants.HOMEWORK_LIST_URL;
+            else if(mUser.getUserType().equals(ApiConstants.STAFF))
+                Str_HomeWorkList_Url = ApiConstants.HOMEWORK_LIST_STAFF_URL;
+            Log.d(MODULE, TAG + " Str_HomeWorkList_Url : " + Str_HomeWorkList_Url);
             new GetHomeWorkList(Str_HomeWorkList_Url,Payload_HomeWork(Str_Date),this).getHomeWorks();
+            AppUtils.showProgressDialog(mActivity);
         }
         catch (Exception ex)
         {
@@ -436,6 +442,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getHomeWorksList();
             showHomeWorkList();
         }
@@ -451,6 +458,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             text_view_empty.setText(Str_Msg);
             showEmptyView();
         }
@@ -466,7 +474,7 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         TAG = "onHomeWorkListItemClicked";
         Log.d(MODULE, TAG);
         Log.d(MODULE, TAG + " Position : " + position);
-        gotoFragmentUpdate(position);
+        if(mUser.getUserType().equals(ApiConstants.STAFF))  gotoFragmentUpdate(position);
     }
 
     public void getClassList()
