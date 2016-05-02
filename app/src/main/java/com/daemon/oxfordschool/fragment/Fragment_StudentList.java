@@ -90,6 +90,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         {
             mActivity = (AppCompatActivity) getActivity();
             getProfile();
+            AppUtils.showProgressDialog(mActivity);
             getClassList();
             setHasOptionsMenu(true);
             if (mActivity.getCurrentFocus() != null)
@@ -247,6 +248,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getClassList();
             showClassList();
         }
@@ -258,7 +260,17 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
 
     @Override
     public void onClassListReceivedError(String Str_Msg) {
+        TAG = "onClassListReceivedError";
+        Log.d(MODULE, TAG);
+        try
+        {
+            AppUtils.hideProgressDialog();
+            AppUtils.showDialog(mActivity,Str_Msg);
+        }
+        catch (Exception ex)
+        {
 
+        }
     }
 
     @Override
@@ -267,6 +279,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getSectionList();
             showSectionList();
         }
@@ -278,6 +291,17 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
 
     @Override
     public void onSectionListReceivedError(String Str_Msg) {
+        TAG = "onSectionListReceivedError";
+        Log.d(MODULE, TAG);
+        try
+        {
+            AppUtils.hideProgressDialog();
+            AppUtils.showDialog(mActivity, Str_Msg);
+        }
+        catch (Exception ex)
+        {
+
+        }
 
     }
 
@@ -330,6 +354,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.showProgressDialog(mActivity);
             new SectionList_Process(this, PayloadSection()).GetSectionList();
         }
         catch (Exception ex)
