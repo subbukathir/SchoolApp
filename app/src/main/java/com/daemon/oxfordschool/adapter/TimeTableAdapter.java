@@ -94,7 +94,7 @@ public class TimeTableAdapter extends BaseAdapter
             holder.tv_day.setTypeface(font.getHelveticaBold());
             holder.tv_day.setTextColor(Color.WHITE);
             holder.layout_timetable_root.setBackground(new ColorDrawable(Color.parseColor("#C81E5E")));
-            holder.tv_day.setText(item.getName());
+            holder.tv_day.setText(item.getName().toString());
         }
         else
         {
@@ -123,7 +123,7 @@ public class TimeTableAdapter extends BaseAdapter
                 {
                     if(Str_SubjectId.equals(mSubjectList.get(i).getID()))
                     {
-                        Str=mSubjectList.get(i).getName();
+                        Str=mSubjectList.get(i).getName().substring(0,3);
                     }
                 }
             }
