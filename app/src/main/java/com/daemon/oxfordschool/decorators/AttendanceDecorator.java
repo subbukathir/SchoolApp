@@ -1,5 +1,6 @@
 package com.daemon.oxfordschool.decorators;
 
+import com.daemon.oxfordschool.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -15,9 +16,11 @@ public class AttendanceDecorator implements DayViewDecorator  {
 
     private int color;
     private HashSet<CalendarDay> dates;
+
     public AttendanceDecorator(int color, Collection<CalendarDay> dates) {
         this.color = color;
         this.dates = new HashSet<>(dates);
+
     }
     @Override
     public boolean shouldDecorate(CalendarDay day) {
@@ -26,7 +29,7 @@ public class AttendanceDecorator implements DayViewDecorator  {
     @Override
     public void decorate(DayViewFacade view) {
         //view.setBackgroundDrawable(new ColorDrawable(color));
-        view.addSpan(new DotSpan(20, color));
+        view.addSpan(new DotSpan(10, color));
     }
 
 }

@@ -86,6 +86,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
             mSavedInstanceState=savedInstanceState;
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
+            AppUtils.showProgressDialog(mActivity);
             new GetEventsList(Str_Url,this).getEvents();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -235,6 +236,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getEventsList();
             showEventsList();
             swipeRefreshLayout.setRefreshing(false);
@@ -252,6 +254,8 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         try
         {
             swipeRefreshLayout.setRefreshing(false);
+            AppUtils.hideProgressDialog();
+            AppUtils.showDialog(mActivity,Str_Msg);
         }
         catch (Exception ex)
         {
