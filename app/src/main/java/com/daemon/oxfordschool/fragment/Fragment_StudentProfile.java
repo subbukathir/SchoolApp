@@ -68,6 +68,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
             mActivity = (AppCompatActivity) getActivity();
             getProfile();
             setHasOptionsMenu(true);
+            AppUtils.showProgressDialog(mActivity);
             new GetStudentList(Str_Url,Payload(),this).getStudents();
         }
         catch (Exception ex)
@@ -188,6 +189,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getStudentsList();
             if(mListStudents.size()>0)
             {
@@ -208,7 +210,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
-
+            AppUtils.hideProgressDialog();
         }
         catch (Exception ex)
         {
