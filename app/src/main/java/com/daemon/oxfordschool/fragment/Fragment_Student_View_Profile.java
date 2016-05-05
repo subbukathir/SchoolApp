@@ -74,6 +74,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         {
             mActivity = (AppCompatActivity) getActivity();
             getProfile();
+            AppUtils.showProgressDialog(mActivity);
             new GetStudentProfile(Str_Url,Payload(),this).getStudentProfile();
             setHasOptionsMenu(true);
             if (mActivity.getCurrentFocus() != null)
@@ -189,6 +190,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getStudentProfile();
             setProfile();
         }
@@ -204,6 +206,7 @@ public class Fragment_Student_View_Profile extends Fragment implements ViewStude
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             AppUtils.showDialog(mActivity,Str_Msg);
         }
         catch (Exception ex)

@@ -95,7 +95,7 @@
     </string-array>
 
     <!-- Splash Screen -->
-    <string name="lbl_loading">Loading...,Please wait</string>
+    <string name="lbl_loading">Loading...Please wait</string>
     <string name="lbl_welcome">Welcome to Oxford School</string>
     <string name="lbl_parent_module">Parent Module</string>
 
