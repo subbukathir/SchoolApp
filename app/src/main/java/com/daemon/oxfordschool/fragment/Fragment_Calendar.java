@@ -2,7 +2,6 @@ package com.daemon.oxfordschool.fragment;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,15 +22,12 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daemon.oxfordschool.Utils.AppUtils;
-import com.daemon.oxfordschool.adapter.EventsAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetEventsList;
 import com.daemon.oxfordschool.asyncprocess.GetHolidayList;
 import com.daemon.oxfordschool.classes.CEvents;
 import com.daemon.oxfordschool.classes.CHolidays;
-import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.constants.ApiConstants;
 import com.daemon.oxfordschool.decorators.EventDecorator;
 import com.daemon.oxfordschool.decorators.HighlightWeekendsDecorator;
@@ -40,19 +36,14 @@ import com.daemon.oxfordschool.decorators.MySelectorDecorator;
 import com.daemon.oxfordschool.decorators.OneDayDecorator;
 import com.daemon.oxfordschool.listeners.EventsListListener;
 import com.daemon.oxfordschool.listeners.HolidayList_Listener;
-import com.daemon.oxfordschool.response.CommonList_Response;
 import com.daemon.oxfordschool.response.EventsList_Response;
-import com.daemon.oxfordschool.response.ExamResult_Response;
 import com.daemon.oxfordschool.response.HolidaysList_Response;
 import com.google.gson.reflect.TypeToken;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.DayViewDecorator;
-import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,6 +75,11 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
     ArrayList<CEvents> mListEvents =new ArrayList<CEvents>();
     String Str_EventsUrl = ApiConstants.EVENTS_LIST_URL;
 
+    Animation slideOut;
+    Animation slideIn;
+    Animation slideDown;
+    Animation scaleUp;
+
     public Fragment_Calendar()
     {
         // Required empty public constructor
@@ -101,6 +97,12 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
             setHasOptionsMenu(true);
             mDensity =  mActivity.getResources().getDisplayMetrics().density;
             mTitleSize = (int) (mActivity.getResources().getDimension(R.dimen.lbl_size) / mDensity);
+
+            slideOut = AnimationUtils.loadAnimation( mActivity,R.anim.slide_out_right);
+            slideIn = AnimationUtils.loadAnimation( mActivity,R.anim.slide_in_left);
+            slideDown = AnimationUtils.loadAnimation( mActivity,R.anim.slide_down);
+            scaleUp = AnimationUtils.loadAnimation(mActivity, R.anim.scale_up);
+
             new GetHolidayList(ApiConstants.HOLIDAYS_URL,this).getHolidays();
             new GetEventsList(Str_EventsUrl,this).getEvents();
             if (mActivity.getCurrentFocus() != null)
@@ -185,8 +187,12 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                     new HighlightWeekendsDecorator(),
                     oneDayDecorator
             );
+
             CalendarDay day= CalendarDay.today();
             showDescription(day);
+
+            slideDown.setAnimationListener(animationWidgetListener);
+            widget.startAnimation(slideDown);
         }
         catch (Exception ex)
         {
@@ -475,16 +481,14 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                 }
                 else
                 {
-                    Animation RightSwipe = AnimationUtils.loadAnimation( mActivity,R.anim.slide_out_right);
-                    ll_view_calendar.startAnimation(RightSwipe);
-                    RightSwipe.setAnimationListener(animationListener);
+                    ll_view_calendar.startAnimation(slideOut);
+                    slideOut.setAnimationListener(animationSlideOutListener);
                 }
             }
             else
             {
-                Animation RightSwipe = AnimationUtils.loadAnimation( mActivity,R.anim.slide_out_right);
-                ll_view_calendar.startAnimation(RightSwipe);
-                RightSwipe.setAnimationListener(animationListener);
+                ll_view_calendar.startAnimation(slideOut);
+                slideOut.setAnimationListener(animationSlideOutListener);
             }
 
         }
@@ -494,40 +498,67 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         }
     }
 
-    Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+    Animation.AnimationListener animationWidgetListener = new Animation.AnimationListener()
+    {
         @Override
-        public void onAnimationStart(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-            Animation LeftSwipe = AnimationUtils.loadAnimation( mActivity,R.anim.slide_in_left);
-            ll_view_calendar.startAnimation(LeftSwipe);
-        }
+        public void onAnimationStart(Animation animation) { }
 
         @Override
-        public void onAnimationRepeat(Animation animation) {
-
+        public void onAnimationEnd(Animation animation)
+        {
+            scaleUp.setAnimationListener(animationScaleUpListener);
+            ll_view_calendar.startAnimation(scaleUp);
         }
+        @Override
+        public void onAnimationRepeat(Animation animation) { }
     };
 
+    Animation.AnimationListener animationSlideOutListener = new Animation.AnimationListener()
+    {
+        @Override
+        public void onAnimationStart(Animation animation) { }
+
+        @Override
+        public void onAnimationEnd(Animation animation)
+        {
+           ll_view_calendar.startAnimation(slideIn);
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) { }
+    };
+
+    Animation.AnimationListener animationScaleUpListener = new Animation.AnimationListener()
+    {
+        @Override
+        public void onAnimationStart(Animation animation) { }
+
+        @Override
+        public void onAnimationEnd(Animation animation)
+        {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) { }
+    };
+
+
     @Override
-    public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-        //noinspection ConstantConditions
+    public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) { }
 
-    }
-
-    private String getSelectedDatesString() {
+    private String getSelectedDatesString()
+    {
         CalendarDay date = widget.getSelectedDate();
-        if (date == null) {
+        if (date == null)
+        {
             return "No Selection";
         }
         return FORMATTER.format(date.getDate());
     }
 
-    public void showHelpDialog() {
+    public void showHelpDialog()
+    {
         TAG = "showHelpDialog";
         Log.d(MODULE, TAG);
         try
@@ -542,6 +573,9 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
 
             text_view_holiday.setTypeface(font.getHelveticaRegular());
             text_view_event.setTypeface(font.getHelveticaRegular());
+
+            text_view_holiday.setTextColor(Color.parseColor("#c1c1c1"));
+            text_view_event.setTextColor(Color.BLUE);
 
             AlertDialog b = dialogBuilder.create();
             b.setCanceledOnTouchOutside(true);

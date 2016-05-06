@@ -12,17 +12,15 @@
         android:layout_height="wrap_content"
         android:text="@string/lbl_help_grey"
         android:layout_margin="@dimen/space_layout_margin"
-        android:textSize="@dimen/lbl_profile_title"
-        android:textColor="#c1c1c1"/>
+        android:textSize="@dimen/lbl_profile_title" />
 
     <TextView
         android:id="@+id/text_view_event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/lbl_help_yellow"
+        android:text="@string/lbl_help_blue"
         android:layout_margin="@dimen/space_layout_margin"
-        android:textSize="@dimen/lbl_profile_title"
-        android:textColor="@color/color_yellow"/>
+        android:textSize="@dimen/lbl_profile_title" />
 
 </LinearLayout>
 
