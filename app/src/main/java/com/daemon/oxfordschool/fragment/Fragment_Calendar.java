@@ -337,7 +337,6 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                     String startDateTime = mListEvents.get(i).getStartDate();
                     CalendarDay startDay = GetCalendarDay(startDateTime);
 
-
                     String endDateTime = mListEvents.get(i).getEndDate();
                     CalendarDay endDay = GetCalendarDay(endDateTime);
 
@@ -353,7 +352,7 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
                     }
 
                 }
-                widget.addDecorator(new EventDecorator(Color.YELLOW,dates));
+                widget.addDecorator(new EventDecorator(Color.BLUE,dates));
             }
             else
             {
@@ -421,7 +420,6 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         Log.d(MODULE, TAG);
         try
         {
-
             showDescription(date);
         }
         catch (Exception e)
@@ -437,7 +435,6 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         try
         {
             boolean isHolidayFound=false;
-            Date convertedDate = new Date();
             for(int i=0;i<mListHolidays.size(); i++) {
                 String[] dtime = mListHolidays.get(i).getHolidayDate().split(" ");
                 String[] cdate = dtime[0].split("-");
@@ -473,7 +470,7 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
 
                 if(!isEventFound)
                 {
-                    text_view_cal_header.setText(getString(R.string.lbl_welcome));
+                    text_view_cal_header.setText(ConvertedDate());
                     text_view_cal_description.setText(getString(R.string.lbl_have_nice_day));
                 }
                 else
@@ -571,6 +568,40 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
             calendar.add(Calendar.DATE, 1);
         }
         return dates;
+    }
+
+    public String GetTodayDate() {
+        String Str_TodayDate = "";
+        try
+        {
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            Str_TodayDate = date;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return Str_TodayDate;
+    }
+
+    public String ConvertedDate()
+    {
+        TAG = "ConvertedDate";
+        Log.d(MODULE,TAG);
+        String Str_ReturnValue="";
+        try
+        {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat format1 = new SimpleDateFormat("E, MMM dd yyyy");
+            Date date;
+            date = sdf1.parse(GetTodayDate());
+            Str_ReturnValue = format1.format(date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return Str_ReturnValue;
     }
 
 }

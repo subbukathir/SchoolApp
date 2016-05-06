@@ -16,6 +16,7 @@
         style="@style/match_wrap_style"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/space_layout_margin"
+        android:elevation="@dimen/space_layout_margin"
         android:padding="@dimen/space_layout_padding">
 
         <TextView

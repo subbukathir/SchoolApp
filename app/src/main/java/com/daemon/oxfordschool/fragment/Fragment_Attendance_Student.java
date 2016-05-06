@@ -24,6 +24,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -279,7 +283,11 @@ public class Fragment_Attendance_Student extends Fragment implements ViewStudent
         @Override
         public void onBottomReached()
         {
-            layout_student_pager_item.setVisibility(View.GONE);
+            //Animation slideUp = AnimationUtils.loadAnimation( mActivity,R.anim.slide_up);
+            //layout_student_pager_item.startAnimation(slideUp);
+            //slideUp.setAnimationListener(animationUpListener);
+            slideToTop((View) layout_student_pager_item);
+
         }
     };
 
@@ -289,7 +297,14 @@ public class Fragment_Attendance_Student extends Fragment implements ViewStudent
         public void onRefresh()
         {
             if (swipe_refresh_layout.isRefreshing()) swipe_refresh_layout.setRefreshing(false);
-            if(!layout_student_pager_item.isShown()) layout_student_pager_item.setVisibility(View.VISIBLE);
+            if(!layout_student_pager_item.isShown())
+            {
+                //Animation slideDown= AnimationUtils.loadAnimation( mActivity,R.anim.slide_down);
+                //layout_student_pager_item.startAnimation(slideDown);
+                //slideDown.setAnimationListener(animationDownListener);
+                slideToBottom((View) layout_student_pager_item);
+            }
+
         }
     };
 
@@ -506,7 +521,8 @@ public class Fragment_Attendance_Student extends Fragment implements ViewStudent
         AppUtils.hideProgressDialog();
         try
         {
-
+            tv_working_days.setText( getString(R.string.lbl_working_days) + " : 0 ");
+            tv_present_days.setText(getString(R.string.lbl_present_days) + " : 0 " );
         }
         catch (Exception ex)
         {
@@ -693,4 +709,57 @@ public class Fragment_Attendance_Student extends Fragment implements ViewStudent
             return super.onFling(e1, e2, velocityX, velocityY);
         }
     });
+
+    // To animate view slide out from top to bottom
+    public void slideToBottom(View view){
+        TranslateAnimation animate = new TranslateAnimation(0,0,-view.getHeight(),0);
+        animate.setDuration(500);
+        animate.setAnimationListener(animationDownListener);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
+    // To animate view slide out from bottom to top
+    public void slideToTop(View view){
+        TranslateAnimation animate = new TranslateAnimation(0,0,0,-view.getHeight());
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        animate.setAnimationListener(animationUpListener);
+        view.startAnimation(animate);
+    }
+
+    Animation.AnimationListener animationDownListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+            layout_student_pager_item.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    };
+
+    Animation.AnimationListener animationUpListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+
+            layout_student_pager_item.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    };
 }

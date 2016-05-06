@@ -4,6 +4,7 @@
     style="@style/match_parent_style"
     android:layout_weight="1.4"
     android:orientation="vertical"
+    android:elevation="@dimen/space_layout_margin"
     android:background="@color/windowBackground">
 
 
