@@ -178,6 +178,9 @@ public class Fragment_Discipline_Report_Student extends Fragment implements Disc
         Log.d(MODULE, TAG);
         try
         {
+            tv_name.setTypeface(font.getHelveticaRegular());
+            tv_class.setTypeface(font.getHelveticaRegular());
+            tv_section.setTypeface(font.getHelveticaRegular());
             tv_lbl_self_control.setTypeface(font.getHelveticaRegular());
             tv_self_control.setTypeface(font.getHelveticaRegular());
             tv_lbl_obey_rules .setTypeface(font.getHelveticaRegular());
@@ -276,7 +279,7 @@ public class Fragment_Discipline_Report_Student extends Fragment implements Disc
         Log.d(MODULE, TAG);
         try
         {
-             Str_ClassId = mStudent.getClassId();
+            Str_ClassId = mStudent.getClassId();
             Str_SectionId = mStudent.getSectionId();
             Str_StudentId = mStudent.getStudentId();
             new DisciplineReport_Process(mActivity,this,Payload_Discipline()).GetDisciplineReport();
