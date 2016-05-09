@@ -90,7 +90,6 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         {
             mActivity = (AppCompatActivity) getActivity();
             getProfile();
-            AppUtils.showProgressDialog(mActivity);
             getClassList();
             setHasOptionsMenu(true);
             if (mActivity.getCurrentFocus() != null)
@@ -103,7 +102,6 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         {
             ex.printStackTrace();
         }
-
     }
 
     @Override
@@ -380,6 +378,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
             }
             else
             {
+                AppUtils.showProgressDialog(mActivity);
                 new ClassList_Process(mActivity, this).GetClassList();
             }
         }

@@ -14,6 +14,7 @@
     <LinearLayout
         android:id="@+id/ll_view_calendar"
         style="@style/match_wrap_style"
+        android:visibility="gone"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/space_layout_margin"
         android:elevation="@dimen/space_layout_margin"

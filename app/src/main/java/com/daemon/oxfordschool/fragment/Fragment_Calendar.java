@@ -531,13 +531,13 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
     Animation.AnimationListener animationScaleUpListener = new Animation.AnimationListener()
     {
         @Override
-        public void onAnimationStart(Animation animation) { }
+        public void onAnimationStart(Animation animation)
+        {
+            ll_view_calendar.setVisibility(View.VISIBLE);
+        }
 
         @Override
-        public void onAnimationEnd(Animation animation)
-        {
-
-        }
+        public void onAnimationEnd(Animation animation) { }
 
         @Override
         public void onAnimationRepeat(Animation animation) { }
