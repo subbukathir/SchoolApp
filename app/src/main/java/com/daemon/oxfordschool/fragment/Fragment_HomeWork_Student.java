@@ -224,7 +224,7 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
     View.OnClickListener _OnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            selectDate(view);
+            selectDate();
         }
     };
 
@@ -405,8 +405,10 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
         return Str_TodayDate;
     }
 
-    public void selectDate(View view) {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_HomeWork_Student.this);
+    public void selectDate() {
+        SelectDateFragment newFragment = new SelectDateFragment();
+        newFragment.setListener(this);
+        newFragment.setDate(Str_Date);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 

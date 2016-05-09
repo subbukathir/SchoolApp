@@ -280,7 +280,7 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
             switch (view.getId())
             {
                 case R.id.btn_select_date:
-                    selectDate(view);
+                    selectDate();
                     break;
                 default:
                     break;
@@ -535,8 +535,10 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
         return Str_TodayDate;
     }
 
-    public void selectDate(View view) {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_Diary_Notes_Student.this);
+    public void selectDate() {
+        SelectDateFragment newFragment = new SelectDateFragment();
+        newFragment.setListener(this);
+        newFragment.setDate(Str_Date);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 

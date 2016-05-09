@@ -219,11 +219,8 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             btn_end_time.setOnClickListener(_OnClickListener);
             btn_add_event.setOnClickListener(_OnClickListener);
 
-            setActionBarFont();
-
             if(!Str_EventId.equals(""))
             {
-
                 Log.d(MODULE, TAG + "bundle available");
                 btn_add_event.setText("update");
                 et_add_event_name.setText(Str_Event_Name);
@@ -262,20 +259,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         }
     }
 
-    private void setActionBarFont()
-    {
-        TextView titleTextView = null;
-        try
-        {
-            TextView subTitleView = (TextView) mToolbar.getChildAt(1);
-            subTitleView.setTypeface(font.getHelveticaRegular());
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
 
-    }
 
     public void getProfile()
     {
@@ -334,26 +318,24 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             switch (view.getId())
             {
                 case R.id.btn_select_start_date:
-                    flag=true;
-                    selectDate(view);
+                     flag=true;
+                     selectStartDate();
                      break;
                 case R.id.btn_select_end_date:
                      flag=false;
-                     selectDate(view);
+                     selectEndDate();
                      break;
                 case R.id.btn_select_start_time:
-                    flag1=true;
-                    selectTime();
-                    break;
+                     flag1=true;
+                     selectTime();
+                     break;
                 case R.id.btn_select_end_time:
-                    flag1=false;
-                    selectTime();
-                    break;
-
+                     flag1=false;
+                     selectTime();
+                     break;
                 case R.id.btn_add_event:
                      if(IsValid()) goto_Add_Event();
                      break;
-
                 default:
                      break;
             }
@@ -384,10 +366,10 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         String str_startTime=btn_start_time.getText().toString();
         String str_endTime=btn_end_time.getText().toString();
 
-            str_startDate.append(str_start).append(" ").append(str_startTime);
-            str_endDate.append(str_end).append(" ").append(str_endTime);
+        str_startDate.append(str_start).append(" ").append(str_startTime);
+        str_endDate.append(str_end).append(" ").append(str_endTime);
 
-        Log.d(MODULE,TAG + "value :"+ str_start +"value of end :"+ str_end);
+        Log.d(MODULE, TAG + "value :" + str_start + "value of end :" + str_end);
 
         try {
             obj.put("UserId", Str_Id);
@@ -424,8 +406,19 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         return Str_TodayDate;
     }
 
-    public void selectDate(View view) {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_Add_Event.this);
+    public void selectStartDate() {
+        String str_start=btn_start_date.getText().toString();
+        SelectDateFragment newFragment = new SelectDateFragment();
+        newFragment.setListener(this);
+        newFragment.setDate(ConvertedDate(str_start));
+        newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
+    }
+
+    public void selectEndDate() {
+        String str_end=btn_end_date.getText().toString();
+        SelectDateFragment newFragment = new SelectDateFragment();
+        newFragment.setListener(this);
+        newFragment.setDate(ConvertedDate(str_end));
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 
@@ -508,6 +501,27 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
             Date date;
             date = sdf1.parse(StrDateTime);
             Str_ReturnValue = format1.format(date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return Str_ReturnValue;
+    }
+
+    public String ConvertedDate(String StrDateTime)
+    {
+        TAG = "ConvertedDate";
+        Log.d(MODULE,TAG);
+        String Str_ReturnValue="";
+        try
+        {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date;
+            date = sdf1.parse(StrDateTime);
+            Str_ReturnValue = format1.format(date);
+            Log.d(MODULE,TAG + " Str_ReturnValue : " + Str_ReturnValue);
         }
         catch (Exception e)
         {

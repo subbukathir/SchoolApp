@@ -19,21 +19,36 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
 {
     DateSetListener mCallBack;
     Fragment _fragment;
+    int yy,mm,dd;
+    String Str_Date="";
+    final Calendar calendar = Calendar.getInstance();
 
-    public SelectDateFragment(Fragment _fragment)
+    public SelectDateFragment()
+    {
+        yy = calendar.get(Calendar.YEAR);
+        mm = calendar.get(Calendar.MONTH);
+        dd = calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public void setListener(Fragment _fragment)
     {
         this._fragment=_fragment;
         mCallBack = (DateSetListener) _fragment;
     }
 
+    public void setDate(String Str_Date)
+    {
+        this.Str_Date=Str_Date;
+        String[] date = Str_Date.split("-");
+        yy=Integer.parseInt(date[0]);
+        mm=Integer.parseInt(date[1]);
+        mm=mm-1;
+        dd=Integer.parseInt(date[2]);
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        final Calendar calendar = Calendar.getInstance();
-        int yy = calendar.get(Calendar.YEAR);
-        int mm = calendar.get(Calendar.MONTH);
-        int dd = calendar.get(Calendar.DAY_OF_MONTH);
-
         return new DatePickerDialog(getActivity(), this, yy, mm, dd);
     }
 

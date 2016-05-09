@@ -792,7 +792,9 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
     }
 
     public void selectDate(View view) {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_Attendance_Staff.this);
+        SelectDateFragment newFragment = new SelectDateFragment();
+        newFragment.setListener(this);
+        newFragment.setDate(Str_Date);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 

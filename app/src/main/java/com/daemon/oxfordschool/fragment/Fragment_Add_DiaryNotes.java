@@ -942,7 +942,9 @@ public class Fragment_Add_DiaryNotes extends Fragment implements AddDiaryNotesLi
     }
 
     public void selectDate() {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_Add_DiaryNotes.this);
+        SelectDateFragment newFragment = new SelectDateFragment();
+        newFragment.setListener(this);
+        newFragment.setDate(Str_Date);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 

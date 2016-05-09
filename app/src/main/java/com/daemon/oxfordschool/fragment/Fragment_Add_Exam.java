@@ -677,7 +677,9 @@ public class Fragment_Add_Exam extends Fragment implements ClassListListener,Dat
     }
 
     public void selectDate() {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_Add_Exam.this);
+        SelectDateFragment newFragment = new SelectDateFragment();
+        newFragment.setListener(this);
+        newFragment.setDate(Str_Date);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 

@@ -483,7 +483,9 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
     }
 
     public void selectDate(View view) {
-        DialogFragment newFragment = new SelectDateFragment(Fragment_HomeWork.this);
+        SelectDateFragment newFragment = new SelectDateFragment();
+        newFragment.setListener(this);
+        newFragment.setDate(Str_Date);
         newFragment.show(mActivity.getSupportFragmentManager(), "DatePicker");
     }
 
