@@ -8,6 +8,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendarView"
         style="@style/match_wrap_style"
+        android:elevation="@dimen/space_layout_margin"
         app:mcv_selectionColor="#00F"
         app:mcv_showOtherDates="all" />
 
