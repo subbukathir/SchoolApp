@@ -650,15 +650,14 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         switch (item.getItemId())
         {
             case android.R.id.home:
-                 FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                 mManager.popBackStack();
-                 return true;
+                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                mManager.popBackStack();
+                return true;
             default:
-                 break;
+                break;
 
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }

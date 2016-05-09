@@ -671,12 +671,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         switch (item.getItemId())
         {
             case R.id.action_settings:
-                return true;
+                 return true;
             case android.R.id.home:
-                FragmentDrawer.mDrawerLayout.openDrawer(Gravity.LEFT);
-                return false;
+                 FragmentDrawer.mDrawerLayout.openDrawer(Gravity.LEFT);
+                 return false;
             default:
-                break;
+                 break;
         }
         return super.onOptionsItemSelected(item);
     }
