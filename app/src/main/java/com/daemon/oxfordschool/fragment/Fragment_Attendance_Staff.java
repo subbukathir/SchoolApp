@@ -345,7 +345,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
             switch (view.getId())
             {
                 case R.id.btn_select_date:
-                     selectDate(view);
+                     selectDate();
                      break;
                 case R.id.btn_take_attendance:
                      isTakeAttendancePressed=true;
@@ -791,7 +791,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
         return Str_TodayDate;
     }
 
-    public void selectDate(View view) {
+    public void selectDate() {
         SelectDateFragment newFragment = new SelectDateFragment();
         newFragment.setListener(this);
         newFragment.setDate(Str_Date);

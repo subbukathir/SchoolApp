@@ -4,10 +4,11 @@
     style="@style/match_parent_style"
     android:orientation="vertical">
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendarView"
         style="@style/match_wrap_style"
+        android:background="@color/calendarBackground"
         android:elevation="@dimen/space_layout_margin"
         app:mcv_selectionColor="#00F"
         app:mcv_showOtherDates="all" />
@@ -15,25 +16,24 @@
     <LinearLayout
         android:id="@+id/ll_view_calendar"
         style="@style/match_wrap_style"
-        android:visibility="gone"
-        android:orientation="vertical"
         android:layout_marginTop="@dimen/space_layout_margin"
-        android:elevation="@dimen/space_layout_margin"
-        android:padding="@dimen/space_layout_padding">
+        android:orientation="vertical"
+        android:padding="@dimen/space_layout_padding"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/text_view_cal_header"
             style="@style/text_view_header_name"
-            android:textSize="@dimen/lbl_profile_title"
+            android:text="Something"
             android:textColor="@color/color_black"
-            android:text="Something"/>
+            android:textSize="@dimen/lbl_profile_title" />
 
         <TextView
             android:id="@+id/text_view_cal_description"
             style="@style/text_view_label"
             android:layout_marginTop="@dimen/space_layout_margin"
-            android:textColor="@color/color_black"
-            android:text="Something"/>
+            android:text="Something"
+            android:textColor="@color/color_black" />
 
     </LinearLayout>
 

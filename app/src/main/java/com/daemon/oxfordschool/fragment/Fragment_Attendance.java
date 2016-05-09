@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -78,6 +79,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
     SharedPreferences mPreferences;
     User mUser,mSelectedUser;
     ViewPager vp_student;
+    RelativeLayout layout_profile_header;
     MaterialCalendarView widget;
     SwipeRefreshLayout swipe_refresh_layout;
     InteractiveScrollView scrollView_Calendar;
@@ -150,6 +152,7 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         Log.d(MODULE, TAG);
         try
         {
+            layout_profile_header=(RelativeLayout) view.findViewById(R.id.layout_profile_header);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             swipe_refresh_layout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
             scrollView_Calendar = (InteractiveScrollView) view.findViewById(R.id.scrollView_Calendar);
@@ -327,7 +330,8 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         @Override
         public void onBottomReached()
         {
-            vp_student.setVisibility(View.GONE);
+            //vp_student.setVisibility(View.GONE);
+            slideToTop((View) layout_profile_header);
         }
     };
 
@@ -337,9 +341,10 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
        public void onRefresh()
        {
            if (swipe_refresh_layout.isRefreshing()) swipe_refresh_layout.setRefreshing(false);
-           if(!vp_student.isShown())
+           if(!layout_profile_header.isShown())
            {
-              vp_student.setVisibility(View.VISIBLE);
+              //vp_student.setVisibility(View.VISIBLE);
+               slideToBottom((View) layout_profile_header);
            }
        }
    };
@@ -580,7 +585,8 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         AppUtils.hideProgressDialog();
         try
         {
-
+            tv_working_days.setText( getString(R.string.lbl_working_days) + " : 0 ");
+            tv_present_days.setText(getString(R.string.lbl_present_days) + " : 0 ");
         }
         catch (Exception ex)
         {
@@ -672,5 +678,57 @@ public class Fragment_Attendance extends Fragment implements StudentsListListene
         return super.onOptionsItemSelected(item);
     }
 
+    // To animate view slide out from top to bottom
+    public void slideToBottom(View view){
+        TranslateAnimation animate = new TranslateAnimation(0,0,-view.getHeight(),0);
+        animate.setDuration(500);
+        animate.setAnimationListener(animationDownListener);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+    }
+
+    // To animate view slide out from bottom to top
+    public void slideToTop(View view){
+        TranslateAnimation animate = new TranslateAnimation(0,0,0,-view.getHeight());
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        animate.setAnimationListener(animationUpListener);
+        view.startAnimation(animate);
+    }
+
+    Animation.AnimationListener animationDownListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+            layout_profile_header.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    };
+
+    Animation.AnimationListener animationUpListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+
+            layout_profile_header.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    };
 
 }

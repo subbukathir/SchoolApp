@@ -257,7 +257,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
     View.OnClickListener _OnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            selectDate(view);
+            selectDate();
         }
     };
 
@@ -482,7 +482,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         return Str_TodayDate;
     }
 
-    public void selectDate(View view) {
+    public void selectDate() {
         SelectDateFragment newFragment = new SelectDateFragment();
         newFragment.setListener(this);
         newFragment.setDate(Str_Date);

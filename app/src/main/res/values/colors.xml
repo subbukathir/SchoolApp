@@ -16,4 +16,5 @@
     <color name="color_app">#C81E5E</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#D6D4D7</color>
+    <color name="calendarBackground">#efeef0</color>
 </resources>
