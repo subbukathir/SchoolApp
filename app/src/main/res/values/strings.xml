@@ -110,6 +110,8 @@
     <string name="lbl_class">Class :</string>
     <string name="lbl_section">Section :</string>
 
+    <string name="lbl_retry">Retry</string>
+
     <!-- Profile View -->
 
     <string name="lbl_Email">Email</string>

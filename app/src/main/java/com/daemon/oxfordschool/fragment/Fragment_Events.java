@@ -5,8 +5,11 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -32,6 +35,7 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.EventsAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetEventsList;
+import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.classes.CEvents;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.components.RecycleEmptyErrorView;
@@ -45,10 +49,10 @@ import java.util.ArrayList;
 
 public class Fragment_Events extends Fragment implements EventsListListener,Event_List_Item_Click_Listener
 {
-
     public static String MODULE = "Fragment_Events ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     SwipeRefreshLayout swipeRefreshLayout;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
@@ -118,6 +122,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         try
         {
             swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_events);
             fab_add_event = (FloatingActionButton) view.findViewById(R.id.fab);
 
@@ -255,7 +260,7 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
         {
             swipeRefreshLayout.setRefreshing(false);
             AppUtils.hideProgressDialog();
-            AppUtils.showDialog(mActivity,Str_Msg);
+            showSnackBar(Str_Msg);
         }
         catch (Exception ex)
         {
@@ -448,6 +453,27 @@ public class Fragment_Events extends Fragment implements EventsListListener,Even
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSnackBar(String Str_Msg)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                new GetEventsList(Str_Url,Fragment_Events.this).getEvents();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }

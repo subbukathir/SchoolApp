@@ -5,7 +5,10 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -61,6 +64,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
     public static String MODULE = "Fragment_ExamSchedule ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_lbl_select_exam_type,text_view_empty,tv_lbl_subject_name,tv_lbl_exam_date;
     Spinner spinner_exam_type;
     RelativeLayout layout_empty;
@@ -134,6 +138,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             tv_lbl_select_exam_type = (TextView) view.findViewById(R.id.tv_select_exam_type);
             spinner_exam_type = (Spinner) view.findViewById(R.id.spinner_exam_type);
@@ -352,7 +357,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
 
         try
         {
-
+            showSnackBar(Str_Msg,0);
         }
         catch (Exception ex)
         {
@@ -383,6 +388,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         try
         {
             showEmptyView();
+            showSnackBar(Str_Msg,1);
         }
         catch (Exception ex)
         {
@@ -575,6 +581,34 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSnackBar(String Str_Msg,final int mService)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(mService==0) new ExamTypeList_Process(mActivity,Fragment_ExamSchedule.this).GetExamTypeList();
+                else if(mService==1)
+                {
+                    if(mSelectedExamTypePosition > 0)
+                    {
+                        getExamListFromService(mSelectedExamTypePosition);
+                    }
+                }
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }

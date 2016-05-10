@@ -5,7 +5,10 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -45,7 +48,6 @@ import com.daemon.oxfordschool.listeners.ExamTypeListListener;
 import com.daemon.oxfordschool.listeners.Exam_Result_List_Item_Click_Listener;
 import com.daemon.oxfordschool.listeners.StudentsListListener;
 import com.daemon.oxfordschool.response.CommonList_Response;
-import com.daemon.oxfordschool.response.ExamList_Response;
 import com.daemon.oxfordschool.response.ExamResult_Response;
 import com.daemon.oxfordschool.response.StudentsList_Response;
 import com.google.gson.reflect.TypeToken;
@@ -62,11 +64,12 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
     public static String MODULE = "Fragment_ExamResult";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_select_exam_type,text_view_empty,tv_lbl_exam_subject,
             tv_lbl_exam_marks,tv_lbl_exam_result;
     Spinner spinner_exam_type;
     RelativeLayout layout_empty;
-    int mSelectedPosition;
+    int mSelectedExamTypePosition=0;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
 
@@ -76,19 +79,17 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
 
     ArrayList<User> mListStudents =new ArrayList<User>();
     ArrayList<Common_Class> mListExamType =new ArrayList<Common_Class>();
-    ArrayList<CExam> mListExams =new ArrayList<CExam>();
     ArrayList<CResult> mListResult =new ArrayList<CResult>();
 
     StudentsList_Response studentListResponse;
     CommonList_Response examListTypeResponse;
-    ExamList_Response examListResponse;
     ExamResult_Response response;
 
     AppCompatActivity mActivity;
     String Str_Id="",Str_ExamTypeId="",Str_ClassId="",Str_StudentId="";
+    int mSelectedPosition=0;
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
-    String Str_ExamList_Url = ApiConstants.EXAM_LIST_URL;
     String Str_ExamResult_Url = ApiConstants.EXAM_RESULT_URL;
 
     public Fragment_ExamResult()
@@ -139,6 +140,7 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             tv_select_exam_type = (TextView) view.findViewById(R.id.tv_select_exam_type);
             tv_lbl_exam_subject = (TextView) view.findViewById(R.id.tv_lbl_exam_subject);
@@ -272,6 +274,7 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
         public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
 
             Str_ExamTypeId = mListExamType.get(position).getID();
+            mSelectedExamTypePosition=position;
             getExamResultFromService(position);
 
         }
@@ -356,7 +359,7 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
 
         try
         {
-
+            showSnackBar(Str_Msg,0);
         }
         catch (Exception ex)
         {
@@ -387,6 +390,7 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
         try
         {
             showEmptyView();
+            showSnackBar(Str_Msg,1);
         }
         catch (Exception ex)
         {
@@ -579,6 +583,34 @@ public class Fragment_ExamResult extends Fragment implements StudentsListListene
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSnackBar(String Str_Msg,final int mService)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(mService==0) new ExamTypeList_Process(mActivity,Fragment_ExamResult.this).GetExamTypeList();
+                else if(mService==1)
+                {
+                    if(mSelectedExamTypePosition > 0)
+                    {
+                        getExamResultFromService(mSelectedExamTypePosition);
+                    }
+                }
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }

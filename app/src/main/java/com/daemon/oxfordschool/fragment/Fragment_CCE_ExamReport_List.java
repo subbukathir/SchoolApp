@@ -6,7 +6,10 @@ package com.daemon.oxfordschool.fragment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -55,6 +58,7 @@ public class Fragment_CCE_ExamReport_List extends Fragment implements CCE_ExamRe
     public static String MODULE = "Fragment_CCE_ExamReport_List";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView text_view_empty,tv_lbl_subject_name,tv_lbl_average,tv_lbl_grade;
     RelativeLayout layout_empty;
     int mSelectedRowPosition;
@@ -124,6 +128,7 @@ public class Fragment_CCE_ExamReport_List extends Fragment implements CCE_ExamRe
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_cce_exam_report);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
@@ -208,6 +213,7 @@ public class Fragment_CCE_ExamReport_List extends Fragment implements CCE_ExamRe
         {
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+            showSnackBar(Str_Msg);
         }
         catch (Exception ex)
         {
@@ -362,6 +368,27 @@ public class Fragment_CCE_ExamReport_List extends Fragment implements CCE_ExamRe
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSnackBar(String Str_Msg)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                getCCEExamReportFromService();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }

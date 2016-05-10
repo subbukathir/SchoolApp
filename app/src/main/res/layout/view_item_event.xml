@@ -30,7 +30,7 @@
                 android:id="@+id/tv_event_organizer"
                 style="@style/text_view_event_list_item"
                 android:textColor="@color/color_green"
-                android:textSize="@dimen/txt_size_btn"/>
+                android:textSize="@dimen/lbl_event_sub_tile"/>
 
             <LinearLayout
                 style="@style/match_wrap_style"
@@ -40,14 +40,14 @@
                     android:id="@+id/tv_event_start_date"
                     style="@style/text_view_event_list_item"
                     android:gravity="left"
-                    android:textSize="@dimen/lbl_size_list_item"
+                    android:textSize="@dimen/lbl_event_text"
                     android:textColor="@color/color_light_grey" />
 
                 <TextView
                     android:id="@+id/tv_event_end_date"
                     style="@style/text_view_event_list_item"
                     android:gravity="right"
-                    android:textSize="@dimen/lbl_size_list_item"
+                    android:textSize="@dimen/lbl_event_text"
                     android:visibility="gone"
                     android:textColor="@color/color_light_grey" />
 

@@ -79,7 +79,9 @@
     <dimen name="lbl_profile_title">20sp</dimen>
 
     <!-- Events -->
-    <dimen name="lbl_event_tile">20sp</dimen>
+    <dimen name="lbl_event_tile">16sp</dimen>
+    <dimen name="lbl_event_sub_tile">14sp</dimen>
+    <dimen name="lbl_event_text">12sp</dimen>
 
     <!-- ProgressBar -->
 

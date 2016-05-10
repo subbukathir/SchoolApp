@@ -81,7 +81,9 @@
 
     <!-- Events -->
 
-    <dimen name="lbl_event_tile">22sp</dimen>
+    <dimen name="lbl_event_tile">18sp</dimen>
+    <dimen name="lbl_event_sub_tile">16sp</dimen>
+    <dimen name="lbl_event_text">14sp</dimen>
 
     <!-- ProgressBar -->
 

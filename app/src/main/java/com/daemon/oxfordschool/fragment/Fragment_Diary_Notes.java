@@ -5,8 +5,11 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -62,6 +65,7 @@ public class Fragment_Diary_Notes extends Fragment implements StudentsListListen
     public static String MODULE = "Fragment_Diary_Notes ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_lbl_select_date,tv_lbl_select_student,text_view_empty;
     Button btn_select_date;
     RelativeLayout layout_empty;
@@ -138,6 +142,7 @@ public class Fragment_Diary_Notes extends Fragment implements StudentsListListen
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             tv_lbl_select_student = (TextView) view.findViewById(R.id.tv_lbl_select_student);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
@@ -324,6 +329,7 @@ public class Fragment_Diary_Notes extends Fragment implements StudentsListListen
         TAG = "onStudentsReceivedError";
         Log.d(MODULE, TAG);
         AppUtils.hideProgressDialog();
+        showSnackBar(Str_Msg, 0);
     }
 
     @Override
@@ -351,6 +357,7 @@ public class Fragment_Diary_Notes extends Fragment implements StudentsListListen
         {
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+            showSnackBar(Str_Msg,1);
         }
         catch (Exception ex)
         {
@@ -450,7 +457,6 @@ public class Fragment_Diary_Notes extends Fragment implements StudentsListListen
                 text_view_empty.setText(getString(R.string.lbl_no_diary_notes));
                 showEmptyView();
             }
-
         }
         catch (Exception ex)
         {
@@ -623,5 +629,28 @@ public class Fragment_Diary_Notes extends Fragment implements StudentsListListen
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSnackBar(String Str_Msg, final int mService)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(mService==0)
+                    new GetStudentList(Str_StudentList_Url,Payload_Student_List(),Fragment_Diary_Notes.this).getStudents();
+                else if (mService==1) getDiaryNotesFromService(Str_Date);
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 }

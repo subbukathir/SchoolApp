@@ -5,7 +5,10 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -42,6 +45,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
     public static String MODULE = "Fragment_StudentProfile ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address;
     ViewPager vp_student;
     SharedPreferences mPreferences;
@@ -95,6 +99,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             tv_profile_mobile_number=(TextView) view.findViewById(R.id.tv_profile_mobile_number);
             tv_profile_email=(TextView) view.findViewById(R.id.tv_profile_email);
@@ -212,6 +217,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         try
         {
             AppUtils.hideProgressDialog();
+            showSnackBar(Str_Msg);
         }
         catch (Exception ex)
         {
@@ -318,6 +324,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu)
     {
@@ -326,5 +333,26 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         menu.findItem(R.id.action_chart_view).setVisible(false);
         menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showSnackBar(String Str_Msg)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                new GetStudentList(Str_Url,Payload(),Fragment_StudentProfile.this).getStudents();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 }

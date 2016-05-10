@@ -5,7 +5,10 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -31,6 +34,7 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.HomeWorkAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
+import com.daemon.oxfordschool.asyncprocess.GetEventsList;
 import com.daemon.oxfordschool.asyncprocess.GetHomeWorkList;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.classes.CHomework;
@@ -60,6 +64,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
     public static String MODULE = "Fragment_HomeWork ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_lbl_select_date,text_view_empty;
     Button btn_select_date;
     RelativeLayout layout_empty;
@@ -130,6 +135,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             tv_lbl_select_date = (TextView) view.findViewById(R.id.tv_lbl_select_date);
             btn_select_date = (Button) view.findViewById(R.id.btn_select_date);
@@ -317,6 +323,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         {
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+            showSnackBar(Str_Msg);
         }
         catch (Exception ex)
         {
@@ -538,5 +545,26 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
         menu.findItem(R.id.action_chart_view).setVisible(false);
         menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showSnackBar(String Str_Msg)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                getHomeWorks(mSelectedPosition, Str_Date);
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 }

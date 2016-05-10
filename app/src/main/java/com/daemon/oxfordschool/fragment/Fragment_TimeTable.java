@@ -5,7 +5,10 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -28,6 +31,7 @@ import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.adapter.TimeTableAdapter;
 import com.daemon.oxfordschool.asyncprocess.AllSubjectList_Process;
+import com.daemon.oxfordschool.asyncprocess.GetFeesTermList;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.asyncprocess.GetTimeTable;
 import com.daemon.oxfordschool.classes.Common_Class;
@@ -49,6 +53,7 @@ import java.util.ArrayList;
 
 public class Fragment_TimeTable extends Fragment implements StudentsListListener,TimeTableListener,SubjectListListener
 {
+    CoordinatorLayout cl_main;
 
     public static String MODULE = "Fragment_TimeTable";
     public static String TAG = "";
@@ -129,6 +134,7 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             grid_view_table=(GridView) view.findViewById(R.id.grid_view_table);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
@@ -313,7 +319,7 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
         Log.d(MODULE, TAG + Str_Msg);
         try
         {
-
+            showSnackBar(Str_Msg,1);
         }
         catch (Exception ex)
         {
@@ -583,8 +589,9 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
     }
 
     @Override
-    public void onSubjectListReceivedError(String Str_Msg) {
-
+    public void onSubjectListReceivedError(String Str_Msg)
+    {
+        showSnackBar(Str_Msg,0);
     }
 
     public void getSubjects()
@@ -633,6 +640,28 @@ public class Fragment_TimeTable extends Fragment implements StudentsListListener
         menu.findItem(R.id.action_chart_view).setVisible(false);
         menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showSnackBar(String Str_Msg,final int mService)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(mService==0) getSubjectsListFromService();
+                else if(mService==1) getTimeTableFromService();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }

@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -68,6 +70,7 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
     public static String MODULE = "Fragment_PaymentDetail";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView text_view_empty,tv_select_term_fees,tv_lbl_tution_fees,tv_tution_fees,tv_lbl_development_fund,
             tv_development_fund,tv_lbl_exam_fees,tv_exam_fees,tv_lbl_library_fees,tv_library_fees,tv_lbl_total_fees,
             tv_total_fees,tv_lbl_paid_status_fees,tv_paid_status;
@@ -92,7 +95,6 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
     String Str_Id="",Str_TermFeesId="",Str_StudentId="";
     private Font font= MyApplication.getInstance().getFontInstance();
     String Str_StudentList_Url = ApiConstants.STUDENT_LIST;
-    String Str_TermList_Url = ApiConstants.TERM_LIST_URL;
     String Str_PaymentDetail_Url = ApiConstants.PAYMENT_DETAIL_STUDENT_URL;
 
     public Fragment_PaymentDetail()
@@ -143,6 +145,7 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             tv_select_term_fees = (TextView) view.findViewById(R.id.tv_select_term_fees);
             tv_lbl_tution_fees = (TextView) view.findViewById(R.id.tv_lbl_tution_fees);
@@ -384,7 +387,7 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
         Log.d(MODULE, TAG);
         try
         {
-
+            showSnackBar(Str_Msg,0);
         }
         catch (Exception ex)
         {
@@ -415,6 +418,7 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
         {
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+            showSnackBar(Str_Msg, 1);
         }
         catch (Exception ex)
         {
@@ -634,5 +638,27 @@ public class Fragment_PaymentDetail extends Fragment implements StudentsListList
         menu.findItem(R.id.action_chart_view).setVisible(false);
         menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showSnackBar(String Str_Msg,final int mService)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(mService==0)  new GetFeesTermList(Fragment_PaymentDetail.this).getFeesTermList();
+                else if(mService==1) getPaymentDetailFromService();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 }
