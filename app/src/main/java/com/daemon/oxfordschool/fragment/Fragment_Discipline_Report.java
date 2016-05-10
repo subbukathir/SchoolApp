@@ -5,8 +5,11 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -65,6 +68,7 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
     public static String MODULE = "Fragment_Discipline_Report ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_lbl_self_control,tv_self_control,tv_lbl_obey_rules,tv_obey_rules,tv_lbl_obey_staff,tv_obey_staff,tv_lbl_dress_code,
      tv_dress_code,tv_lbl_time_keeping,tv_time_keeping,tv_lbl_conduct,tv_conduct,text_view_empty;
     LinearLayout ll_discipline_report;
@@ -135,6 +139,7 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             ll_discipline_report = (LinearLayout) view.findViewById(R.id.ll_discipline_report);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
@@ -338,6 +343,7 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
         {
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+            showSnackBar(Str_Msg);
         }
         catch (Exception ex)
         {
@@ -521,6 +527,27 @@ public class Fragment_Discipline_Report extends Fragment implements StudentsList
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSnackBar(String Str_Msg)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                getDisciplineReportFromService();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }
