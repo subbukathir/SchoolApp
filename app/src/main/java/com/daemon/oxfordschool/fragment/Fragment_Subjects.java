@@ -5,8 +5,11 @@ package com.daemon.oxfordschool.fragment;
  */
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -50,6 +53,7 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
     public static String MODULE = "Fragment_Subjects ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     SwipeRefreshLayout swipeRefreshLayout;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
@@ -117,6 +121,7 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_subjects);
             fab_add_subject = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -255,6 +260,7 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
     {
         TAG = "onSubjectListReceivedError";
         Log.d(MODULE, TAG);
+        showSnackBar(Str_Msg);
     }
 
     @Override
@@ -420,5 +426,26 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
         menu.findItem(R.id.action_chart_view).setVisible(false);
         menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showSnackBar(String Str_Msg)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                new AllSubjectList_Process(Fragment_Subjects.this).GetSubjectsList();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 }

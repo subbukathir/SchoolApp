@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -54,6 +57,7 @@ public class Fragment_Discipline_Report_Student extends Fragment implements Disc
     public static String MODULE = "Fragment_Discipline_Report_Student ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_lbl_self_control,tv_self_control,tv_lbl_obey_rules,tv_obey_rules,tv_lbl_obey_staff,tv_obey_staff,tv_lbl_dress_code,
      tv_dress_code,tv_lbl_time_keeping,tv_time_keeping,tv_lbl_conduct,tv_conduct,text_view_empty,tv_name,tv_class,tv_section;
     ImageView imageView;
@@ -123,6 +127,7 @@ public class Fragment_Discipline_Report_Student extends Fragment implements Disc
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             imageView = (ImageView) view.findViewById(R.id.iv_profile);
             tv_name  = (TextView) view.findViewById(R.id.tv_header_name);
             tv_class  = (TextView) view.findViewById(R.id.tv_class_name);
@@ -345,6 +350,7 @@ public class Fragment_Discipline_Report_Student extends Fragment implements Disc
         {
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+            showSnackBar(Str_Msg);
         }
         catch (Exception ex)
         {
@@ -522,6 +528,27 @@ public class Fragment_Discipline_Report_Student extends Fragment implements Disc
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSnackBar(String Str_Msg)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                getDisciplineReportFromService();
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }

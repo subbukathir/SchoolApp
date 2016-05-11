@@ -7,8 +7,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +39,7 @@ import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.adapter.DiaryListAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetDiaryNotesList;
+import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.asyncprocess.GetStudentProfile;
 import com.daemon.oxfordschool.classes.CHomework;
 import com.daemon.oxfordschool.classes.User;
@@ -63,6 +67,7 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
     public static String MODULE = "Fragment_Diary_Notes_Student";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_lbl_select_date,tv_lbl_select_student,text_view_empty,tv_name,tv_class,tv_section;
     ImageView imageView;
     Button btn_select_date;
@@ -136,6 +141,7 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             imageView = (ImageView) view.findViewById(R.id.iv_profile);
             tv_name  = (TextView) view.findViewById(R.id.tv_header_name);
             tv_class  = (TextView) view.findViewById(R.id.tv_class_name);
@@ -309,7 +315,7 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
         Log.d(MODULE, TAG);
         try
         {
-
+            showSnackBar(Str_Msg,0);
         }
         catch (Exception ex)
         {
@@ -342,6 +348,7 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
         {
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+            showSnackBar(Str_Msg,1);
         }
         catch (Exception ex)
         {
@@ -600,6 +607,29 @@ public class Fragment_Diary_Notes_Student extends Fragment implements DiaryNotes
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSnackBar(String Str_Msg, final int mService)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(mService==0)
+                    new GetStudentProfile(Str_Student_Profile_Url,Payload(),Fragment_Diary_Notes_Student.this).getStudentProfile();
+                else if (mService==1) getDiaryNotesFromService(Str_Date);
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }

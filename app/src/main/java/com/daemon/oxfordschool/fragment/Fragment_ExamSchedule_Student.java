@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -63,6 +66,7 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
     public static String MODULE = "Fragment_ExamSchedule_Student ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_lbl_select_exam_type,text_view_empty,tv_lbl_subject_name,tv_lbl_exam_date,tv_name,tv_class,tv_section;
     ImageView imageView;
     Spinner spinner_exam_type;
@@ -81,7 +85,7 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
     CommonList_Response examListResponse;
 
     AppCompatActivity mActivity;
-    int mSelectedPosition;
+    int mSelectedPosition,mSelectedExamTypePosition;
     Bitmap mDecodedImage;
     String Str_Id="",Str_ExamTypeId="",Str_ClassId="",Str_EncodeImage="";
     private Font font= MyApplication.getInstance().getFontInstance();
@@ -136,7 +140,7 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
         Log.d(MODULE, TAG);
         try
         {
-
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             imageView = (ImageView) view.findViewById(R.id.iv_profile);
             tv_name  = (TextView) view.findViewById(R.id.tv_header_name);
             tv_class  = (TextView) view.findViewById(R.id.tv_class_name);
@@ -206,6 +210,7 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
 
             if(position>0)
             {
+                mSelectedExamTypePosition=position;
                 Str_ExamTypeId = mListExamType.get(position).getID();
                 getExamListFromService(position);
             }
@@ -585,6 +590,34 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
         menu.findItem(R.id.action_chart_view).setVisible(false);
         menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showSnackBar(String Str_Msg,final int mService)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(mService==0) new ExamTypeList_Process(mActivity,Fragment_ExamSchedule_Student.this).GetExamTypeList();
+                else if(mService==1)
+                {
+                    if(mSelectedExamTypePosition > 0)
+                    {
+                        getExamListFromService(mSelectedExamTypePosition);
+                    }
+                }
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
     }
 
 }
