@@ -35,6 +35,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.AddSubject;
 import com.daemon.oxfordschool.classes.Common_Class;
 import com.daemon.oxfordschool.classes.User;
@@ -393,7 +394,7 @@ public class Fragment_Add_Subject extends Fragment implements AddSubjectListener
         switch (item.getItemId())
         {
             case android.R.id.home:
-                 FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                if(!MainActivity.mTwoPane) FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
                  mManager.popBackStack();
                  return true;
             default:

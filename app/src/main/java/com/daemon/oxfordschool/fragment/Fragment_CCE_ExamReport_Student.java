@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.asyncprocess.GetStudentProfile;
@@ -45,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStudentProfileListener
 {
@@ -52,6 +55,7 @@ public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStu
     public static String MODULE = "Fragment_CCE_ExamReport_Student";
     public static String TAG = "";
 
+    Toolbar mToolbar;
     TextView text_view_empty,tv_name,tv_class,tv_section;
     ImageView imageView;
     int mSelectedPosition;
@@ -125,6 +129,7 @@ public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStu
             tv_section  = (TextView) view.findViewById(R.id.tv_section_name);
             frame_layout_cce_report = (FrameLayout) view.findViewById(R.id.frame_layout_cce_report);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -164,6 +169,38 @@ public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStu
         {
             ex.printStackTrace();
         }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_reports);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     public void getProfile()

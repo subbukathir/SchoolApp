@@ -32,6 +32,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
 import com.daemon.oxfordschool.asyncprocess.AddMarks;
@@ -206,13 +207,17 @@ public class Fragment_Add_Marks extends Fragment implements ClassListListener,Se
                 mActivity.setSupportActionBar(mToolbar);
                 mToolbar.setTitle(R.string.lbl_add_marks);
                 mToolbar.setSubtitle("");
-                FragmentDrawer.mDrawerLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        FragmentDrawer.mDrawerToggle.syncState();
-                    }
-                });
-                mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
         }
         catch (Exception ex)

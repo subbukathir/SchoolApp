@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 
 public class Fragment_About_Us extends Fragment
 {
@@ -27,6 +29,7 @@ public class Fragment_About_Us extends Fragment
     public static String TAG = "";
 
     AppCompatActivity mActivity;
+    Toolbar mToolbar;
     TextView tv_about_us_one,tv_about_us_two,tv_about_us_three;
     private Font font= MyApplication.getInstance().getFontInstance();
 
@@ -78,6 +81,7 @@ public class Fragment_About_Us extends Fragment
             tv_about_us_two = (TextView) view.findViewById(R.id.tv_about_us_two);
             tv_about_us_three = (TextView) view.findViewById(R.id.tv_about_us_three);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -121,6 +125,40 @@ public class Fragment_About_Us extends Fragment
         {
             ex.printStackTrace();
         }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_homework);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     @Override

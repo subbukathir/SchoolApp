@@ -18,6 +18,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.ExamListAdapter;
 import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetExamList;
@@ -66,6 +68,7 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
     public static String MODULE = "Fragment_ExamSchedule_Student ";
     public static String TAG = "";
 
+    Toolbar mToolbar;
     CoordinatorLayout cl_main;
     TextView tv_lbl_select_exam_type,text_view_empty,tv_lbl_subject_name,tv_lbl_exam_date,tv_name,tv_class,tv_section;
     ImageView imageView;
@@ -202,6 +205,40 @@ public class Fragment_ExamSchedule_Student extends Fragment implements ViewStude
         {
             ex.printStackTrace();
         }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_exam_schedule);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     AdapterView.OnItemSelectedListener _OnItemSelectedListener = new AdapterView.OnItemSelectedListener() {

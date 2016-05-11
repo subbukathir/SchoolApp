@@ -31,6 +31,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.AttendanceStaffAdapter;
 import com.daemon.oxfordschool.asyncprocess.AttendanceAdd_Process;
 import com.daemon.oxfordschool.classes.StudentAttendance;
@@ -171,8 +172,8 @@ public class Fragment_Attendance_Add extends Fragment implements AttendanceAddLi
                 btn_save.setEnabled(true);
                 btn_save.setClickable(true);
             }
-            setActionBarFont();
             SetActionBar();
+            setActionBarFont();
         }
         catch (Exception ex)
         {
@@ -403,7 +404,7 @@ public class Fragment_Attendance_Add extends Fragment implements AttendanceAddLi
         switch (item.getItemId())
         {
             case android.R.id.home:
-                 FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                 if(!MainActivity.mTwoPane) FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
                  mManager.popBackStack();
                  return true;
             default:

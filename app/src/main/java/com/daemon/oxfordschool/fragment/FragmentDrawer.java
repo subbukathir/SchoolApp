@@ -35,6 +35,7 @@ import java.util.List;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.activity.DialogGallery;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.NavigationDrawerAdapter;
 import com.daemon.oxfordschool.asyncprocess.ImageSaving;
 import com.daemon.oxfordschool.classes.Action;
@@ -52,6 +53,7 @@ import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 public class FragmentDrawer extends Fragment implements ImagePickListener,ImageSavingListener
 {
 
+    boolean mTwoPane;
     private RecyclerView recyclerView;
     public ImageView image_view_profile;
     SharedPreferences mPreferences;
@@ -152,7 +154,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             public void onClick(View view, int position)
             {
                 drawerListener.onDrawerItemSelected(view, titles[position]);
-                mDrawerLayout.closeDrawer(containerView);
+                if(!MainActivity.mTwoPane) mDrawerLayout.closeDrawer(containerView);
             }
             @Override
             public void onLongClick(View view, int position)
@@ -259,7 +261,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
                     if (child != null && clickListener != null)
                     {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
                     }
                 }
             });
@@ -272,7 +274,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             View child = rv.findChildViewUnder(e.getX(), e.getY());
             if (child != null && clickListener != null && gestureDetector.onTouchEvent(e))
             {
-                clickListener.onClick(child, rv.getChildPosition(child));
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
             }
             return false;
         }

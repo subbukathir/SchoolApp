@@ -16,6 +16,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +34,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.ExamListAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
@@ -64,6 +66,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
     public static String MODULE = "Fragment_ExamSchedule ";
     public static String TAG = "";
 
+    Toolbar mToolbar;
     CoordinatorLayout cl_main;
     TextView tv_lbl_select_exam_type,text_view_empty,tv_lbl_subject_name,tv_lbl_exam_date;
     Spinner spinner_exam_type;
@@ -149,6 +152,7 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -195,6 +199,40 @@ public class Fragment_ExamSchedule extends Fragment implements StudentsListListe
         {
             ex.printStackTrace();
         }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_exam_schedule);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     public void getProfile()

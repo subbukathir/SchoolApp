@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.ExamResultStaffAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.ExamTypeList_Process;
@@ -64,6 +66,7 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
     public static String MODULE = "Fragment_Exam_Schedule_Staff";
     public static String TAG = "";
 
+    Toolbar mToolbar;
     TextView tv_lbl_class,tv_lbl_section,tv_select_exam_type,text_view_empty,tv_select_subject,
             tv_lbl_exam_subject,tv_lbl_exam_marks,tv_lbl_exam_result;
     Spinner spinner_class,spinner_section,spinner_exam_type,spinner_subject;
@@ -167,6 +170,7 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_exam_result);
 
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -230,6 +234,41 @@ public class Fragment_Exam_Result_Staff extends Fragment implements ClassListLis
             ex.printStackTrace();
         }
     }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_exam_result);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
 
     public void getProfile()
     {

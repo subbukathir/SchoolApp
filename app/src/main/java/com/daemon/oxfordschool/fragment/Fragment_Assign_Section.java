@@ -31,6 +31,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.AllSectionList_Process;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.AssignSection;
@@ -636,7 +637,7 @@ public class Fragment_Assign_Section extends Fragment implements AssignSectionLi
         switch (item.getItemId())
         {
             case android.R.id.home:
-                 FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                 if(!MainActivity.mTwoPane) FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
                  mManager.popBackStack();
                  return true;
             default:

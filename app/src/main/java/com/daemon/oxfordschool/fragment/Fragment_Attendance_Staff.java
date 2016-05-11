@@ -29,6 +29,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetAttendance;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
@@ -199,13 +200,17 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                 mActivity.setSupportActionBar(mToolbar);
                 mToolbar.setTitle(R.string.lbl_attendance);
                 mToolbar.setSubtitle("");
-                FragmentDrawer.mDrawerLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        FragmentDrawer.mDrawerToggle.syncState();
-                    }
-                });
-                mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
         }
         catch (Exception ex)

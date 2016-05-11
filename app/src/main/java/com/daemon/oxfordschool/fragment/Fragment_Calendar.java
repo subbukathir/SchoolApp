@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.daemon.oxfordschool.Utils.AppUtils;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.GetEventsList;
 import com.daemon.oxfordschool.asyncprocess.GetHolidayList;
 import com.daemon.oxfordschool.classes.CEvents;
@@ -65,6 +67,7 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
 
     MaterialCalendarView widget;
     LinearLayout ll_view_calendar;
+    Toolbar mToolbar;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
     int mTitleSize=0;float mDensity=0;
     TextView text_view_cal_header,text_view_cal_description;
@@ -167,6 +170,39 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
             ex.printStackTrace();
         }
     }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_calendar);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
 
     public void setProperties()
     {

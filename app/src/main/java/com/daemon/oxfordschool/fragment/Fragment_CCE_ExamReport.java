@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.classes.User;
@@ -51,6 +53,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
     ViewPager vp_student;
     FrameLayout frame_layout_cce_report;
     FragmentManager mManager;
+    Toolbar mToolbar;
 
     ArrayList<User> mListStudents =new ArrayList<User>();
 
@@ -114,6 +117,7 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             vp_student = (ViewPager) view.findViewById(R.id.vp_student);
             frame_layout_cce_report = (FrameLayout) view.findViewById(R.id.frame_layout_cce_report);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -143,6 +147,39 @@ public class Fragment_CCE_ExamReport extends Fragment implements StudentsListLis
             ex.printStackTrace();
         }
     }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_reports);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
 
     public void setProperties()
     {

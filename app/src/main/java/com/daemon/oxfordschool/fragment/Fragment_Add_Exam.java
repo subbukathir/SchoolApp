@@ -34,6 +34,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.AddExam;
 import com.daemon.oxfordschool.asyncprocess.AddMarks;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
@@ -214,13 +215,17 @@ public class Fragment_Add_Exam extends Fragment implements ClassListListener,Dat
                 mActivity.setSupportActionBar(mToolbar);
                 mToolbar.setTitle(R.string.lbl_add_exam);
                 mToolbar.setSubtitle("");
-                FragmentDrawer.mDrawerLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        FragmentDrawer.mDrawerToggle.syncState();
-                    }
-                });
-                mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
         }
         catch (Exception ex)

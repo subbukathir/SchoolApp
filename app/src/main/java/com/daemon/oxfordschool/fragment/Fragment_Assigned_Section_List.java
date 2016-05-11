@@ -35,6 +35,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.AssignedSectionAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
@@ -216,13 +217,17 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
                 mActivity.setSupportActionBar(mToolbar);
                 mToolbar.setTitle(R.string.lbl_assign_section);
                 mToolbar.setSubtitle("");
-                FragmentDrawer.mDrawerLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        FragmentDrawer.mDrawerToggle.syncState();
-                    }
-                });
-                mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
         }
         catch (Exception ex)

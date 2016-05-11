@@ -35,6 +35,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.AddEvent;
 import com.daemon.oxfordschool.classes.User;
 import com.daemon.oxfordschool.classes.CEvents;
@@ -650,7 +651,7 @@ public class Fragment_Add_Event extends Fragment implements DateSetListener, Add
         switch (item.getItemId())
         {
             case android.R.id.home:
-                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                if(!MainActivity.mTwoPane) FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
                 mManager.popBackStack();
                 return true;
             default:
