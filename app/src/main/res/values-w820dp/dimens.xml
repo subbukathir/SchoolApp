@@ -56,8 +56,8 @@
     <dimen name="horizontal_line_height">2dp</dimen>
 
     <dimen name="txt_view_small">14sp</dimen>
-    <dimen name="txt_view_medium">25sp</dimen>
-    <dimen name="txt_view_large">22sp</dimen>
+    <dimen name="txt_view_medium">18sp</dimen>
+    <dimen name="txt_view_large">20sp</dimen>
 
 
     <dimen name="img_logo_login_width">230dp</dimen>
