@@ -634,6 +634,7 @@ public class Fragment_Diary_Notes extends Fragment implements StudentsListListen
                      else
                          FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
                  }
+                return true;
             default:
                  break;
 

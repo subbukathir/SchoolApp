@@ -907,6 +907,7 @@ public class Fragment_Attendance_Staff extends Fragment implements ClassListList
                     else
                         FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
                  }
+                 return true;
             default:
                 break;
 

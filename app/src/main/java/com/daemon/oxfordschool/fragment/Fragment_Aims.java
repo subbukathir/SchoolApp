@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 
 public class Fragment_Aims extends Fragment
 {
@@ -133,10 +134,13 @@ public class Fragment_Aims extends Fragment
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                 if(!MainActivity.mTwoPane)
+                 {
+                     if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                         FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                     else
+                         FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                 }
                 return true;
             default:
                 break;
