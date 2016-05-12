@@ -217,7 +217,6 @@ public class Fragment_Mass_Notification extends Fragment implements SendNotifica
         {
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS, Context.MODE_PRIVATE);
             String Str_Json = mPreferences.getString(AppUtils.SHARED_LOGIN_PROFILE,"");
-            Log.d(MODULE, TAG + " Str_Json : " + Str_Json);
             if(Str_Json.length()>0)
             {
                 mUser = (User) AppUtils.fromJson(Str_Json, new TypeToken<User>(){}.getType());

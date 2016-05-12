@@ -98,7 +98,6 @@ public class StudentsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 if(!Str_EncodeImage.equals(""))
                 {
-                    Log.d(MODULE, TAG + "if else encoded string ***" + Str_EncodeImage);
                     byte[] decodedString = Base64.decode(Str_EncodeImage, Base64.DEFAULT);
                     mDecodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     holder.iv_profile.setImageBitmap(mDecodedImage);
