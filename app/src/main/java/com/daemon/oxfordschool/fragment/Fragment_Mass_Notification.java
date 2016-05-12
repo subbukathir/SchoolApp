@@ -368,12 +368,12 @@ public class Fragment_Mass_Notification extends Fragment implements SendNotifica
         switch (item.getItemId())
         {
             case android.R.id.home:
-                FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                mManager = mActivity.getSupportFragmentManager();
-                mManager.popBackStack();
-                return true;
+                 if(!MainActivity.mTwoPane)FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                 mManager = mActivity.getSupportFragmentManager();
+                 mManager.popBackStack();
+                 return true;
             default:
-                break;
+                 break;
 
         }
         return super.onOptionsItemSelected(item);

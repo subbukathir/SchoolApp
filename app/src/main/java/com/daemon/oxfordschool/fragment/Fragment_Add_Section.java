@@ -399,7 +399,7 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(!MainActivity.mTwoPane) FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                 if(!MainActivity.mTwoPane) FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
                  mManager.popBackStack();
                  return true;
             default:

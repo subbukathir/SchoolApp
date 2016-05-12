@@ -391,10 +391,13 @@ public class Fragment_CCE_ExamReport_Student extends Fragment implements ViewStu
         switch (item.getItemId())
         {
             case android.R.id.home:
-                 if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                 else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                 if(!MainActivity.mTwoPane)
+                 {
+                    if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                        FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                    else
+                        FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                 }
                  return true;
             case R.id.action_list_view:
                  Goto_Fragment_CCE_Report_List();

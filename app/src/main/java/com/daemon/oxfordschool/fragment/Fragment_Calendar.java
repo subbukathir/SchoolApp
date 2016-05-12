@@ -441,11 +441,14 @@ public class Fragment_Calendar extends Fragment implements OnDateSelectedListene
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+                 if(!MainActivity.mTwoPane)
+                 {
+                     if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                         FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                     else
+                         FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                 }
+                 return true;
             case R.id.action_help:
                  showHelpDialog();
                  break;

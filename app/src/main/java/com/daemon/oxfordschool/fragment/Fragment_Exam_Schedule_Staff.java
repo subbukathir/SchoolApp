@@ -728,10 +728,13 @@ public class Fragment_Exam_Schedule_Staff extends Fragment implements ClassListL
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                if(!MainActivity.mTwoPane)
+                {
+                    if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                        FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                    else
+                        FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                }
                 return true;
             default:
                 break;

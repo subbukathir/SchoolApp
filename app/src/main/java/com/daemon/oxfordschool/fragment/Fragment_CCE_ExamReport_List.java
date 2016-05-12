@@ -30,6 +30,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.CCEReportAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetCCE_ExamReport;
@@ -358,10 +359,13 @@ public class Fragment_CCE_ExamReport_List extends Fragment implements CCE_ExamRe
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                if(!MainActivity.mTwoPane)
+                {
+                    if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                        FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                    else
+                        FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                }
                 return true;
             default:
                 break;

@@ -162,25 +162,6 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
         }
     }
 
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            default:
-                break;
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public void setProperties()
     {
         TAG = "setProperties";
@@ -435,6 +416,27 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
         menu.findItem(R.id.action_chart_view).setVisible(false);
         menu.findItem(R.id.action_help).setVisible(false);
         super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                if(!MainActivity.mTwoPane)
+                {
+                    if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                        FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                    else
+                        FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                }
+                return true;
+            default:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void showSnackBar(String Str_Msg)

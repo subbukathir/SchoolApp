@@ -32,6 +32,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.CCEReportAdapter;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetCCE_ExamReport;
@@ -424,13 +425,16 @@ public class Fragment_CCE_ExamReport_Chart extends Fragment implements CCE_ExamR
         switch (item.getItemId())
         {
             case android.R.id.home:
-                if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
-                    FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+                 if(!MainActivity.mTwoPane)
+                 {
+                     if(FragmentDrawer.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+                         FragmentDrawer.mDrawerLayout.closeDrawer(GravityCompat.START);
+                     else
+                         FragmentDrawer.mDrawerLayout.openDrawer(GravityCompat.START);
+                 }
+                 return true;
             default:
-                break;
+                 break;
 
         }
         return super.onOptionsItemSelected(item);
