@@ -137,7 +137,7 @@ public class Fragment_About_Us extends Fragment
             {
                 mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
                 mActivity.setSupportActionBar(mToolbar);
-                mToolbar.setTitle(R.string.lbl_homework);
+                mToolbar.setTitle(R.string.lbl_about_us);
                 mToolbar.setSubtitle("");
                 if(!MainActivity.mTwoPane)
                 {

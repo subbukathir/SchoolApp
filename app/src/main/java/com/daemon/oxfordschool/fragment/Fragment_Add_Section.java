@@ -119,6 +119,7 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
             til_add_section_name= (TextInputLayout) view.findViewById(R.id.til_add_section_name);
             btn_add_section = (Button) view.findViewById(R.id.btn_add_section);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -136,7 +137,6 @@ public class Fragment_Add_Section extends Fragment implements AddSectionListener
 
         try
         {
-            SetActionBar();
         }
         catch (Exception ex)
         {

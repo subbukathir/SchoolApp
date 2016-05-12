@@ -95,6 +95,7 @@ public class Fragment_Class_List extends Fragment implements ClassListListener,C
             mSavedInstanceState=savedInstanceState;
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
+            AppUtils.showProgressDialog(mActivity);
             new ClassList_Process(mActivity,this).GetClassList();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -247,6 +248,7 @@ public class Fragment_Class_List extends Fragment implements ClassListListener,C
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getClassList();
             showClassList();
         }
@@ -263,6 +265,7 @@ public class Fragment_Class_List extends Fragment implements ClassListListener,C
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             text_view_empty.setText(Str_Msg);
             showEmptyView();
         }

@@ -6,8 +6,11 @@ package com.daemon.oxfordschool.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -38,6 +41,7 @@ import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.AssignedSectionAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
+import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
 import com.daemon.oxfordschool.asyncprocess.AssignSection;
 import com.daemon.oxfordschool.classes.Common_Class;
@@ -63,6 +67,7 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
     public static String MODULE = "Fragment_Assigned_Section_List ";
     public static String TAG = "";
 
+    CoordinatorLayout cl_main;
     TextView tv_lbl_class,text_view_empty;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
@@ -106,6 +111,7 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
             mSavedInstanceState=savedInstanceState;
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
+            AppUtils.showProgressDialog(mActivity);
             new ClassList_Process(mActivity,this).GetClassList();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -136,6 +142,7 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
         Log.d(MODULE, TAG);
         try
         {
+            cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
             tv_lbl_class = (TextView) view.findViewById(R.id.tv_lbl_class);
             layout_section = (LinearLayout) view.findViewById(R.id.layout_section);
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
@@ -266,6 +273,7 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getClassList();
             showClassList();
         }
@@ -282,8 +290,11 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             text_view_empty.setText(Str_Msg);
             showEmptyView();
+            showSnackBar(Str_Msg,0);
+
         }
         catch (Exception ex)
         {
@@ -311,6 +322,18 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
     @Override
     public void onSectionListReceivedError(String Str_Msg)
     {
+        TAG = "onSectionListReceivedError";
+        Log.d(MODULE, TAG);
+        try
+        {
+            getSectionList();
+            showSectionList();
+            showSnackBar(Str_Msg, 1);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
     }
 
@@ -373,6 +396,7 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
         Log.d(MODULE, TAG);
         AppUtils.hideProgressDialog();
         AppUtils.DialogMessage(mActivity, Str_Msg);
+        showSnackBar(Str_Msg, 2);
     }
 
     AdapterView.OnItemSelectedListener _OnClassItemSelectedListener =  new AdapterView.OnItemSelectedListener()
@@ -708,4 +732,31 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
             }
         }
     };
+
+    public void showSnackBar(String Str_Msg, final int mService)
+    {
+        Snackbar snackbar = Snackbar.make(cl_main, Str_Msg, Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.lbl_retry), new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(mService==0)
+                    new ClassList_Process(mActivity,this).GetClassList();
+                else if (mService==1) getSectionListFromService();
+                else if (mService==2)
+                {
+                    new AssignSection(Str_Add_Section_Url,Fragment_Assigned_Section_List.this,Payload_Delete_Section()).assignSection();
+                }
+            }
+        });
+        // Changing message text color
+        snackbar.setActionTextColor(Color.RED);
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        textView.setTypeface(font.getHelveticaRegular());
+        snackbar.show();
+    }
 }

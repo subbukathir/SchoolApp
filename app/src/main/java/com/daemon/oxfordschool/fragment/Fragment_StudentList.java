@@ -267,6 +267,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
             {
                 Log.d(MODULE, TAG + " Spinner Section : " + position);
                 Str_SectionId=mListSection.get(position-1).getID();
+                AppUtils.showProgressDialog(mActivity);
                 new GetStudentList(Str_StudentUrl,PayloadStudent(),Fragment_StudentList.this).getStudents();
             }
         }
@@ -346,6 +347,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getStudentsList();
             if(mListStudents.size()>0)
             {

@@ -99,6 +99,7 @@ public class Fragment_Section_List extends Fragment implements Section_List_Item
             mSavedInstanceState=savedInstanceState;
             mPreferences = mActivity.getSharedPreferences(AppUtils.SHARED_PREFS,Context.MODE_PRIVATE);
             getProfile();
+            AppUtils.showProgressDialog(mActivity);
             new AllSectionList_Process(this).GetSectionList();
             if (mActivity.getCurrentFocus() != null)
             {
@@ -253,6 +254,7 @@ public class Fragment_Section_List extends Fragment implements Section_List_Item
         Log.d(MODULE, TAG);
         try
         {
+            AppUtils.hideProgressDialog();
             getSectionList();
             showSectionList();
 
@@ -266,7 +268,7 @@ public class Fragment_Section_List extends Fragment implements Section_List_Item
     @Override
     public void onSectionListReceivedError(String Str_Msg)
     {
-
+        AppUtils.hideProgressDialog();
     }
 
     @Override

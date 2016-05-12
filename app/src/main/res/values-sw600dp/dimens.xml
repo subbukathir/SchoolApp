@@ -57,8 +57,8 @@
 
 
     <dimen name="txt_view_small">14sp</dimen>
-    <dimen name="txt_view_medium">22sp</dimen>
-    <dimen name="txt_view_large">24sp</dimen>
+    <dimen name="txt_view_medium">18sp</dimen>
+    <dimen name="txt_view_large">20sp</dimen>
 
     <dimen name="padding_small">5dp</dimen>
     <dimen name="padding_medium">10dp</dimen>
