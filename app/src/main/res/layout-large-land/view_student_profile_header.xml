@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_profile_header"
+    style="@style/match_wrap_style"
+    android:elevation="@dimen/space_layout_margin"
+    android:background="@color/windowBackground"
+    android:layout_weight="1">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_student"
+        style="@style/match_parent_style">
+
+    </android.support.v4.view.ViewPager>
+
+
+</RelativeLayout>
+

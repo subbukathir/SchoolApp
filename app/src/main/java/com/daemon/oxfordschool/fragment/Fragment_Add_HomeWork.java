@@ -4,7 +4,9 @@ package com.daemon.oxfordschool.fragment;
  * Created by Ravi on 29/07/15.
  */
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -568,8 +570,7 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
         try
         {
             AppUtils.hideProgressDialog();
-            AppUtils.showDialog(mActivity,Str_Msg);
-            mManager.popBackStack();
+            showDialog(mActivity,Str_Msg);
         }
         catch (Exception ex)
         {
@@ -926,5 +927,19 @@ public class Fragment_Add_HomeWork extends Fragment implements AddHomeWorkListen
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDialog(AppCompatActivity mActivity,String Str_Msg)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setMessage(Str_Msg)
+                .setCancelable(false)
+                .setPositiveButton(mActivity.getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mManager.popBackStack();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

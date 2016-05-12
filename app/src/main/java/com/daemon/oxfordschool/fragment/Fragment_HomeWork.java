@@ -147,6 +147,7 @@ public class Fragment_HomeWork extends Fragment implements HomeWorkListListener,
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {

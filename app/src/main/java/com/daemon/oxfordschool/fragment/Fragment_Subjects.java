@@ -55,7 +55,6 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
     public static String TAG = "";
 
     CoordinatorLayout cl_main;
-    SwipeRefreshLayout swipeRefreshLayout;
     RecycleEmptyErrorView recycler_view;
     RecyclerView.LayoutManager mLayoutManager;
 
@@ -123,7 +122,6 @@ public class Fragment_Subjects extends Fragment implements SubjectListListener,S
         try
         {
             cl_main = (CoordinatorLayout) mActivity.findViewById(R.id.cl_main);
-            swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_subjects);
             fab_add_subject = (FloatingActionButton) view.findViewById(R.id.fab);
 
