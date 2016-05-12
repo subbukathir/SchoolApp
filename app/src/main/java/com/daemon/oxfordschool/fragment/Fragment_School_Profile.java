@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.SchoolProfileAdapter;
 
 
@@ -35,6 +37,7 @@ public class Fragment_School_Profile extends Fragment
     ViewPager vp_school_profile;
     FragmentManager mManager;
     TabLayout tab_layout;
+    Toolbar mToolbar;
 
     public Fragment_School_Profile()
     {
@@ -85,6 +88,7 @@ public class Fragment_School_Profile extends Fragment
             vp_school_profile = (ViewPager) view.findViewById(R.id.vp_school_profile);
             tab_layout = (TabLayout) view.findViewById(R.id.tab_layout);
             setProperties();
+            SetActionBar();
             setAdapter();
         }
         catch (Exception ex)
@@ -92,6 +96,41 @@ public class Fragment_School_Profile extends Fragment
             ex.printStackTrace();
         }
     }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_about_us);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public void onStart()

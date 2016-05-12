@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.TimeTableAdapter;
 import com.daemon.oxfordschool.asyncprocess.AllSubjectList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetStudentProfile;
@@ -82,8 +84,8 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
     String Str_Url = ApiConstants.STUDENT_PROFILE_URL;
     String Str_TimeTable_Url = ApiConstants.TIME_TABLE_URL;
     ArrayList<TimeTableItem> mListSubjectId = new ArrayList<TimeTableItem>();
-
     TimeTableAdapter adapter;
+    Toolbar mToolbar;
 
     public Fragment_TimeTable_Student()
     {
@@ -136,6 +138,7 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -170,6 +173,39 @@ public class Fragment_TimeTable_Student extends Fragment implements ViewStudentP
             tv_class.setTypeface(font.getHelveticaRegular());
             tv_section.setTypeface(font.getHelveticaRegular());
             text_view_empty.setTypeface(font.getHelveticaRegular());
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_time_table);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
         }
         catch (Exception ex)
         {

@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     SharedPreferences mPreferences;
     SharedPreferences.Editor editor;
     String Str_Id="",Str_DeviceId="",Str_Token="",Str_Url="";
+    public static boolean mTwoPane;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -123,8 +124,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        if (findViewById(R.id.drawer_layout) != null)  mTwoPane = false;
+        else mTwoPane = true;
+
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        if(!mTwoPane)drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
         // display the first navigation drawer view on app launch
         setActionBarFont();
@@ -673,7 +677,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case R.id.action_settings:
                  return true;
             case android.R.id.home:
-                 FragmentDrawer.mDrawerLayout.openDrawer(Gravity.LEFT);
+                 if(!mTwoPane)FragmentDrawer.mDrawerLayout.openDrawer(Gravity.LEFT);
                  return false;
             default:
                  break;

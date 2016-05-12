@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +28,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.TimeTableAdapter;
 import com.daemon.oxfordschool.asyncprocess.AllSubjectList_Process;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
@@ -67,6 +69,7 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
     User mUser,mSelectedUser;
     GridView grid_view;
     RelativeLayout layout_empty;
+    Toolbar mToolbar;
 
     ArrayList<Common_Class> mSubjectList;
     ArrayList<User> mListStudents =new ArrayList<User>();
@@ -142,6 +145,7 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
             spinner_class = (Spinner) view.findViewById(R.id.spinner_class);
             spinner_section = (Spinner) view.findViewById(R.id.spinner_section);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -188,6 +192,40 @@ public class Fragment_TimeTable_Staff extends Fragment implements TimeTableListe
             ex.printStackTrace();
         }
     }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_time_table);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
 
     public void getProfile()
     {

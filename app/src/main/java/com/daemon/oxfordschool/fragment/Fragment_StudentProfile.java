@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.StudentPagerAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.classes.User;
@@ -45,6 +47,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
     public static String MODULE = "Fragment_StudentProfile ";
     public static String TAG = "";
 
+    Toolbar mToolbar;
     CoordinatorLayout cl_main;
     TextView tv_profile_mobile_number,tv_profile_email,tv_lbl_profile_address,tv_profile_address;
     ViewPager vp_student;
@@ -106,6 +109,7 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
             tv_lbl_profile_address=(TextView) view.findViewById(R.id.tv_lbl_profile_address);
             tv_profile_address=(TextView) view.findViewById(R.id.tv_profile_address);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -146,6 +150,39 @@ public class Fragment_StudentProfile extends Fragment implements StudentsListLis
         catch (Exception ex)
         {
 
+        }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_student_profile);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
         }
     }
 

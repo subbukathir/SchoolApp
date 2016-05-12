@@ -34,6 +34,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.HomeWorkAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetHomeWorkList;
@@ -230,7 +231,6 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
     {
         TAG = "SetActionBar";
         Log.d(MODULE, TAG);
-
         try
         {
             if (mActivity != null)
@@ -238,19 +238,27 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
                 mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
                 mActivity.setSupportActionBar(mToolbar);
                 mToolbar.setTitle(R.string.lbl_homework);
-                FragmentDrawer.mDrawerLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        FragmentDrawer.mDrawerToggle.syncState();
-                    }
-                });
-                mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
+
     }
 
     public void getProfile()

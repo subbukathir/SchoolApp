@@ -18,6 +18,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.HomeWorkAdapter;
 import com.daemon.oxfordschool.asyncprocess.GetHomeWorkList;
 import com.daemon.oxfordschool.asyncprocess.GetStudentProfile;
@@ -64,7 +66,9 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
     public static String MODULE = "Fragment_HomeWork_Student ";
     public static String TAG = "";
 
+
     CoordinatorLayout cl_main;
+    Toolbar mToolbar;
     TextView tv_lbl_select_date,text_view_empty,tv_name,tv_class,tv_section;
     ImageView imageView;
     Bitmap mDecodedImage;
@@ -193,6 +197,40 @@ public class Fragment_HomeWork_Student extends Fragment implements HomeWorkListL
         {
             ex.printStackTrace();
         }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_homework);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     public void setEmptyText()

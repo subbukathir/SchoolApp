@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +29,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.StudentsListAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
 import com.daemon.oxfordschool.asyncprocess.GetStudentList;
@@ -61,6 +63,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
     Spinner spinner_class,spinner_section;
     RelativeLayout layout_empty;
     TextView tv_lbl_class,tv_lbl_section,text_view_empty;
+    Toolbar mToolbar;
     SharedPreferences mPreferences;
     User mUser;
     ArrayList<Common_Class> mListClass =new ArrayList<Common_Class>();
@@ -128,6 +131,7 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
             spinner_section = (Spinner) view.findViewById(R.id.spinner_section);
             recycler_view = (RecycleEmptyErrorView) view.findViewById(R.id.recycler_view_students);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -171,6 +175,39 @@ public class Fragment_StudentList extends Fragment implements StudentsListListen
             layout_empty.setVisibility(View.VISIBLE);
             recycler_view.setVisibility(View.GONE);
             showSectionList();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_student_profile);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
         }
         catch (Exception ex)
         {

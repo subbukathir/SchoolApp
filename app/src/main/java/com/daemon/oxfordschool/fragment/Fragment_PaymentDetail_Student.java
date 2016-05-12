@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import com.daemon.oxfordschool.MyApplication;
 import com.daemon.oxfordschool.R;
 import com.daemon.oxfordschool.Utils.AppUtils;
 import com.daemon.oxfordschool.Utils.Font;
+import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.asyncprocess.GetFeesTermList;
 import com.daemon.oxfordschool.asyncprocess.GetPaymentDetail;
 import com.daemon.oxfordschool.asyncprocess.GetStudentProfile;
@@ -68,6 +70,7 @@ public class Fragment_PaymentDetail_Student extends Fragment implements ViewStud
     RelativeLayout layout_empty;
     LinearLayout ll_payment_details;
     int mSelectedPosition;
+    Toolbar mToolbar;
 
     SharedPreferences mPreferences;
     User mUser,mStudent;
@@ -153,6 +156,7 @@ public class Fragment_PaymentDetail_Student extends Fragment implements ViewStud
             layout_empty = (RelativeLayout) view.findViewById(R.id.layout_empty);
             text_view_empty = (TextView) view.findViewById(R.id.text_view_empty);
             setProperties();
+            SetActionBar();
         }
         catch (Exception ex)
         {
@@ -185,7 +189,6 @@ public class Fragment_PaymentDetail_Student extends Fragment implements ViewStud
         try
         {
             layout_empty.setVisibility(View.VISIBLE);
-
             tv_name.setTypeface(font.getHelveticaRegular());
             tv_class.setTypeface(font.getHelveticaRegular());
             tv_section.setTypeface(font.getHelveticaRegular());
@@ -211,6 +214,40 @@ public class Fragment_PaymentDetail_Student extends Fragment implements ViewStud
         {
             ex.printStackTrace();
         }
+    }
+
+    public void SetActionBar()
+    {
+        TAG = "SetActionBar";
+        Log.d(MODULE, TAG);
+        try
+        {
+            if (mActivity != null)
+            {
+                mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                mActivity.setSupportActionBar(mToolbar);
+                mToolbar.setTitle(R.string.lbl_fees_detail);
+                mToolbar.setSubtitle("");
+                if(!MainActivity.mTwoPane)
+                {
+                    FragmentDrawer.mDrawerLayout.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            FragmentDrawer.mDrawerToggle.syncState();
+                        }
+                    });
+                    mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                else mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
     }
 
     public void getProfile()
