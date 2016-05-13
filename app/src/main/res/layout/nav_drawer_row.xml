@@ -15,7 +15,6 @@
         android:paddingLeft="@dimen/space_layout_margin"
         android:textSize="@dimen/txt_view_large"
         android:duplicateParentState="true"
-        android:textColor="@color/text_color_selector"
         android:textStyle="bold" />
 
 </RelativeLayout>
