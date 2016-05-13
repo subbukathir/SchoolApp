@@ -33,6 +33,7 @@
         <activity
             android:name="com.daemon.oxfordschool.activity.MainActivity"
             android:label="@string/app_name"
+            android:configChanges="keyboardHidden|screenSize"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity

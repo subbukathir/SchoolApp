@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -685,5 +686,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+            //Toast.makeText(mActivity, "landscape", Toast.LENGTH_SHORT).show();
+        }
+        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            //Toast.makeText(mActivity, "portrait", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }

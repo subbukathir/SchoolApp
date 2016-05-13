@@ -131,8 +131,9 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     {
         super.onCreate(savedInstanceState);
         TAG="onCreate";
-        Log.d(MODULE,TAG);
+        Log.d(MODULE, TAG);
         mSavedInstanceState=savedInstanceState;
+        setRetainInstance(true);
         // drawer labels
         left_menu_staff= getActivity().getResources().getStringArray(R.array.left_menu_staff);
         left_menu_parent_student= getActivity().getResources().getStringArray(R.array.left_menu_parent_student);
@@ -150,9 +151,6 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
         image_view_profile = (ImageView) layout.findViewById(R.id.image_view_profile);
-
-        adapter = new NavigationDrawerAdapter(getActivity(), getData());
-        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener()
         {
@@ -160,13 +158,25 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             public void onClick(View view, int position)
             {
                 drawerListener.onDrawerItemSelected(view, titles[position]);
-                if(!MainActivity.mTwoPane) mDrawerLayout.closeDrawer(containerView);
+                mSelectedPosition=position;
+                adapter.selectPosition(position);
+                if (!MainActivity.mTwoPane) mDrawerLayout.closeDrawer(containerView);
             }
             @Override
             public void onLongClick(View view, int position)
             {
             }
         }));
+        adapter = new NavigationDrawerAdapter(mActivity,getData());
+        if(mSavedInstanceState!=null)
+        {
+            Log.d(MODULE, TAG + " mSelectedPosition:"+mSavedInstanceState.getInt(ARG_lIST_SELECTED_POSITION));
+            mSelectedPosition=mSavedInstanceState.getInt(ARG_lIST_SELECTED_POSITION);
+            Log.d(MODULE, TAG + " mSelectedPosition:"+mSelectedPosition);
+            adapter.selectPosition(mSelectedPosition);
+        }
+        else adapter.selectPosition(0);
+        recyclerView.setAdapter(adapter);
         image_view_profile.setOnClickListener(_OnClickListener);
         //initImageLoader();
         //SetProfileImage();
@@ -194,10 +204,6 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     public void onStart()
     {
         super.onStart();
-        if(mSavedInstanceState!=null)
-        {
-            mSelectedPosition=mSavedInstanceState.getInt(ARG_lIST_SELECTED_POSITION);
-        }
     }
 
     View.OnClickListener _OnClickListener = new View.OnClickListener() {
@@ -457,7 +463,6 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     {
         TAG = "onSaveInstanceState";
         Log.d(MODULE, TAG);
-
         super.onSaveInstanceState(outState);
         mSavedInstanceState = getSavedState();
     }
@@ -471,12 +476,13 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         try
         {
             outState.putInt(ARG_lIST_SELECTED_POSITION,mSelectedPosition);
+            Log.d(MODULE, TAG + " mSelectedPosition:"+mSelectedPosition);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
-        Log.d(MODULE, TAG);
+
         return outState;
     }
 
