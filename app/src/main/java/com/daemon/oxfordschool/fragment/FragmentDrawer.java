@@ -222,10 +222,12 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             }
         };
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerLayout.post(new Runnable() {
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        mDrawerLayout.post(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 mDrawerToggle.syncState();
             }
         });
