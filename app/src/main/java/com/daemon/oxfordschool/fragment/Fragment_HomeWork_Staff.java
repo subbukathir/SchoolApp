@@ -813,11 +813,10 @@ public class Fragment_HomeWork_Staff extends Fragment implements ClassListListen
         {
             ex.printStackTrace();
         }
-
-
         Log.d(MODULE, TAG);
         return outState;
     }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.action_settings).setVisible(false);

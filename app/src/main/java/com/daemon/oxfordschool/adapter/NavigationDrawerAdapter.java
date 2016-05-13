@@ -56,6 +56,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
+        View itemView;
 
         public MyViewHolder(View itemView) {
             super(itemView);

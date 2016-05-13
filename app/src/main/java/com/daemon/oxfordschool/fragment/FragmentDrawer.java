@@ -52,6 +52,8 @@ import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 public class FragmentDrawer extends Fragment implements ImagePickListener,ImageSavingListener
 {
+    public static String MODULE = "FragmentDrawer";
+    public static String TAG="";
 
     boolean mTwoPane;
     private RecyclerView recyclerView;
@@ -73,9 +75,10 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static User mUser;
     String Str_Id="";
+    Bundle mSavedInstanceState;
 
-    public static String MODULE = "FragmentDrawer";
-    public static String TAG="";
+    final static String ARG_lIST_SELECTED_POSITION = "List_Selected_Position";
+    int mSelectedPosition=0;
 
     public FragmentDrawer()
     {
@@ -96,6 +99,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
     {
         TAG="getData";
         Log.d(MODULE,TAG);
+
         List<NavDrawerItem> data = new ArrayList<>();
         if(mUser.getUserType().equals(ApiConstants.STAFF))
         {
@@ -116,6 +120,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         {
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles[i]);
+            navItem.setIsSelected(false);
             data.add(navItem);
         }
         return data;
@@ -127,6 +132,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         super.onCreate(savedInstanceState);
         TAG="onCreate";
         Log.d(MODULE,TAG);
+        mSavedInstanceState=savedInstanceState;
         // drawer labels
         left_menu_staff= getActivity().getResources().getStringArray(R.array.left_menu_staff);
         left_menu_parent_student= getActivity().getResources().getStringArray(R.array.left_menu_parent_student);
@@ -181,6 +187,16 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
         catch (Exception e)
         {
 
+        }
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        if(mSavedInstanceState!=null)
+        {
+            mSelectedPosition=mSavedInstanceState.getInt(ARG_lIST_SELECTED_POSITION);
         }
     }
 
@@ -368,7 +384,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
 
     @Override
     public void onImageSavedError() {
-        AppUtils.DialogMessage(mActivity,"Cannot Save");
+        AppUtils.DialogMessage(mActivity, "Cannot Save");
     }
 
     private void dispatchTakePictureIntent()
@@ -388,7 +404,7 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             Bitmap bmpProfile = AppUtils.getScaledBitmap(imageBitmap, 240, 320);
-            AppUtils.saveImage(bmpProfile,mActivity,"profile");
+            AppUtils.saveImage(bmpProfile, mActivity, "profile");
         }
     }
 
@@ -435,5 +451,34 @@ public class FragmentDrawer extends Fragment implements ImagePickListener,ImageS
             ex.printStackTrace();
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        TAG = "onSaveInstanceState";
+        Log.d(MODULE, TAG);
+
+        super.onSaveInstanceState(outState);
+        mSavedInstanceState = getSavedState();
+    }
+
+    public Bundle getSavedState()
+    {
+        TAG = "getSavedState";
+        Log.d(MODULE, TAG);
+
+        Bundle outState = new Bundle();
+        try
+        {
+            outState.putInt(ARG_lIST_SELECTED_POSITION,mSelectedPosition);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        Log.d(MODULE, TAG);
+        return outState;
+    }
+
 
 }

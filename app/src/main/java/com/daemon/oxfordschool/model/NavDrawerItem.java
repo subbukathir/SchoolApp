@@ -6,7 +6,7 @@ package com.daemon.oxfordschool.model;
 public class NavDrawerItem {
     private boolean showNotify;
     private String title;
-
+    private boolean isSelected;
 
     public NavDrawerItem() {
 
@@ -32,4 +32,13 @@ public class NavDrawerItem {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
 }
