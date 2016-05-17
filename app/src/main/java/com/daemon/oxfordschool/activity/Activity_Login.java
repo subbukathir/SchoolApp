@@ -2,6 +2,7 @@ package com.daemon.oxfordschool.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -55,6 +56,11 @@ public class Activity_Login extends AppCompatActivity implements LoginListener
             setContentView(R.layout.activity_login);
             TAG = "onCreate";
             Log.d(MODULE, TAG);
+
+            boolean IsTablet = getResources().getBoolean(R.bool.is_tablet);
+            if(IsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+            else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
             mContext = getApplicationContext();
 
             tv_welcome = (TextView) findViewById(R.id.tv_welcome);

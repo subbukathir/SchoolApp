@@ -3,6 +3,7 @@ package com.daemon.oxfordschool.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +44,9 @@ public class SplashScreen extends AppCompatActivity implements ClassListListener
         super.onCreate(savedInstanceState);
         TAG = "onCreate";
         Log.d(MODULE, TAG);
+        boolean IsTablet = getResources().getBoolean(R.bool.is_tablet);
+        if(IsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.splash_screen);
         mActivity=this;
         Init();
