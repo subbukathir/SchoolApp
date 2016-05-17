@@ -41,7 +41,6 @@ import com.daemon.oxfordschool.Utils.Font;
 import com.daemon.oxfordschool.activity.MainActivity;
 import com.daemon.oxfordschool.adapter.AssignedSectionAdapter;
 import com.daemon.oxfordschool.asyncprocess.ClassList_Process;
-import com.daemon.oxfordschool.asyncprocess.GetStudentList;
 import com.daemon.oxfordschool.asyncprocess.SectionList_Process;
 import com.daemon.oxfordschool.asyncprocess.AssignSection;
 import com.daemon.oxfordschool.classes.Common_Class;
@@ -291,8 +290,8 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
         {
             AppUtils.hideProgressDialog();
             text_view_empty.setText(Str_Msg);
-            showEmptyView();
-            showSnackBar(Str_Msg,0);
+            showEmptyView(Str_Msg);
+            showSnackBar(Str_Msg, 0);
 
         }
         catch (Exception ex)
@@ -325,8 +324,7 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
         Log.d(MODULE, TAG);
         try
         {
-            getSectionList();
-            showSectionList();
+            showEmptyView(Str_Msg);
             showSnackBar(Str_Msg, 1);
         }
         catch (Exception ex)
@@ -522,6 +520,9 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
         {
             AssignedSectionAdapter adapter = new AssignedSectionAdapter(mListSection,this);
             recycler_view.setAdapter(adapter);
+            layout_empty.setVisibility(View.GONE);
+            recycler_view.setVisibility(View.VISIBLE);
+
         }
         catch (Exception ex)
         {
@@ -529,21 +530,16 @@ public class Fragment_Assigned_Section_List extends Fragment implements ClassLis
         }
     }
 
-    public void showEmptyView()
+    public void showEmptyView(String Str_Msg)
     {
         TAG = "showEmptyView";
         Log.d(MODULE, TAG);
 
         try
         {
-            View emptyView  = mActivity.getLayoutInflater().inflate(R.layout.view_list_empty, null);
-            LinearLayout.LayoutParams params = AppUtils.getMatchParentParams();
-            emptyView.setLayoutParams(params);
-            TextView textView = (TextView) emptyView.findViewById(R.id.text_view_empty);
-            textView.setText(R.string.lbl_no_section_list);
-            textView.setTypeface(font.getHelveticaRegular());
-            ((ViewGroup)recycler_view.getParent().getParent()).addView(emptyView);
-            recycler_view.setEmptyView(emptyView);
+            text_view_empty.setText(Str_Msg);
+            layout_empty.setVisibility(View.VISIBLE);
+            recycler_view.setVisibility(View.GONE);
         }
         catch (Exception ex)
         {
