@@ -30,7 +30,8 @@ public class CCEResult implements Parcelable
         dest.writeString(Grade);
     }
 
-    public CCEResult(Parcel source) {
+    public CCEResult(Parcel source)
+    {
         result = new ArrayList<Result>();
         this.SubjectName = source.readString();
         this.result = source.readArrayList(Result.class.getClassLoader());

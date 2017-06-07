@@ -131,7 +131,6 @@ public class Fragment_School_Profile extends Fragment
 
     }
 
-
     @Override
     public void onStart()
     {
@@ -221,6 +220,7 @@ public class Fragment_School_Profile extends Fragment
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.action_settings).setVisible(false);

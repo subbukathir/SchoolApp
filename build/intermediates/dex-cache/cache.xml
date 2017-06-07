@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/libs/internal_impl-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.1_08e8792444d24fd1195abbfd52db153434458b9d.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-vision/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="724ce977487ab3a215d4d2eb47d8dccd9f30013f">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-vision-8.3.0_16eada56d92f896c7c334f12dbf4fb4d9d4d5444.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="9c9bdb4b2497465a6cf7d5e8f57c5298f828a380">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-wallet-8.3.0_d7a3985b6e0e51d5f0e005555450932932d6940b.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="71eda10e33212e44245524b5087366ff8d805825">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-gcm-8.3.0_08cd6bd66d2d4f5ddb7f1791edb06ec3c0523610.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="744c49c02a27569cc4cc049685d3649e4ef439f2">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-panorama-8.3.0_492b75263217a20383fd2ba5f0ab5fa3d4013716.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="1ccbc26be2c465c622a48310e8092241b01abe80">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.android.support-cardview-v7-23.0.0_db0ff47b7c3fedf1baaec3342c51e6ba0c401c5d.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="b000ecceb9877fefcdc7ab1959ff03df91551656">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-measurement-8.3.0_f785fabc14da87759dd1cd5903453d30677de005.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="0632f06970823b7e3436f649bfa65b47035c91d0">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0_ecc6b5912b845390fc9722d3e0e147aa02eca373.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/.gradle/caches/modules-2/files-2.1/com.nostra13.universalimageloader/universal-image-loader/1.9.5/442dbfb517b9ab5cb5c6da7ebf8cc28ec5bd0375/universal-image-loader-1.9.5.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="442dbfb517b9ab5cb5c6da7ebf8cc28ec5bd0375">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/universal-image-loader-1.9.5_8e2b2e7844355b083b857d366982fa6836c4f200.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="2c6fcd6267cbac6509a2e72a61127534a1d616cf">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-games-8.3.0_bffed0474646ae8b19108616e306ce0d44e48f9a.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.soundcloud.android/android-crop/1.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="11a65cf2b30c192b38a881d626fa771a78a2293d">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.soundcloud.android-android-crop-1.0.1_f33b3e52cffa9db8c6d760f2ba4b449985f52659.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4b8df1b1e51fe14b0e89b3845dc2e215a024a09f">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-identity-8.3.0_5cd8bc9b401214d941276decd4df042b4c8ac649.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="01a90bbb9495a8bbf6f3cfdf12f1b35caaa9524b">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-base-8.3.0_03d1f5cc46488c303e3bf1750b499d66f9d83697.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="0a1897426566e408a5c20a3d931f77d89771d07f">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-drive-8.3.0_f8bda2fba2596bd485ec81d477ceee9904dcdc6d.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.prolificinteractive/material-calendarview/1.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="602a30946642f5847eb66dec199e6783b10e7384">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.prolificinteractive-material-calendarview-1.2.0_edd459cc492c11db83e2f66bbe1fe218b166395a.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="6d9ed9a288364688e7fcf6704776284dac1eb42e">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-location-8.3.0_53340af0c04f55ddc5e2928a2b61312df9ad1ed7.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="40e7757d9b06db670062ddb3cf5b30c129b2fd8c">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-23.0.0_d7789591d7747a4475e566e58cb7e66359081269.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="9aedc597d74c6d77258ce5236e9abff0c3cc65e3">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-wearable-8.3.0_c69c4ebe473c9a298fc4d20ed125b1672f6a417c.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="af6ee25641df3142059c0828517aa7ee6eba08d6">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-analytics-8.3.0_f69dc39cf40515fc73c9bb5143eb433be6b28b26.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="58adcfbe2c8393765e84c5489d01bba6a5159eb2">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-appinvite-8.3.0_0b9c77ec622cdbcb639cf21639dfacba4a636cf4.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="dcf8c83c3dead00a6c4fe313e95f7aaca20dc641">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.android.support-mediarouter-v7-22.2.0_3b5bc4c9f99b2724b72a83fb255bdcd4ba6fd213.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/.gradle/caches/modules-2/files-2.1/com.github.PhilJay/MPAndroidChart/v2.2.3/f474798fde03291398b1a016118b9809a79550b7/MPAndroidChart-v2.2.3.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="f474798fde03291398b1a016118b9809a79550b7">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/MPAndroidChart-v2.2.3_458737e42fa74cf447a972f1178a071eb311f1d8.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="fd76d95678a6b2b8a49bb8a9fb5bcef7aedb70e7">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-auth-8.3.0_6408b4ef5246444a29329546a49d60615934c280.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4fcf0b1879f8caf497c073e1432d398e9e2988c1">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.0.0_2b6cf374522a7dc5b8b767c1ee264efce3d56261.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="697679619b00837e3d09e9988a2e1e2a9009d502">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-fitness-8.3.0_97ae436dffd49cb67da67daf0f3793639ccda8fe.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/.gradle/caches/modules-2/files-2.1/com.mcxiaoke.volley/library/1.0.19/a8f23f65fc1e522ee4a1a697ee569901a46741fa/library-1.0.19.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="a8f23f65fc1e522ee4a1a697ee569901a46741fa">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/library-1.0.19_fc447cf41b9dfc58e0cf35e49451a214fa964c13.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.1_4a94aacc4e516851338fabada3fe87fd495e17a5.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="eb576427887e497cd958a475475f9206e38dc314">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-nearby-8.3.0_bd4b626a43ddb669ddeb10d4978695e435b23b16.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="0af4f577b4a21eb9be2a7f52e33b077b67e6d9f8">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-plus-8.3.0_d27103778fc05851b6e11450ecfe3e93492fb1dd.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="77f9593d979f4347344be233bd0d888315f79517">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-maps-8.3.0_1cdbb145d5f520b2f0d1395045fbbaaa3fcb3083.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="27775d59b16610ac76f1b83693fedd9520396332">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-ads-8.3.0_f3c58502ee63f3fd960a989e4b2a7dbaab5fad68.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="345a1b5cf5b144ce18ba6962bc66a7e2f26c1c1b">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-basement-8.3.0_4ed952df4fcca1f5e2ed64fede7df23708154100.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/7.0.1/d5d13ea991eab0252e3710e5df3d6a9d4b21d461/butterknife-7.0.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/butterknife-7.0.1_1b8da77f8a46cd80d071d538aa021d09b1e29cde.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.android.support/design/23.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8a5238e4bdcd6568b82db669d41817de670586b8">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.android.support-design-23.0.0_538059be934ed1ce6049bac6a7680c21d2cd2424.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="0c3e81d3eb86b86d194b5cdb6a4de78203f6f7fd">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-appindexing-8.3.0_d6751df245b261a4bd3bca9583ffd1ab1b2960d1.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.2.4/a60a5e993c98c864010053cb901b7eab25306568/gson-2.2.4.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="a60a5e993c98c864010053cb901b7eab25306568">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/gson-2.2.4_188b5dc6ad64441cab9841e9dfb7be037a247b3f.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="ea34579b1be157cd792376362157e9c54ebb4cd7">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-safetynet-8.3.0_3344251dab6d134a70cd440c2d817e941d3fb840.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/8.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="cb4af597d079ffdc0984a3ec2c03cbf6a1b9f869">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-cast-8.3.0_e7f41d67a15d9732b371ceb27231894310b690b8.jar" />
+    </item>
+    <item
+        jar="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="/home/daemonsoft/AndroidStudioProjects/OxfordSchool/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.1.1_ff399c53e8088b4618295b76c3a348d3e97779d2.jar" />
+    </item>
+
+</items>
